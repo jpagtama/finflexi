@@ -1,0 +1,29 @@
+
+.finflexi_icon > svg{
+    height: 25em;
+    stroke-dasharray: 1800;
+    stroke-dashoffset: 1800;
+    animation: animateStroke 2500ms ease-out forwards, fadeOut 1500ms ease-out forwards 3500ms;
+}
+.vanish {
+    display: none;
+}
+
+@keyframes animateStroke {
+    0% {
+        opacity: 0;
+        stroke-dashoffset: 1800;
+    }
+    100% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
