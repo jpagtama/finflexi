@@ -1,12 +1,11 @@
 
-.finflexi_icon > svg{
+
+
+.finflexiIntro {
     height: 25em;
     stroke-dasharray: 1800;
     stroke-dashoffset: 1800;
     animation: animateStroke 2500ms ease-out forwards, fadeOut 1500ms ease-out forwards 3500ms;
-}
-.vanish {
-    display: none;
 }
 
 @keyframes animateStroke {
