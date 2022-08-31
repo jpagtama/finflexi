@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
+import AppIntro from '../components/landing/AppIntro'
 import Main from '../components/layouts/Main'
-import FinflexiSVG from '../components/SVGs/FinFlexiSVG'
 
 const Home = () => {
 
@@ -10,23 +10,22 @@ const Home = () => {
     console.log('animateIntro', animateIntro)
   }, [animateIntro])
 
-  const introStyles = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    width: "100vw"
+  const introEndHandler = () => {
+    setTimeout(() => endIntroHandler(), 2200)
   }
 
-  const introEndHandler = () => {
+  const endIntroHandler = () => {
     setAnimateIntro(false)
   }
 
   return (
     <Main >
-      <section style={introStyles}>
-        <FinflexiSVG introEndHandler={introEndHandler} />
-
+      {animateIntro &&  <AppIntro introEndHandler={introEndHandler} endIntroHandler={endIntroHandler}/>}
+      <section>
+        <h1>Go beyond the charts</h1>
+        <h2>Get access to market data, company filings, and more.</h2>
+        <h1>Understand your investments</h1>
+        <h2>Get the edge on technical analysis and insights.</h2>
       </section>
     </Main>
   )
