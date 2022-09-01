@@ -1,27 +1,16 @@
 import FinflexiSVG from '../SVGs/FinflexiSVG'
+import styles from '../../styles/landing/AppIntro.module.css'
 
 interface Props {
-    introEndHandler: () => void,
+    introDoneHandler: () => void,
     endIntroHandler: () => void
 }
 
 const AppIntro = (props: Props) => {
-    
-    const introStyles = {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100vw",
-        zIndex: "10",
-        position: "absolute",
-        top: 0,
-        backgroundColor: "#121212"
-    } as React.CSSProperties
 
     return (
-        <section style={introStyles} onClick={props.endIntroHandler}>
-            <FinflexiSVG introEndHandler={props.introEndHandler} />
+        <section className={styles.introSection} onClick={props.endIntroHandler}>
+            <FinflexiSVG introEndHandler={props.introDoneHandler} />
         </section>
     )
 }
