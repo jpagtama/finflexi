@@ -7,7 +7,7 @@ interface Props {
 const Main = (props: Props) => {
   return (
     <main id="main">
-        {props.children}
+      {props.children}
     </main>
   )
 }
