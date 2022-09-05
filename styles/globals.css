@@ -1,5 +1,15 @@
+:root {
+  --neon-pink: #F900BF;
+  --neon-green: #00FFAB;
+  --dark-gray: #121212;
+  --gray: #343434;
+  --error: #D61C4E;
+}
+
 html,
 body {
+  color: var(--neon-pink);
+  background: var(--dark-gray);
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -35,16 +45,22 @@ a {
 #main {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  align-items: center;
+  height: 100%;
   width: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
+input:focus {
+  outline: none;
+  border: 1px solid var(--neon-green);
+  box-shadow: 0 0 5px var(--neon-green);
+}
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
   body {
-    color: ivory;
+    color: var(--neon-pink);
     background: #121212;
   }
-}
+} */
