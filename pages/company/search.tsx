@@ -37,7 +37,7 @@ const Search = (props: any) => {
         <h1 className={styles.pageHeading}>search</h1>
         <SearchBar searchCompaniesHandler={searchCompaniesHandler} />
         <ul className={styles.resultList}>
-            {results.map((item: CompanyDetails, i: number) => <li key={i}>{item.name}</li>)}
+            {results.map((item: CompanyDetails, i: number) => <li key={i}><span className={styles.symbol}>{item.symbol}</span><span>{item.name}</span></li>)}
         </ul>
     </div>
   )

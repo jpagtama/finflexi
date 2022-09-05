@@ -22,4 +22,10 @@
     padding: 2em 0;
     border-bottom: 1px solid violet;
     font-weight: 300;
+    display: flex;
+    flex-direction: column;
+}
+.symbol {
+    color: violet;
+    font-size: 0.8em;
 }
