@@ -12,18 +12,6 @@ interface CompanyDetails {
     matchScore: string
 }
 
-interface ResCompanyDetails {
-    '1. symbol': string
-    '2. name': string
-    '3. type': string
-    '4. region': string
-    '5. marketOpen': string
-    '6. marketClose': string
-    '7. timezone': string
-    '8. currency': string
-    '9. matchScore': string
-}
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET' && req.query.search) {
       try {
@@ -33,19 +21,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         let resData: CompanyDetails[] = []
         
         if (data.bestMatches.length > 0) {
-            resData = data.bestMatches.map((item: ResCompanyDetails) => (
-                {
-                    symbol: item['1. symbol'],
-                    name: item['2. name'],
-                    type: item['3. type'],
-                    region: item['4. region'],
-                    marketOpen: item['5. marketOpen'],
-                    marketClose: item['6. marketClose'],
-                    timezone: item['7. timezone'],
-                    currency: item['8. currency'],
-                    matchScore: item['9. matchScore'],
+            for (const item of data.bestMatches) {
+                if (item['3. type'] === 'Equity' && item['4. region'] === 'United States') {
+                    resData.push(
+                        {
+                            symbol: item['1. symbol'],
+                            name: item['2. name'],
+                            type: item['3. type'],
+                            region: item['4. region'],
+                            marketOpen: item['5. marketOpen'],
+                            marketClose: item['6. marketClose'],
+                            timezone: item['7. timezone'],
+                            currency: item['8. currency'],
+                            matchScore: item['9. matchScore'],
+                        }
+                    )
                 }
-            ))
+            }
         }
         res.status(200).json(resData)
 
