@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import Link from 'next/link'
 import {withRouter} from 'next/router'
 import SearchBar from '../../components/UI/SearchBar'
 import styles from '../../styles/company/Search.module.css'
@@ -22,7 +23,6 @@ const Search = (props: any) => {
 
   useEffect(() => {
     if (props.router.query.details) {
-        console.log('props.router.query.details :>> ', JSON.parse(props.router.query.details));
         searchResults = JSON.parse(props.router.query.details)
         setResults(searchResults)
     }
@@ -37,7 +37,20 @@ const Search = (props: any) => {
         <h1 className={styles.pageHeading}>search</h1>
         <SearchBar searchCompaniesHandler={searchCompaniesHandler} />
         <ul className={styles.resultList}>
-            {results.map((item: CompanyDetails, i: number) => <li key={i}><span className={styles.symbol}>{item.symbol}</span><span>{item.name}</span></li>)}
+            {results.map((item: CompanyDetails) => {
+                const urlSymbol = item.symbol.replace(/\./g,'-')
+
+                return (
+                    <li key={item.symbol} >
+                        <Link href={`/company/${urlSymbol}`}>
+                            <a>
+                                <span className={styles.symbol}>{item.symbol}</span>
+                                <span>{item.name}</span>
+                            </a>
+                        </Link>
+                    </li>
+                )
+            })}
         </ul>
     </div>
   )
