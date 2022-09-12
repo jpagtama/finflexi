@@ -1,0 +1,56 @@
+.companyProfileContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90vw;
+}
+.companyName {
+    font-weight: 200;
+    text-align: center;
+}
+.symbol {
+    align-self: flex-start;
+    font-weight: 200;
+    margin-bottom: 1em;
+}
+.chartContainer {
+    margin-top: 5em;
+    margin-bottom: 5em;
+    width: 100%;
+}
+.overviewContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4em;
+}
+.overviewSection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid rgba(169,16,121,0.5); 
+}
+.overviewSection span {
+    padding: 1em 0 0.5em 0;
+    color: var(--dark-pink);
+}
+.desc {
+    margin: 0;
+    color: var(--dark-pink);
+    align-self: flex-start;
+}
+.descLabel {
+    color: var(--neon-pink);
+    align-self: flex-start;
+    margin-top: 1em;
+}
+.errContainer {
+    padding: 1em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid var(--neon-pink);
+    margin: 2em 0 1em 0;
+}
+.errMessage {
+    text-align: center;
+}
