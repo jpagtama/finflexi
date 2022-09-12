@@ -41,3 +41,9 @@ export interface StockData {
     labels: string[]
     price: StockPrice[]
 }
+
+export interface EarningsData {
+    labels: string[]
+    reportedEPS: number[]
+    estimatedEPS: number[]
+}
