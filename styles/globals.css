@@ -3,6 +3,7 @@
   --neon-green: #00FFAB;
   --dark-pink: #A91079;
   --dark-gray: #121212;
+  --purple-blue: #293462;
   --gray: #343434;
   --error: #D61C4E;
 }
@@ -49,6 +50,7 @@ a {
   align-items: center;
   height: 100%;
   width: 100%;
+  padding-top: 15vh;
 }
 
 input:focus {
