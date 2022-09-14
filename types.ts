@@ -47,3 +47,7 @@ export interface EarningsData {
     reportedEPS: number[]
     estimatedEPS: number[]
 }
+
+export interface EarningsCalendar {
+    [key: string]: string
+}
