@@ -25,8 +25,7 @@ interface Props {
 }
 
 const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) => {
-  console.log('earnings_calendar from PROPS :>> ', earnings_calendar);
-  const [graphMode, setGraphMode] = useState('1m')
+  const [graphMode, setGraphMode] = useState(30)
 
   const symbol = `${details && 'Symbol' in details? details.Symbol : ''}`
   const name = `${details && 'Name' in details? details.Name : ''}`
@@ -39,52 +38,6 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
   const ma50 = `${details && 'movingAverage50day' in details? details.movingAverage50day : ''}`
   const ma200 = `${details && 'movingAverage200day' in details? details.movingAverage200day : ''}`
   const fiscYrEnd = `${details && 'FiscalYearEnd' in details? details.FiscalYearEnd : ''}`
-
-  const optionsLine = {
-    responsive: true,
-    plugins: {
-        legend: {
-            display: false
-        }
-    }
-  }
-
-  let labels: string[] = []
-  let prices: number[] = []
-
-  if (daily && 'labels' in daily) {
-    switch(graphMode) {
-        case '7d':
-            labels = daily.labels.slice(daily.labels.length - 7)
-            prices = daily.price.slice(daily.labels.length - 7).map(item => item.close)
-            break
-        case '2wk':
-            labels = daily.labels.slice(daily.labels.length - 14)
-            prices = daily.price.slice(daily.labels.length - 14).map(item => item.close)
-            break
-        case '1m':
-            labels = daily.labels.slice(daily.labels.length - 30)
-            prices = daily.price.slice(daily.labels.length - 30).map(item => item.close)
-            break
-        case '3m':
-            labels = daily.labels.slice(daily.labels.length - 90)
-            prices = daily.price.slice(daily.labels.length - 90).map(item => item.close)
-            break
-        default:
-            labels = daily.labels.slice(daily.labels.length - 7)
-            prices = daily.price.slice(daily.labels.length - 7).map(item => item.close)
-    }
-  }
-
-  const dataStock = {
-    labels: labels,
-    datasets: [{
-        label: symbol,
-        data: prices,
-        borderColor: '#f900bf',
-        backgroundColor: '#f900bf',
-    }]
-  }
 
   const companyOverview = () => {
     return (
@@ -195,6 +148,52 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
     )
   }
 
+  const stockGraphHandler = (days: number) => {
+    setGraphMode(days)
+  }
+
+  const stockChart = () => {
+
+    const optionsLine = {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+
+    let labels: string[] = []
+    let prices: number[] = []
+
+    if (daily && 'labels' in daily) {
+        labels = daily.labels.slice(daily.labels.length - graphMode)
+        prices = daily.price.slice(daily.labels.length - graphMode).map(item => item.close)
+    }
+
+    const dataStock = {
+        labels: labels,
+        datasets: [{
+            label: symbol,
+            data: prices,
+            borderColor: '#f900bf',
+            backgroundColor: '#f900bf',
+        }]
+    }
+
+    return (
+        <div className={styles.chartContainer}>
+            <Line options={optionsLine} data={dataStock} />
+            <div className={styles.graphModesContainer}>
+                <button className={graphMode === 7? styles.isActive: ''} onClick={() => stockGraphHandler(7)} >7d</button>
+                <button className={graphMode === 14? styles.isActive: ''} onClick={() => stockGraphHandler(14)} >2wk</button>
+                <button className={graphMode === 30? styles.isActive: ''} onClick={() => stockGraphHandler(30)} >1m</button>
+                <button className={graphMode === 90? styles.isActive: ''} onClick={() => stockGraphHandler(90)} >3m</button>
+            </div>
+        </div>
+    )
+  }
+
   const displayError = (message: string) => {
     return (
         <div className={styles.errContainer}>
@@ -208,8 +207,7 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
     <div className={styles.companyProfileContainer}>
 
       <h1 className={styles.companyName} >{name}</h1>
-      {typeof daily !== 'undefined' && !('error_message' in daily)? <div className={styles.chartContainer}><Line options={optionsLine} data={dataStock} /></div> : displayError(daily.error_message)}
-
+      {typeof daily !== 'undefined' && !('error_message' in daily)?  stockChart() : displayError(daily.error_message)}
       
       {typeof details !== 'undefined' && !('error_message' in details)? companyOverview() : displayError(details.error_message)}
 
