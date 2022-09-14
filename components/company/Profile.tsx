@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {CompanyOverview, CustomError, EarningsData, Status, StockData, StockPrice} from '../../types'
+import {CompanyOverview, CustomError, EarningsCalendar, EarningsData, Status, StockData, StockPrice} from '../../types'
 import {Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import type {ChartOptions} from 'chart.js'
 import {Line, Bar} from 'react-chartjs-2'
@@ -20,10 +20,12 @@ interface Props {
   details: CompanyOverview | CustomError
   daily: StockData | CustomError
   earnings: EarningsData | CustomError
+  earnings_calendar: EarningsCalendar[] | CustomError
   status: Status
 }
 
-const Profile = ({details, daily, earnings, status}: Props) => {
+const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) => {
+  console.log('earnings_calendar from PROPS :>> ', earnings_calendar);
   const [graphMode, setGraphMode] = useState('1m')
 
   const symbol = `${details && 'Symbol' in details? details.Symbol : ''}`
@@ -43,20 +45,6 @@ const Profile = ({details, daily, earnings, status}: Props) => {
     plugins: {
         legend: {
             display: false
-        }
-    }
-  }
-
-  const optionsBar: ChartOptions = {
-    responsive: true,
-    plugins: {
-        legend: {
-            reverse: true,
-            position: 'top'
-        },
-        title: {
-            display: false,
-            text: ''
         }
     }
   }
@@ -141,13 +129,25 @@ const Profile = ({details, daily, earnings, status}: Props) => {
     )
   }
 
-//   const earningsOverview = (labels: string[], reportedEps: number[], estimatedEps: number[]) => {
   const earningsOverview = () => {
     if ('labels' in earnings) {
         const labels = earnings.labels.slice(0,4).reverse()
         const reportedEps = earnings.reportedEPS.slice(0,4).reverse()
         const estEps = earnings.estimatedEPS.slice(0,4).reverse()
-
+        
+        const options: ChartOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    reverse: true,
+                    position: 'top'
+                },
+                title: {
+                    display: false,
+                    text: ''
+                }
+            }
+        }
         const data = {
             labels: labels,
             datasets: [{
@@ -165,10 +165,34 @@ const Profile = ({details, daily, earnings, status}: Props) => {
             ]
         }
         return (
-            <Bar options={optionsBar} data={data} />
+            <>
+                <Bar options={options} data={data} />
+            </>
         )
     }
     
+  }
+
+  const earningsCalendar = () => {
+    // console.log('earnings_calendar from PROFILE', earnings_calendar)
+    const upcomingEarnings= (earnings_calendar as EarningsCalendar[]).map((i: EarningsCalendar) => {
+
+        if (i.reportDate.length > 0) {
+            return (
+                <div key={i.reportDate} className={styles.overviewSection}>
+                    <span>{i.reportDate}</span> <span>{i.estimate.length > 0? `$${i.estimate}`: '-'}</span>
+                </div>  
+            )
+        }
+    })
+    return (
+        <>
+        <div className={styles.overviewSection}>
+            <span>Date</span><span>Estimated</span>
+        </div>
+        {upcomingEarnings}
+        </>
+    )
   }
 
   const displayError = (message: string) => {
@@ -184,11 +208,16 @@ const Profile = ({details, daily, earnings, status}: Props) => {
     <div className={styles.companyProfileContainer}>
 
       <h1 className={styles.companyName} >{name}</h1>
+      {typeof daily !== 'undefined' && !('error_message' in daily)? <div className={styles.chartContainer}><Line options={optionsLine} data={dataStock} /></div> : displayError(daily.error_message)}
+
       
-      {!('error_message' in daily)? <div className={styles.chartContainer}><Line options={optionsLine} data={dataStock} /></div> : displayError(daily.error_message)}
-      {!('error_message' in details)? companyOverview() : displayError(details.error_message)}
-      {/* {!('error_message' in earnings)? earningsOverview(earnings.labels, earnings.estimatedEPS, earnings.reportedEPS): displayError(earnings.error_message)} */}
-      {!('error_message' in earnings)? earningsOverview(): displayError(earnings.error_message)}
+      {typeof details !== 'undefined' && !('error_message' in details)? companyOverview() : displayError(details.error_message)}
+
+      <h2 className={styles.descLabel}>Earnings:</h2>
+      {typeof earnings !== 'undefined' && !('error_message' in earnings)? earningsOverview(): displayError(earnings.error_message)}
+      
+      <h2 className={styles.descLabel}>Upcoming Earnings:</h2>
+      {typeof earnings_calendar !== 'undefined' && !('error_message' in earnings_calendar)? earningsCalendar(): displayError(earnings_calendar.error_message)}
 
     </div>
   )
