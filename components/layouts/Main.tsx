@@ -1,3 +1,5 @@
+import Footer from './Footer'
+import Header from './Header'
 import styles from '../../styles/layouts/Main.module.css'
 
 interface Props {
@@ -7,7 +9,9 @@ interface Props {
 const Main = (props: Props) => {
   return (
     <main id="main">
-      {props.children}
+      <Header />
+        {props.children}
+      <Footer />
     </main>
   )
 }

@@ -1,8 +1,11 @@
-import React from 'react'
+import Menu from '../UI/Menu'
+import styles from '../../styles/layouts/Header.module.css'
 
 const Header = () => {
   return (
-    <div>Header</div>
+    <header className={styles.header}>
+      <Menu />
+    </header>
   )
 }
 
