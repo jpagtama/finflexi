@@ -4,6 +4,7 @@ import {Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, 
 import type {ChartOptions} from 'chart.js'
 import {Line, Bar} from 'react-chartjs-2'
 import styles from '../../styles/company/Profile.module.css'
+import ChartPicker from '../UI/ChartPicker'
 
 ChartJS.register(
     CategoryScale,
@@ -148,10 +149,6 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
     )
   }
 
-  const stockGraphHandler = (days: number) => {
-    setGraphMode(days)
-  }
-
   const stockChart = () => {
 
     const optionsLine = {
@@ -181,17 +178,23 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
         }]
     }
 
+    const buttons = [
+        {title: '7d', clickHandler: stockGraphHandler, active: graphMode === 7, duration: 7},
+        {title: '2wk', clickHandler: stockGraphHandler, active: graphMode === 14, duration: 14},
+        {title: '1m', clickHandler: stockGraphHandler, active: graphMode === 30, duration: 30},
+        {title: '3m', clickHandler: stockGraphHandler, active: graphMode === 90, duration: 90}
+    ]
+
     return (
         <div className={styles.chartContainer}>
             <Line options={optionsLine} data={dataStock} />
-            <div className={styles.graphModesContainer}>
-                <button className={graphMode === 7? styles.isActive: ''} onClick={() => stockGraphHandler(7)} >7d</button>
-                <button className={graphMode === 14? styles.isActive: ''} onClick={() => stockGraphHandler(14)} >2wk</button>
-                <button className={graphMode === 30? styles.isActive: ''} onClick={() => stockGraphHandler(30)} >1m</button>
-                <button className={graphMode === 90? styles.isActive: ''} onClick={() => stockGraphHandler(90)} >3m</button>
-            </div>
+            <ChartPicker buttons={buttons}/>
         </div>
     )
+  }
+
+  const stockGraphHandler = (days: number) => {
+    setGraphMode(days)
   }
 
   const displayError = (message: string) => {
