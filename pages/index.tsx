@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
-import AppIntro from '../components/landing/AppIntro'
-import SearchBar from '../components/UI/SearchBar'
-import styles from '../styles/landing/Index.module.css'
+import AppIntro from '@components/landing/AppIntro'
+import SearchBar from '@components/UI/SearchBar'
+import styles from '@styles/landing/Index.module.css'
 
 interface CompanyList {
   symbol: string
@@ -43,15 +43,14 @@ const Home = () => {
       </Head>
       {animateIntro &&  <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler}/>}
       <section className={styles.searchSection}>
-        <h1 className={styles.sloganHeading}>Go beyond the charts</h1>
+        <h1 className={styles.sloganHeading}>Flexibility in Finance. FinFlexi.</h1>
         <SearchBar searchCompaniesHandler={searchCompaniesHandler} />
-        
-        
       </section>
       <section>
-        <h2>Get access to market data, company filings, and more.</h2>
-        <h1>Understand your investments</h1>
-        <h2>Get the edge on technical analysis and insights.</h2>
+        <h1>Laser focused.</h1>
+        <h2>Get access to stock market data, company statistics, and more.</h2>
+        <h1>Straight to the point.</h1>
+        <h2>Key economic indicators helps understand where your investments are going.</h2>
       </section>
     </>
   )
