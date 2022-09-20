@@ -10,6 +10,12 @@ const menuSlice = createSlice({
     reducers: {
         toggle(state) {
             state.open = !state.open
+        },
+        close(state) {
+            state.open = false
+        },
+        open(state) {
+            state.open = true
         }
     }
 })
