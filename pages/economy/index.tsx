@@ -326,9 +326,9 @@ export const getStaticProps = async () => {
       cpi: monthlyCPI,
       inflation: annualInflation,
       unemployment: monthlyUnemployment
-    }
+    },
+    revalidate: 86400 // 24hours
   }
-  revalidate: 86400 // 24hours
 } 
 
 export default Economy
