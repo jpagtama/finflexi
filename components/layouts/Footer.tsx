@@ -1,12 +1,13 @@
 import React from 'react'
-import styles from '../../styles/layouts/Footer.module.css'
 import Divider from '../UI/Divider'
-
+import styles from '../../styles/layouts/Footer.module.css'
 
 const Footer = () => {
+  const year = new Date().getFullYear()
   return (
     <footer className={styles.footer}>
       <Divider />
+      <p >Julian Pagtama <span>&copy;</span> {year}</p>
     </footer>
   )
 }
