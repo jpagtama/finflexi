@@ -54,3 +54,14 @@
 .errMessage {
     text-align: center;
 }
+
+@media (min-width: 768px) {
+    .companyProfileContainer {
+        width: 60vw;
+    }
+}
+@media (min-width: 820px) {
+    .companyProfileContainer {
+        width: 50vw;
+    }
+}
