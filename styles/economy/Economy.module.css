@@ -23,8 +23,8 @@
         width: 60vw;
     }
 }
-@media (min-width: 1920px) {
+@media (min-width: 820px) {
     .container {
-        width: 40vw;
+        width: 50vw;
     }
 }
