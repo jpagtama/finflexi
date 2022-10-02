@@ -201,7 +201,7 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
     return (
         <div className={styles.errContainer}>
             <p className={styles.errMessage}>Well, this is awkward. This free API has encountered some limitations:</p>
-            <p className={styles.errMessage}>"{message}"</p>
+            <p className={styles.errMessage}>&quot;{message}&quot;</p>
         </div>
     )
   }
@@ -210,7 +210,7 @@ const Profile = ({details, daily, earnings, earnings_calendar, status}: Props) =
     <div className={styles.companyProfileContainer}>
 
       <h1 className={styles.companyName} >{name}</h1>
-      {typeof daily !== 'undefined' && !('error_message' in daily)?  stockChart() : displayError(daily.error_message)}
+      {typeof daily !== 'undefined' && !('error_message' in daily)? stockChart() : displayError(daily.error_message)}
       
       {typeof details !== 'undefined' && !('error_message' in details)? companyOverview() : displayError(details.error_message)}
 
