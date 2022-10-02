@@ -2,8 +2,15 @@
     margin-top: 15em;
     width: 90vw;
     height: 15em;
-    color: var(--dark-gray);
+    color: var(--purple-blue);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+.footerContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
 }
