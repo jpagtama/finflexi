@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model companies {
+  ticker             String             @id(map: "ticker_pk") @db.VarChar(20)
+  description        String?            @db.VarChar(1000)
+  exchange           String?            @db.VarChar(10)
+  marketcap          BigInt?
+  analysttargetprice Decimal?           @db.Decimal(12, 2)
+  sharesoutstanding  BigInt?
+  forwardpe          Decimal?           @db.Decimal(6, 2)
+  movingavg50        Decimal?           @db.Decimal(12, 2)
+  movingavg200       Decimal?           @db.Decimal(12, 2)
+  fiscalyearend      String?            @db.VarChar(10)
+  name               String?            @db.VarChar(50)
+  stock_data_daily   stock_data_daily[]
+}
+
+model stock_data_daily {
+  date          DateTime  @db.Date
+  open          Decimal?  @db.Decimal(11, 2)
+  close         Decimal?  @db.Decimal(11, 2)
+  high          Decimal?  @db.Decimal(11, 2)
+  low           Decimal?  @db.Decimal(11, 2)
+  volume        Int?
+  companyticker String    @db.VarChar(20)
+  companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "stock_data_daily_company_ticker_fkey")
+
+  @@id([date, companyticker], map: "stock_data_daily_pk")
+}
