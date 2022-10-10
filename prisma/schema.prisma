@@ -34,3 +34,28 @@ model stock_data_daily {
 
   @@id([date, companyticker], map: "stock_data_daily_pk")
 }
+
+model gross_domestic_product {
+  date  DateTime @id(map: "gdp_pk") @db.Date
+  value Decimal  @db.Decimal(9, 3)
+}
+
+model interest_rates {
+  date  DateTime @id(map: "interestrates_pk") @db.Date
+  value Decimal  @db.Decimal(5, 3)
+}
+
+model consumer_price_index {
+  date  DateTime @id(map: "cpi_pk") @db.Date
+  value Decimal  @db.Decimal(7, 3)
+}
+
+model inflation {
+  date  DateTime @id(map: "inflation_pk") @db.Date
+  value Decimal  @db.Decimal(6, 3)
+}
+
+model unemployment {
+  date  DateTime @id(map: "unemployment_pk") @db.Date
+  value Decimal  @db.Decimal(6, 3)
+}
