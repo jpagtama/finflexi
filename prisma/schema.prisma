@@ -8,18 +8,20 @@ datasource db {
 }
 
 model companies {
-  ticker             String             @id(map: "ticker_pk") @db.VarChar(20)
-  description        String?            @db.VarChar(1000)
-  exchange           String?            @db.VarChar(10)
+  ticker             String              @id(map: "ticker_pk") @db.VarChar(20)
+  description        String?             @db.VarChar(1000)
+  exchange           String?             @db.VarChar(10)
   marketcap          BigInt?
-  analysttargetprice Decimal?           @db.Decimal(12, 2)
+  analysttargetprice Decimal?            @db.Decimal(12, 2)
   sharesoutstanding  BigInt?
-  forwardpe          Decimal?           @db.Decimal(6, 2)
-  movingavg50        Decimal?           @db.Decimal(12, 2)
-  movingavg200       Decimal?           @db.Decimal(12, 2)
-  fiscalyearend      String?            @db.VarChar(10)
-  name               String?            @db.VarChar(50)
+  forwardpe          Decimal?            @db.Decimal(6, 2)
+  movingavg50        Decimal?            @db.Decimal(12, 2)
+  movingavg200       Decimal?            @db.Decimal(12, 2)
+  fiscalyearend      String?             @db.VarChar(10)
+  name               String?             @db.VarChar(50)
+  earnings           earnings[]
   stock_data_daily   stock_data_daily[]
+  earnings_calendar  earnings_calendar[]
 }
 
 model stock_data_daily {
@@ -30,7 +32,7 @@ model stock_data_daily {
   low           Decimal?  @db.Decimal(11, 2)
   volume        Int?
   companyticker String    @db.VarChar(20)
-  companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "stock_data_daily_company_ticker_fkey")
+  companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "stock_data_daily_company_ticker_fk")
 
   @@id([date, companyticker], map: "stock_data_daily_pk")
 }
@@ -58,4 +60,22 @@ model inflation {
 model unemployment {
   date  DateTime @id(map: "unemployment_pk") @db.Date
   value Decimal  @db.Decimal(6, 3)
+}
+
+model earnings {
+  companyticker String    @db.VarChar(20)
+  reportedDate  DateTime  @db.Date
+  reportedEPS   Decimal   @db.Decimal(5, 2)
+  estimatedEPS  Decimal   @db.Decimal(5, 2)
+  companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "earnings_fk")
+
+  @@id([companyticker, reportedDate], map: "earnings_pk")
+}
+
+model earnings_calendar {
+  id            String    @id @default(uuid())
+  companyticker String    @db.VarChar(20)
+  reportDate    DateTime? @db.Date
+  estimate      Decimal?  @db.Decimal(5, 2)
+  companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "earningscalendar_fk")
 }
