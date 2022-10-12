@@ -1,4 +1,3 @@
-// import {prisma} from '../../../../db/index'
 import {prisma} from '@db/index'
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -14,12 +13,12 @@ const updateCompanyOverview = async (ticker: string) => {
             name: data['Name'],
             description: data['Description'],
             exchange: data['Exchange'],
-            marketcap: parseInt(data['MarketCapitalization']),
-            analysttargetprice: parseFloat(data['AnalystTargetPrice']).toFixed(2),
-            sharesoutstanding: parseInt(data['SharesOutstanding']),
-            forwardpe: parseFloat(data['ForwardPE']).toFixed(2),
-            movingavg50: parseFloat(data['50DayMovingAverage']).toFixed(2),
-            movingavg200: parseFloat(data['200DayMovingAverage']).toFixed(2),
+            marketcap: isNaN(parseInt(data['MarketCapitalization']))? null: parseInt(data['MarketCapitalization']),
+            analysttargetprice: isNaN(parseFloat(data['AnalystTargetPrice']))? null : parseFloat(data['AnalystTargetPrice']).toFixed(2),
+            sharesoutstanding: isNaN(parseInt(data['SharesOutstanding']))? null: parseInt(data['SharesOutstanding']),
+            forwardpe: isNaN(data['ForwardPE'])? null : parseFloat(data['ForwardPE']).toFixed(2),
+            movingavg50: isNaN(parseFloat(data['50DayMovingAverage']))? null: parseFloat(data['50DayMovingAverage']).toFixed(2),
+            movingavg200: isNaN(parseFloat(data['200DayMovingAverage']))? null: parseFloat(data['200DayMovingAverage']).toFixed(2),
             fiscalyearend: data['FiscalYearEnd'],
         },
         create: {
@@ -27,12 +26,12 @@ const updateCompanyOverview = async (ticker: string) => {
             name: data['Name'],
             description: data['Description'],
             exchange: data['Exchange'],
-            marketcap: parseInt(data['MarketCapitalization']),
-            analysttargetprice: parseFloat(data['AnalystTargetPrice']).toFixed(2),
-            sharesoutstanding: parseInt(data['SharesOutstanding']),
-            forwardpe: parseFloat(data['ForwardPE']).toFixed(2),
-            movingavg50: parseFloat(data['50DayMovingAverage']).toFixed(2),
-            movingavg200: parseFloat(data['200DayMovingAverage']).toFixed(2),
+            marketcap: isNaN(parseInt(data['MarketCapitalization']))? null: parseInt(data['MarketCapitalization']),
+            analysttargetprice: isNaN(parseFloat(data['AnalystTargetPrice']))? null : parseFloat(data['AnalystTargetPrice']).toFixed(2),
+            sharesoutstanding: isNaN(parseInt(data['SharesOutstanding']))? null: parseInt(data['SharesOutstanding']),
+            forwardpe: isNaN(data['ForwardPE'])? null : parseFloat(data['ForwardPE']).toFixed(2),
+            movingavg50: isNaN(parseFloat(data['50DayMovingAverage']))? null: parseFloat(data['50DayMovingAverage']).toFixed(2),
+            movingavg200: isNaN(parseFloat(data['200DayMovingAverage']))? null: parseFloat(data['200DayMovingAverage']).toFixed(2),
             fiscalyearend: data['FiscalYearEnd'],
         }
     })
