@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "earnings" ALTER COLUMN "reportedEPS" DROP NOT NULL,
+ALTER COLUMN "estimatedEPS" DROP NOT NULL;

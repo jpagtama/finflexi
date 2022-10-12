@@ -9,7 +9,7 @@ datasource db {
 
 model companies {
   ticker             String              @id(map: "ticker_pk") @db.VarChar(20)
-  description        String?             @db.VarChar(1000)
+  description        String?             @db.VarChar(2000)
   exchange           String?             @db.VarChar(10)
   marketcap          BigInt?
   analysttargetprice Decimal?            @db.Decimal(12, 2)
@@ -20,8 +20,10 @@ model companies {
   fiscalyearend      String?             @db.VarChar(10)
   name               String?             @db.VarChar(50)
   earnings           earnings[]
-  stock_data_daily   stock_data_daily[]
   earnings_calendar  earnings_calendar[]
+  stock_data_daily   stock_data_daily[]
+
+  @@index([ticker, name])
 }
 
 model stock_data_daily {
@@ -65,8 +67,8 @@ model unemployment {
 model earnings {
   companyticker String    @db.VarChar(20)
   reportedDate  DateTime  @db.Date
-  reportedEPS   Decimal   @db.Decimal(5, 2)
-  estimatedEPS  Decimal   @db.Decimal(5, 2)
+  reportedEPS   Decimal?  @db.Decimal(7, 2)
+  estimatedEPS  Decimal?  @db.Decimal(7, 2)
   companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "earnings_fk")
 
   @@id([companyticker, reportedDate], map: "earnings_pk")
@@ -76,6 +78,6 @@ model earnings_calendar {
   id            String    @id @default(uuid())
   companyticker String    @db.VarChar(20)
   reportDate    DateTime? @db.Date
-  estimate      Decimal?  @db.Decimal(5, 2)
+  estimate      Decimal?  @db.Decimal(7, 2)
   companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "earningscalendar_fk")
 }
