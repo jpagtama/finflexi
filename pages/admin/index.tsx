@@ -22,8 +22,8 @@ const AdminHome = () => {
         console.log('data response :>> ', data);
     }
 
-    // TO ADD: 'AAL','ADBE','BLK','BRK.B','CAT','CCL','COF','CVX','COST','CSCO','CRM','CMCSA','DAL','EBAY','EFX','EIX','F','FDX','FIS','GE','GS','HAS','HD','HSBC','KR','INTU','INTC','INFY','JNJ','JD','KO','KBH','KHC','LOW','LUV','LVMUY','LVMHF','LMND','MA','MDB','MGM','PHM','NOC','O','ORCL','PEP','Q','QSR','RTX','SHEL','SCHW','SNOW','SPY','TSM','TM','TXN','UPS','VAC','VMW','VTI','WING','WIX','XPEV','ZM'
-    const companies = ['AAPL', 'AMD', 'AMT', 'AMTD', 'AMZN', 'BA', 'BABA', 'BAC', 'BBBY', 'BBY', 'BRK.A', 'BRK.B', 'C', 'COKE', 'CS', 'DIS', 'GME', 'GOOG', 'GOOGL', 'HCP', 'HI', 'IBM', 'IVC', 'JPM', 'KLAC', 'KOSS', 'MATW', 'MCD', 'META', 'MMM', 'MRNA', 'MS', 'MSFT', 'NFLX', 'NIO', 'NKE', 'NVDA', 'OXY', 'PFE', 'PG', 'PPG', 'PYPL', 'RCL', 'SBUX', 'SCI', 'SHOP', 'SONY', 'T', 'TGT', 'TMUS', 'TSLA', 'UAL', 'UNH', 'USB', 'V', 'VZ', 'WFC', 'WMT', 'XOM']
+    // TO ADD: 'AAL','ADBE','BLK','CAT','CCL','COF','CVX','COST','CSCO','CRM','CMCSA','DAL','EBAY','EFX','EIX','F','FDX','FIS','GE','GS','HAS','HD','HSBC','KR','INTU','INTC','INFY','JNJ','JD','KBH','KHC','LOW','LUV','LVMUY','LVMHF','LMND','MA','MDB','MGM','PHM','NOC','O','ORCL','PEP','Q','QSR','RTX','SHEL','SCHW','SNOW','SPY','TSM','TM','TXN','UPS','VAC','VMW','VTI','WING','WIX','XPEV','ZM'
+    const companies = ['AAPL', 'AMD', 'AMT', 'AMTD', 'AMZN', 'BA', 'BABA', 'BAC', 'BBBY', 'BBY', 'BRK.A', 'BRK.B', 'C', 'COKE', 'CS', 'DIS', 'GME', 'GOOG', 'GOOGL', 'HCP', 'HI', 'IBM', 'IVC', 'JPM', 'KLAC', 'KO', 'KOSS', 'MATW', 'MCD', 'META', 'MMM', 'MRNA', 'MS', 'MSFT', 'NFLX', 'NIO', 'NKE', 'NVDA', 'OXY', 'PFE', 'PG', 'PPG', 'PYPL', 'RCL', 'SBUX', 'SCI', 'SHOP', 'SONY', 'T', 'TGT', 'TMUS', 'TSLA', 'UAL', 'UNH', 'USB', 'V', 'VZ', 'WFC', 'WMT', 'XOM']
 
     return (
         <>
