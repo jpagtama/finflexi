@@ -4,22 +4,23 @@ import type { NextApiRequest, NextApiResponse } from "next"
 const quarterlyEarningsHandler = async (company: string) => {
     const response = await fetch(`https://www.alphavantage.co/query?function=EARNINGS&symbol=${company}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
     const data = await response.json()
-    const quarterlyEarnings = data.quarterlyEarnings.slice(0,4)
+    const quarterlyEarnings = data.quarterlyEarnings ? data.quarterlyEarnings?.slice(0, 4) : []
 
     return quarterlyEarnings.map((i: { [key: string]: string }) => ({
         companyticker: company,
         reportedDate: new Date(i.reportedDate),
-        reportedEPS: isNaN(parseFloat(i.reportedEPS))? null: parseFloat(i.reportedEPS).toFixed(2),
-        estimatedEPS: isNaN(parseFloat(i.estimatedEPS))? null: parseFloat(i.estimatedEPS).toFixed(2)
+        reportedEPS: isNaN(parseFloat(i.reportedEPS)) ? null : parseFloat(i.reportedEPS).toFixed(2),
+        estimatedEPS: isNaN(parseFloat(i.estimatedEPS)) ? null : parseFloat(i.estimatedEPS).toFixed(2)
     }))
 }
 
 const earningsCalendarHandler = async (company: string) => {
     const response = await fetch(`https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol=${company}&horizon=12month&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
     const data = await response.text()
-    const earningsCalDataFields = data.split(/[\n|,]/).slice(0, 6)
-    const earningsCalData = data.split(/[\n|,]/).slice(6)
     let earningsCalendar = []
+
+    const earningsCalDataFields = data.length ? data.split(/[\n|,]/).slice(0, 6) : []
+    const earningsCalData = data.length ? data.split(/[\n|,]/).slice(6) : []
     // Convert csv data to json
     for (let i = 0; i < earningsCalData.length; i++) {
         let item: { [key: string]: string } = {}
@@ -36,9 +37,9 @@ const earningsCalendarHandler = async (company: string) => {
     for (const i of earningsCalendar) {
         if (i.symbol.length) {
             calendarData.push({
-                companyticker: company, 
+                companyticker: company,
                 reportDate: new Date(i.reportDate),
-                estimate: isNaN(parseFloat(i.estimate))? null: parseFloat(i.estimate).toFixed(2)
+                estimate: isNaN(parseFloat(i.estimate)) ? null : parseFloat(i.estimate).toFixed(2)
             })
         }
     }
@@ -54,10 +55,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const quarterlyEarnings = await quarterlyEarningsHandler(ticker)
             const earningsCalendar = await earningsCalendarHandler(ticker)
-    
+
             // console.log('quarterlyEarnings', quarterlyEarnings)
             console.log(`earningsCalendar for ${ticker}`, earningsCalendar)
-    
+
             prisma.$transaction([
                 prisma.earnings.deleteMany({
                     where: { companyticker: ticker }
