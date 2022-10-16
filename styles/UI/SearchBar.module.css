@@ -4,14 +4,16 @@
     align-items: center;
     width: 100%;
 }
+
 .searchBar {
     width: 100%;
     padding: 1em;
     border: none;
     color: ivory;
     background-color: var(--gray);
-    
+
 }
+
 .searchBar:focus {
     /* override default input focus behavior */
     outline: none;
@@ -23,12 +25,15 @@
     width: 100%;
     display: flex;
 }
+
 .resultsBorderWithoutRecords {
     border-radius: 5px 0 0 5px;
 }
+
 .resultsBorderWithRecords {
     border-radius: 5px 0 0 0;
 }
+
 .searchIcon {
     display: flex;
     justify-content: center;
@@ -37,17 +42,21 @@
     padding: 1em;
     cursor: pointer;
 }
+
 .searchIconBorderWithRecords {
     border-radius: 0 5px 0 0;
 }
+
 .searchIconBorderWithoutRecords {
     border-radius: 0 5px 5px 0;
 }
+
 .userMessage {
     color: var(--error);
     margin-top: 0.5em;
     font-weight: 200;
 }
+
 .searchResultsContainer {
     display: flex;
     flex-direction: column;
@@ -57,12 +66,14 @@
     border: none;
     border-radius: 0 0 5px 5px;
 }
+
 .searchResultsList {
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 100%;
 }
+
 .searchItem {
     display: flex;
     width: 100%;
@@ -70,14 +81,22 @@
     padding: 1em;
     cursor: pointer;
 }
+
 .searchItem:hover {
     color: black;
     background-color: var(--dark-green);
 }
+
 .ticker {
     font-weight: 200;
     font-size: 0.8em;
 }
+
 .companyName {
     font-weight: 200;
+}
+
+.highlight {
+    color: black;
+    background-color: var(--dark-green);
 }
