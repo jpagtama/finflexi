@@ -8,25 +8,17 @@ export interface CustomError {
 }
 
 export interface CompanyOverview {
-    movingAverage50day: string
-    high52week: string
-    low52week: string
-    movingAverage200day: string
-    Address: string
-    AnalystTargetPrice: string
-    AssetType: string
-    CIK: string
-    Country: string
-    Description: string
-    Exchange: string
-    FiscalYearEnd: string
-    ForwardPE: string
-    Industry: string
-    LatestQuarter: string
-    MarketCapitalization: string
-    Name: string
-    SharesOutstanding: string
-    Symbol: string
+    ticker: string
+    movingavg50: number
+    movingavg200: number
+    analysttargetprice: number
+    description: string
+    exchange: string
+    fiscalyearend: string
+    forwardpE: number
+    marketcap: string
+    name: string
+    sharesoutstanding: number
 }
 
 export interface StockPrice {
@@ -49,5 +41,6 @@ export interface EarningsData {
 }
 
 export interface EarningsCalendar {
-    [key: string]: string
+    reportDate: string | null
+    estimate: string | null
 }
