@@ -15,7 +15,7 @@ export interface CompanyOverview {
     description: string
     exchange: string
     fiscalyearend: string
-    forwardpE: number
+    forwardpe: number
     marketcap: string
     name: string
     sharesoutstanding: number
