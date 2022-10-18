@@ -1,7 +1,9 @@
 import { GetStaticPropsContext } from "next"
-import {CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
-import { isJSONEmpty } from "../../utils/utils"
+import { prisma } from '@db/index'
+import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
+import { dbDatetoString, isJSONEmpty } from "../../utils/utils"
 import Profile from '../../components/company/Profile'
+import { Decimal } from "@prisma/client/runtime"
 
 interface Props {
   details: CompanyOverview | CustomError
@@ -11,13 +13,14 @@ interface Props {
   status: Status
 }
 
-const Details = (props: Props) => {
+const Details = ({ details, daily, earnings, earnings_calendar }: Props) => {
 
-  const companyProfile = <Profile {...props} />
+  // const companyProfile = <Profile {...props} />
+  console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
 
   return (
     <>
-      {companyProfile}
+      <h1>Company Profile Page</h1>
     </>
   )
 }
@@ -26,123 +29,123 @@ export const getStaticPaths = async () => {
   return {
     fallback: true,
     paths: [
-      {params: {ticker: 'AAPL'}},
-      {params: {ticker: 'TSLA'}},
-      {params: {ticker: 'AMZN'}},
-      {params: {ticker: 'MSFT'}},
-      {params: {ticker: 'GOOG'}},
-      {params: {ticker: 'GOOGL'}},
-      {params: {ticker: 'JNJ'}},
-      {params: {ticker: 'GME'}},
-      {params: {ticker: 'BBBY'}},
+      { params: { ticker: 'AAPL' } },
+      { params: { ticker: 'TSLA' } },
+      { params: { ticker: 'AMZN' } },
+      { params: { ticker: 'MSFT' } },
+      { params: { ticker: 'GOOG' } },
+      { params: { ticker: 'GOOGL' } },
+      { params: { ticker: 'JNJ' } },
+      { params: { ticker: 'GME' } },
+      { params: { ticker: 'BBBY' } },
     ]
   }
 }
 
-export const getStaticProps = async(context: GetStaticPropsContext) => {
+const getCompanyOverview = async (ticker: string) => {
+  const dataOverview = await prisma.companies.findFirst({ where: { ticker: ticker } })
+  let company: { [key: string]: any } = {}
+  if (dataOverview) {
+    for (const [key, value] of Object.entries(dataOverview)) {
+      if (typeof value === 'bigint') {
+        company[key] = value.toString()
+      } else if (value instanceof Date) {
+        company[key] = dbDatetoString(value)
+      } else if (value instanceof Decimal) {
+        company[key] = value.toString()
+      } else {
+        company[key] = value
+      }
+    }
+  }
+  return company
+}
+const getDailyStockPrices = async (ticker: string) => {
+  let labels = []
+  let price = []
+  const dataDaily = await prisma.stock_data_daily.findMany({ where: { companyticker: ticker } })
+  // const updatedDaily = JSON.stringify(dataDaily, (_key, value) => {
+  //   return typeof value === 'bigint' ? value = value.toString() : value
+  // })
+  for (const item of dataDaily) {
+    let d = null
+    if (item['date'] != null) {
+      d = dbDatetoString(item['date'])
+    }
+    labels.push(d)
+    price.push(item['close']?.toFixed())
+  }
+
+  return { labels, price }
+}
+const getReportedEarnings = async (ticker: string) => {
+  const dataEPS = await prisma.earnings.findMany({ where: { companyticker: ticker } })
+  let labels = []
+  let reportedEPS = []
+  let estimatedEPS = []
+  for (const item of dataEPS) {
+    let d = null
+    if (item['reportedDate'] != null) {
+      d = dbDatetoString(item['reportedDate'])
+    }
+    labels.push(d)
+    reportedEPS.push(item['reportedEPS']?.toFixed(2))
+    estimatedEPS.push(item['estimatedEPS']?.toFixed(2))
+  }
+  return { labels, reportedEPS, estimatedEPS }
+}
+const getEarningsCalendar = async (ticker: string) => {
+  const dataEarningsCal = await prisma.earnings_calendar.findMany({
+    where: { companyticker: ticker },
+    select: { reportDate: true, estimate: true }
+  })
+
+  let calendar = []
+  let reportDate = null
+  let estimate = null
+
+  for (const item of dataEarningsCal) {
+    const d = item['reportDate'] != null ? dbDatetoString(item['reportDate']) : null
+    reportDate = (d)
+    estimate = item['estimate'] ? item['estimate'].toString() : null
+    calendar.push({ reportDate, estimate })
+  }
+
+  return calendar
+}
+
+export const getStaticProps = async (context: GetStaticPropsContext) => {
 
   const ticker = context.params?.ticker?.toString().trim()
-  let details: CompanyOverview | CustomError | {} = {}
+  let details: CompanyOverview | CustomError | {} | null = {}
   let daily: StockData | CustomError | {} = {}
   let earnings: EarningsData | CustomError | {} = {}
-  let earnings_calendar: EarningsCalendar[] | CustomError | [] = []
-  let status: Status = {status: "ok"}
+  let earnings_calendar: EarningsCalendar[] = []
+  let status: Status = { status: "ok" }
 
   if (ticker) {
     try {
-      const resOverview = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
-      const dataOverview = await resOverview.json()
+      const overview = await getCompanyOverview(ticker)
+      // console.log('overview ->', overview)
 
-      const resDaily = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
-      const dataDaily = await resDaily.json()
+      const dailyStockPrices = await getDailyStockPrices(ticker)
+      // console.log('dailyStockPrices from fun->', dailyStockPrices)
 
-      const resEPS = await fetch(`https://www.alphavantage.co/query?function=EARNINGS&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
-      const dataEPS = await resEPS.json()
+      const updatedEPS = await getReportedEarnings(ticker)
+      // console.log('updatedEPS from func ->', updatedEPS)
 
-      const resEarningsCal = await fetch(`https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol=${ticker}&horizon=12month&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
-      const dataEarningsCal = await resEarningsCal.text()
+      const earningsCalendar = await getEarningsCalendar(ticker)
+      // console.log('earningsCalendar ->', earningsCalendar)
 
-      // const res5min = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=5min&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
-      // const data5min = await res5min.json()
-      // console.log('data5min', data5min)
+      details = overview
+      // daily -> { labels, price }
+      daily = dailyStockPrices
+      // earnings -> { labels, reportedEPS, estimatedEPS }
+      earnings = updatedEPS
+      // earnings_calendar -> [{reportDate, estimate}]
+      earnings_calendar = earningsCalendar
 
-      if (isJSONEmpty(dataOverview)) {
-        details = {error_message: 'Company overview not available'}
-      } else if (dataOverview.Note) {
-        details = {error_message: dataOverview.Note}
-      } else {
-        details = {
-          ...dataOverview,
-          movingAverage50day: dataOverview['50DayMovingAverage'],
-          movingAverage200day: dataOverview['200DayMovingAverage'],
-          high52week: dataOverview['52WeekHigh'],
-          low52week: dataOverview['52WeekLow']
-        }
-      }
 
-      const dailyData = {...dataDaily['Time Series (Daily)']}
-
-      if (isJSONEmpty(dailyData)) {
-        daily = {error_message: 'Stock data not available'}
-      } else if (dailyData.Note) {
-        daily = {error_message: 'Stock data not available at this time'}
-      } else {
-        const labels = Object.keys(dailyData).sort()
-        const price = labels.map(item => ({
-          open: parseFloat(dailyData[item]['1. open']),
-          high: parseFloat(dailyData[item]['2. high']),
-          low: parseFloat(dailyData[item]['3. low']),
-          close: parseFloat(dailyData[item]['4. close']),
-          volume: parseFloat(dailyData[item]['5. volume'])
-        }))
-        daily = {labels, price}
-      }
-
-      const epsData = dataEPS.quarterlyEarnings
-
-      if (epsData === 'undefined' || epsData.length === 0) {
-        earnings = {error_message: 'Earnings data not available'}
-      } else if (dataEPS.Note) {
-        earnings = {error_message: 'Earnings data not available at this time'}
-      } else {
-        const labels: string[] = []
-        const reportedEPS: number[] = [] 
-        const estimatedEPS: number[] = []
-
-        for (const i of epsData) {
-          labels.push(i.reportedDate)
-          reportedEPS.push(parseFloat(i.reportedEPS))
-          estimatedEPS.push(parseFloat(i.estimatedEPS))
-        }
-
-        earnings = {labels, reportedEPS, estimatedEPS}
-      }
-
-      if (dataEarningsCal === 'undefined' || typeof dataEarningsCal !== 'string' || dataEarningsCal.length === 0) {
-        earnings_calendar = {error_message: 'Earnings calendar data not available'}
-      } else {
-        const earningsCalDataFields = dataEarningsCal.split(/[\n|,]/).slice(0,6)
-        const earningsCalData = dataEarningsCal.split(/[\n|,]/).slice(6)
-        let earningsCalendar = []
-        // console.log('earningsCalDataFields :>> ', earningsCalDataFields);
-        // console.log('ungabunga :>> ', earningsCalData);
-
-        // Convert csv data to json
-        for (let i = 0; i < earningsCalData.length; i++) {
-          let item: {[key: string]: string} = {} 
-          for (let j = 0; j < earningsCalDataFields.length; j++) {
-            let field = earningsCalDataFields[j]? earningsCalDataFields[j].replace(/(\r\n|\n|\r)/gm, "") : ''
-            let fieldValue = earningsCalData[i]? earningsCalData[i].replace(/(\r\n|\n|\r)/gm, "") : ''
-            item[field] = fieldValue
-            if (j !== earningsCalDataFields.length - 1) i = i + 1
-          }
-          earningsCalendar.push(item)
-        }
-        // console.log('earningsCalendar BEFORE', earningsCalendar)
-        earnings_calendar = earningsCalendar.length > 0? earningsCalendar: {error_message: 'Earnings calendar data not available'}
-        // console.log('earnings_calendar AFTER :>> ', earnings_calendar);
-      }
-      
     } catch (err) {
       if (err instanceof Error) {
         console.log("Reached Error:", err.message)
@@ -151,16 +154,8 @@ export const getStaticProps = async(context: GetStaticPropsContext) => {
       }
     }
   }
-  
-  return {
-    props: {
-      details,
-      daily,
-      earnings,
-      earnings_calendar,
-      status
-    },
-  }
+
+  return { props: { details, daily, earnings, earnings_calendar, status } }
 }
 
 export default Details
