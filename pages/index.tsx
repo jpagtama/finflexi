@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 import AppIntro from '@components/landing/AppIntro'
@@ -20,7 +20,7 @@ const Home = () => {
     if (companyResults.length > 0) {
       Router.push({
         pathname: '/company/search',
-        query: {details: JSON.stringify(companyResults)}
+        query: { details: JSON.stringify(companyResults) }
       }, '/company/search')
     }
   }, [companyResults])
@@ -38,10 +38,10 @@ const Home = () => {
   return (
     <>
       <Head>
-          <title>Finflexi</title>
-          <meta name="description" content="Access to stock market data, company filings, and technical analysis" />
+        <title>Finflexi</title>
+        <meta name="description" content="Access to stock market data, company filings, and technical analysis" />
       </Head>
-      {animateIntro &&  <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler}/>}
+      {animateIntro && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />}
       <section className={styles.searchSection}>
         <h1 className={styles.sloganHeading}>Flexibility in Finance. FinFlexi.</h1>
         <SearchBar searchCompaniesHandler={searchCompaniesHandler} />
