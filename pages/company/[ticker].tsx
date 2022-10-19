@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { GetStaticPropsContext } from 'next'
 import { prisma } from '@db/index'
 import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
@@ -7,6 +8,7 @@ import { Line, Bar } from 'react-chartjs-2'
 import ChartPicker from '@components/UI/ChartPicker'
 import { dbDatetoString, isJSONEmpty } from '../../utils/utils'
 import { Decimal } from '@prisma/client/runtime'
+import Loading from '@components/UI/Loading'
 import styles from '@styles/company/Profile.module.css'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
@@ -20,8 +22,9 @@ interface Props {
 }
 
 const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
-  console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
+  // console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
   const [graphMode, setGraphMode] = useState(30)
+  const router = useRouter()
 
   const stockChart = () => {
 
@@ -158,6 +161,7 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
     setGraphMode(days)
   }
 
+  if (router.isFallback) return <Loading />
   return (
     <div className={styles.companyProfileContainer}>
       <h1 className={styles.companyName} >{details.name}</h1>
@@ -167,23 +171,6 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
       {earnings_calendar.length > 0 && earningsCalendar()}
     </div>
   )
-}
-
-export const getStaticPaths = async () => {
-  return {
-    fallback: true,
-    paths: [
-      { params: { ticker: 'AAPL' } },
-      { params: { ticker: 'TSLA' } },
-      { params: { ticker: 'AMZN' } },
-      { params: { ticker: 'MSFT' } },
-      { params: { ticker: 'GOOG' } },
-      { params: { ticker: 'GOOGL' } },
-      { params: { ticker: 'JNJ' } },
-      { params: { ticker: 'GME' } },
-      { params: { ticker: 'BBBY' } },
-    ]
-  }
 }
 
 const getCompanyOverview = async (ticker: string) => {
@@ -233,8 +220,8 @@ const getReportedEarnings = async (ticker: string) => {
       d = dbDatetoString(item['reportedDate'])
     }
     labels.push(d)
-    reportedEPS.push(item['reportedEPS']?.toFixed(2))
-    estimatedEPS.push(item['estimatedEPS']?.toFixed(2))
+    reportedEPS.push(item['reportedEPS']?.toFixed(2) != undefined ? item['reportedEPS']?.toFixed(2) : null)
+    estimatedEPS.push(item['estimatedEPS']?.toFixed(2) != undefined ? item['estimatedEPS']?.toFixed(2) : null)
   }
   return { labels, reportedEPS, estimatedEPS }
 }
@@ -256,6 +243,23 @@ const getEarningsCalendar = async (ticker: string) => {
   }
 
   return calendar
+}
+
+export const getStaticPaths = async () => {
+  return {
+    fallback: true,
+    paths: [
+      { params: { ticker: 'AAPL' } },
+      { params: { ticker: 'TSLA' } },
+      { params: { ticker: 'AMZN' } },
+      { params: { ticker: 'MSFT' } },
+      { params: { ticker: 'GOOG' } },
+      { params: { ticker: 'GOOGL' } },
+      { params: { ticker: 'JNJ' } },
+      { params: { ticker: 'GME' } },
+      { params: { ticker: 'BBBY' } },
+    ]
+  }
 }
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
