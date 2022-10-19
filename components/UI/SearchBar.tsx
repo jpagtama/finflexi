@@ -52,6 +52,10 @@ const SearchBar = (props: Props) => {
         if (searchResults.length === 0) setHighlightedResult(-1)
     }, [searchResults])
 
+    useEffect(() => {
+        searchBarRef.current?.focus()
+    }, [])
+
     const submitHandler = async (e: React.FormEvent) => {
         e.preventDefault()
         if (highlightedResult > -1) {
