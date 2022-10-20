@@ -56,9 +56,9 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
 
     const buttons = [
       { title: '7d', clickHandler: stockGraphHandler, active: graphMode === 7, duration: 7 },
-      { title: '2wk', clickHandler: stockGraphHandler, active: graphMode === 14, duration: 14 },
-      { title: '1m', clickHandler: stockGraphHandler, active: graphMode === 30, duration: 30 },
-      { title: '3m', clickHandler: stockGraphHandler, active: graphMode === 90, duration: 90 }
+      { title: '14d', clickHandler: stockGraphHandler, active: graphMode === 14, duration: 14 },
+      { title: '30d', clickHandler: stockGraphHandler, active: graphMode === 30, duration: 30 },
+      { title: '90d', clickHandler: stockGraphHandler, active: graphMode === 90, duration: 90 }
     ]
 
     return (
