@@ -1534,6 +1534,11 @@
   "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.229.tgz"
   "version" "1.4.229"
 
+"email-validator@^2.0.4":
+  "integrity" "sha512-gYCwo7kh5S3IDyZPLZf6hSS0MnZT8QmJFqYvbqlDZSbwdZlY6QZWxJ4i/6UhITOJ4XzyI647Bm2MXKCLqnJ4nQ=="
+  "resolved" "https://registry.npmjs.org/email-validator/-/email-validator-2.0.4.tgz"
+  "version" "2.0.4"
+
 "emittery@^0.10.2":
   "integrity" "sha512-aITqOwnLanpHLNXZJENbOgjUBeHocD+xsSJmNrjovKBW5HbSpW3d1pEls7GFQPUWXiwG9+0P4GtHfEqC/4M0Iw=="
   "resolved" "https://registry.npmjs.org/emittery/-/emittery-0.10.2.tgz"
