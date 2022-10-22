@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--dark-gray);
+    margin-top: 10em;
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+    gap: 20px;
+}
+
+.title {
+    text-align: center;
+    font-weight: 200;
+}
