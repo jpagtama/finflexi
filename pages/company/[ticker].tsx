@@ -82,7 +82,7 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
           <div className={styles.overviewSection}>
             <span>Exchange:</span> <span>{details.exchange}</span>
           </div>
-          {details.marketcap && <div className={styles.overviewSection}><span>Market Cap:</span> <span>{details.marketcap}</span></div>}
+          {details.marketcap && <div className={styles.overviewSection}><span>Market Cap:</span> <span>${details.marketcap}</span></div>}
           {details.analysttargetprice && <div className={styles.overviewSection}><span>Analyst Target Price:</span> <span>${details.analysttargetprice}</span></div>}
           {details.sharesoutstanding && <div className={styles.overviewSection}><span>Shares Outstanding:</span> <span>{details.sharesoutstanding}</span></div>}
           {details.forwardpe && <div className={styles.overviewSection}><span>Forward PE:</span> <span>{details.forwardpe}</span></div>}
