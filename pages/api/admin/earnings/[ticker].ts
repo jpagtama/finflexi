@@ -56,9 +56,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const quarterlyEarnings = await quarterlyEarningsHandler(ticker)
             const earningsCalendar = await earningsCalendarHandler(ticker)
 
-            // console.log('quarterlyEarnings', quarterlyEarnings)
-            console.log(`earningsCalendar for ${ticker}`, earningsCalendar)
-
             prisma.$transaction([
                 prisma.earnings.deleteMany({
                     where: { companyticker: ticker }
