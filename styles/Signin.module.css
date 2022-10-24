@@ -1,0 +1,31 @@
+.signupContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.signupContainer h1 {
+    font-weight: 200;
+    margin-bottom: 1em;
+}
+
+.form {
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+    gap: 10;
+}
+
+.form>input {
+    margin-bottom: 2em;
+}
+
+.form>label {
+    margin-bottom: 0.5em;
+}
+
+.form>button {
+    align-self: center;
+    width: 25vw;
+}
