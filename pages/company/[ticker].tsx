@@ -4,6 +4,8 @@ import { GetStaticPropsContext } from 'next'
 import { prisma } from '@db/index'
 import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
+import { IconContext } from 'react-icons'
+import { FaStar, FaRegStar } from 'react-icons/fa'
 import { Line, Bar } from 'react-chartjs-2'
 import ChartPicker from '@components/UI/ChartPicker'
 import { dbDatetoString, isJSONEmpty } from '../../utils/utils'
@@ -24,6 +26,7 @@ interface Props {
 const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
   // console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
   const [graphMode, setGraphMode] = useState(30)
+  const [favorited, setFavorited] = useState(false)
   const router = useRouter()
 
   const stockChart = () => {
@@ -66,6 +69,16 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
         <Line options={optionsLine} data={dataStock} />
         <ChartPicker buttons={buttons} />
       </div>
+    )
+  }
+  const priceChange = () => {
+    const focusedArr = [...daily.price.slice(0, graphMode)]
+    const currentPrice = parseFloat(`${focusedArr[0]}`)
+    const prevPrice = parseFloat(`${focusedArr[graphMode - 1]}`)
+    const priceChange = parseFloat(`${(currentPrice - prevPrice)}`).toFixed(2)
+    const changePercent = ((parseFloat(priceChange) / prevPrice) * 100).toFixed(2)
+    return (
+      <span>{parseFloat(priceChange) < 0 ? `-$${Math.abs(parseFloat(priceChange))}` : `+$${priceChange}`} ({changePercent}%)</span>
     )
   }
   const companyOverview = () => {
@@ -133,14 +146,13 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
       </>
     )
   }
-
   const earningsCalendar = () => {
     // console.log('earnings_calendar from PROFILE', earnings_calendar)
-    const upcomingEarnings = earnings_calendar.map(i => {
+    const upcomingEarnings = earnings_calendar.map((i, idx) => {
 
       if (i.reportDate) {
         return (
-          <div key={i.reportDate} className={styles.overviewSection}>
+          <div key={idx} className={styles.overviewSection}>
             <span>{i.reportDate}</span> <span>{i.estimate ? `$${i.estimate}` : '-'}</span>
           </div>
         )
@@ -156,15 +168,29 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
       </>
     )
   }
-
   const stockGraphHandler = (days: number) => {
     setGraphMode(days)
+  }
+  const renderFavorited = () => {
+
+    return (
+      <IconContext.Provider value={{ size: '1.5em', color: 'var(--dark-pink)' }}>
+        <div className={styles.starIcon} onClick={addToWatchList}>{favorited ? <FaStar /> : <FaRegStar />}</div>
+      </IconContext.Provider>
+    )
+  }
+  const addToWatchList = () => {
+    setFavorited(!favorited)
   }
 
   if (router.isFallback) return <Loading />
   return (
     <div className={styles.companyProfileContainer}>
       <h1 className={styles.companyName} >{details.name}</h1>
+      <div className={styles.priceChangeSection}>
+        {daily.price.length && priceChange()}
+        {renderFavorited()}
+      </div>
       {stockChart()}
       {companyOverview()}
       {earnings.labels.length > 0 && earningsOverview()}
@@ -200,11 +226,13 @@ const getDailyStockPrices = async (ticker: string) => {
   // })
   for (const item of dataDaily) {
     let d = null
+    let p = null
+    if (item['close'] != null) p = item['close'].toFixed(2)
     if (item['date'] != null) {
       d = dbDatetoString(item['date'])
     }
     labels.push(d)
-    price.push(item['close']?.toFixed(2))
+    price.push(p)
   }
 
   return { labels, price }
@@ -264,7 +292,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
 
-  const ticker = context.params?.ticker?.toString().trim()
+  const ticker = context.params?.ticker?.toString().trim().toLocaleUpperCase()
   let details: CompanyOverview | CustomError | {} | null = {}
   let daily: StockData | CustomError | {} = {}
   let earnings: EarningsData | CustomError | {} = {}
