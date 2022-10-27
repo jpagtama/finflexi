@@ -35,13 +35,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  watchlist     watchlist[]
 }
 
 model VerificationToken {
@@ -50,6 +51,19 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model watchlist {
+  id            String  @id @default(cuid())
+  userId        String
+  companyticker String  @db.VarChar(20)
+  order         Int?
+  listName      String?
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company companies @relation(fields: [companyticker], references: [ticker], onDelete: Cascade)
+
+  @@unique([userId, listName, companyticker])
 }
 
 model companies {
@@ -67,6 +81,7 @@ model companies {
   earnings           earnings[]
   earnings_calendar  earnings_calendar[]
   stock_data_daily   stock_data_daily[]
+  watchlist          watchlist[]
 
   @@index([ticker, name])
 }
