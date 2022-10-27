@@ -10,7 +10,6 @@ import styles from '@styles/Signin.module.css'
 const SignIn = () => {
     const { data: session, status } = useSession()
     const router = useRouter()
-    // console.log('router.asPath >>', router.asPath)
 
     const [email, setEmail] = useState('')
     const [error, setError] = useState(false)
@@ -21,9 +20,10 @@ const SignIn = () => {
     useEffect(() => { emailRef.current?.focus() }, [])
     useEffect(() => {
         if (status === 'authenticated') {
+            const redirectTo = router.query?.callbackUrl ? router.query.callbackUrl as string : '/'
             setTimeout(() => {
-                router.push('/')
-            }, 2000)
+                router.push(redirectTo)
+            }, 1500)
         }
     }, [status])
 
@@ -60,6 +60,7 @@ const SignIn = () => {
     return (
         <div className={styles.signupContainer}>
             <h1>{status === 'authenticated' ? 'You are signed in' : 'Sign In'}</h1>
+            {(router.query?.error && status === 'unauthenticated') && <p>Please sign in to continue</p>}
             {status !== 'authenticated' ? renderSignInForm() : <Loading />}
         </div>
     )
