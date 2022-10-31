@@ -1,4 +1,6 @@
+import { GetStaticPropsContext } from 'next'
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import Router from 'next/router'
 import Head from 'next/head'
 import AppIntro from '@components/landing/AppIntro'
@@ -12,8 +14,9 @@ interface CompanyList {
 
 const Home = () => {
   const initialCompanies: Array<CompanyList> = []
+  const { status: sessionStatus } = useSession()
 
-  const [animateIntro, setAnimateIntro] = useState(true)
+  const [animateIntro, setAnimateIntro] = useState(sessionStatus !== 'authenticated')
   const [companyResults, setCompanyResults] = useState(initialCompanies)
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const Home = () => {
     <>
       <Head>
         <title>Finflexi</title>
-        <meta name="description" content="Access to stock market data, company filings, and technical analysis" />
+        <meta name="description" content="Access to stock market data and technical analysis" />
       </Head>
       {animateIntro && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />}
       <section className={styles.searchSection}>
