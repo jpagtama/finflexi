@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticPropsContext } from 'next'
 import { prisma } from '@db/index'
+import { useSession, signIn } from 'next-auth/react'
 import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
 import { IconContext } from 'react-icons'
@@ -16,6 +17,7 @@ import styles from '@styles/company/Profile.module.css'
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface Props {
+  ticker: string
   details: CompanyOverview
   daily: StockData
   earnings: EarningsData
@@ -23,11 +25,24 @@ interface Props {
   status: Status
 }
 
-const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
+const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props) => {
   // console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
+  const { data: sessionData, status: sessionStatus } = useSession()
+  // console.log('sessionData :>> ', sessionData);
+
   const [graphMode, setGraphMode] = useState(30)
   const [favorited, setFavorited] = useState(false)
+
   const router = useRouter()
+  useEffect(() => {
+    if (sessionStatus === 'authenticated' && ticker && sessionData.userId) checkIsFavorited()
+  }, [sessionStatus, ticker, sessionData?.userId])
+
+  const checkIsFavorited = async () => {
+    const response = await fetch(`/api/is-favorite-company?id=${sessionData?.userId}&ticker=${ticker}`)
+    const data = await response.json()
+    setFavorited(data.data.isFavorited)
+  }
 
   const stockChart = () => {
 
@@ -179,8 +194,24 @@ const Profile = ({ details, daily, earnings, earnings_calendar }: Props) => {
       </IconContext.Provider>
     )
   }
-  const addToWatchList = () => {
-    setFavorited(!favorited)
+  const addToWatchList = async () => {
+    const payload = { ticker, favorited: !favorited, userId: sessionData?.userId }
+
+    if (sessionStatus === 'unauthenticated') {
+      signIn('email', { callbackUrl: router.asPath })
+    } else {
+      try {
+        const res = await fetch('/api/add-to-favorites', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await res.json()
+        setFavorited(!favorited)
+      } catch (e) {
+        if (e instanceof Error) console.log(e.message)
+      }
+    }
   }
 
   if (router.isFallback) return <Loading />
@@ -331,7 +362,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     }
   }
 
-  return { props: { details, daily, earnings, earnings_calendar, status } }
+  return { props: { ticker, details, daily, earnings, earnings_calendar, status } }
 }
 
 export default Profile
