@@ -6,8 +6,8 @@ const Footer = () => {
   const year = new Date().getFullYear()
   return (
     <footer className={styles.footer}>
-    <Divider />
       <div className={styles.footerContent}>
+        <Divider />
 
         <p >Julian Pagtama <span>&copy;</span> {year}</p>
       </div>
