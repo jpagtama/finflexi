@@ -28,10 +28,11 @@ const MenuList = () => {
   const renderMenuItems = () => {
     return (
       <ul className={styles.menuList}>
-        {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
-        <li><span onClick={() => clickHandler("/")} >Home</span></li>
         <li><span onClick={() => clickHandler("/company/search")} >Search</span></li>
+        <li><span onClick={() => clickHandler("/account/favorites")} >My Favorites</span></li>
         <li><span onClick={() => clickHandler("/economy")} >Economy</span></li>
+        <li><span onClick={() => clickHandler("/account")} >My Account</span></li>
+        {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
         {status === 'authenticated' && <li><span onClick={displaySignOutAlert} >Sign Out</span></li>}
       </ul>
     )
