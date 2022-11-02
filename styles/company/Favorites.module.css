@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,7 +19,17 @@
     margin-bottom: 2em;
 }
 
-.listItem {
+.listItemContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.linkContainer {
+    width: 100%;
+}
+
+.listItemDetails {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -27,7 +37,7 @@
     cursor: pointer;
 }
 
-.listItem:hover {
+.listItemDetails:hover {
     color: black;
     background-color: var(--dark-green);
 }
@@ -39,4 +49,12 @@
 
 .companyName {
     font-weight: 200;
+}
+
+.starIcon {
+    cursor: pointer;
+}
+
+.starContainer {
+    padding: 0 1em;
 }
