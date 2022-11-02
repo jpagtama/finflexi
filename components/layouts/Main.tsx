@@ -1,16 +1,15 @@
-import Footer from './Footer'
-import Header from './Header'
-import styles from '../../styles/layouts/Main.module.css'
+import Footer from '@components/layouts/Footer'
+import Header from '@components/layouts/Header'
 
 interface Props {
-    children: React.ReactNode
+  children: React.ReactNode
 }
 
 const Main = (props: Props) => {
   return (
     <main id="main">
       <Header />
-        {props.children}
+      {props.children}
       <Footer />
     </main>
   )
