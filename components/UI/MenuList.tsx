@@ -28,7 +28,6 @@ const MenuList = () => {
   const renderMenuItems = () => {
     return (
       <ul className={styles.menuList}>
-        <li><span onClick={() => clickHandler("/company/search")} >Search</span></li>
         <li><span onClick={() => clickHandler("/account/favorites")} >My Favorites</span></li>
         <li><span onClick={() => clickHandler("/economy")} >Economy</span></li>
         <li><span onClick={() => clickHandler("/account")} >My Account</span></li>
