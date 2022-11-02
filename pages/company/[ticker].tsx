@@ -222,7 +222,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
         {daily.price.length && priceChange()}
         {renderFavorited()}
       </div>
-      {stockChart()}
+      {(daily.labels.length && daily.price.length) && stockChart()}
       {companyOverview()}
       {earnings.labels.length > 0 && earningsOverview()}
       {earnings_calendar.length > 0 && earningsCalendar()}
