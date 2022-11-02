@@ -1,14 +1,28 @@
 .header {
-    height: 10vh;
-    width: 90vw;
-    padding-top: 1em;
+    width: 100%;
+    padding: 1em;
     position: fixed;
     top: 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
 }
+
 .menuIsOpen {
     height: 100vh;
-    background-color: var(--dark-gray);
+    /* background-color: var(--dark-gray); */
+    background-color: rgba(0, 0, 0, 0.93);
+}
+
+.headerSection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.searchBarContainer {
+    width: 100%;
+    padding-right: 1em;
 }
