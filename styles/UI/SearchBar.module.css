@@ -65,6 +65,7 @@
     background-color: var(--gray);
     border: none;
     border-radius: 0 0 5px 5px;
+    z-index: 20;
 }
 
 .searchResultsList {
