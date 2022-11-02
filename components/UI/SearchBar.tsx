@@ -35,7 +35,6 @@ const SearchBar = (props: Props) => {
     const [searchText, setSearchText] = useState('')
     const [searchResults, setSearchResults] = useState<Company[]>([])
     const [highlightedResult, setHighlightedResult] = useState(-1)
-    const [errorMessage, setErrorMessage] = useState('')
     const [companies, setCompanies] = useState<Company[]>([])
 
     const router = useRouter()
@@ -52,28 +51,13 @@ const SearchBar = (props: Props) => {
         if (searchResults.length === 0) setHighlightedResult(-1)
     }, [searchResults])
 
-    useEffect(() => {
-        searchBarRef.current?.focus()
-    }, [])
-
     const submitHandler = async (e: React.FormEvent) => {
         e.preventDefault()
         if (highlightedResult > -1) {
             router.push(`/company/${searchResults[highlightedResult].ticker}`)
+            setSearchResults([])
+            searchBarRef.current?.blur()
         }
-        // setIsSearching(true)
-        // try {
-        //     const preparedSearchText = searchText.replace(/\./g, '-').trim()
-        //     if (preparedSearchText.length === 0) throw new Error('Please enter a search criteria')
-        //     const response = await fetch(`/api/search?search=${preparedSearchText}`)
-        //     const data = await response.json()
-        //     if (data.length === 0) throw new Error('No companies found')
-        //     setErrorMessage('')
-        //     if (props.searchCompaniesHandler) props.searchCompaniesHandler(data)
-        // } catch (e) {
-        //     if (e instanceof Error) setErrorMessage(e.message)
-        // }
-        // setIsSearching(false)
     }
 
     const renderSearchResults = () => {
