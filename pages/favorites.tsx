@@ -6,8 +6,6 @@ import Link from 'next/link'
 import { FaStar, FaRegStar } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 import styles from '@styles/company/Favorites.module.css'
-import { iteratorSymbol } from 'immer/dist/internal'
-import { stringify } from 'querystring'
 
 const Favorited = () => {
     const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean }[]>([])
