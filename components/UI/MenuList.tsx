@@ -12,9 +12,6 @@ const MenuList = () => {
   const router = useRouter()
   const { data, status } = useSession()
 
-  console.log('session data :>> ', data);
-  console.log('session status :>> ', status);
-
   const clickHandler = (path: string) => {
     dispatch(menuActions.close())
     router.push(path)
@@ -28,7 +25,8 @@ const MenuList = () => {
   const renderMenuItems = () => {
     return (
       <ul className={styles.menuList}>
-        <li><span onClick={() => clickHandler("/account/favorites")} >My Favorites</span></li>
+        {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/")} >Home</span></li>}
+        <li><span onClick={() => clickHandler("/favorites")} >My Favorites</span></li>
         <li><span onClick={() => clickHandler("/economy")} >Economy</span></li>
         <li><span onClick={() => clickHandler("/account")} >My Account</span></li>
         {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
