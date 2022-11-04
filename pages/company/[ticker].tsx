@@ -93,7 +93,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     const priceChange = parseFloat(`${(currentPrice - prevPrice)}`).toFixed(2)
     const changePercent = ((parseFloat(priceChange) / prevPrice) * 100).toFixed(2)
     return (
-      <span>{parseFloat(priceChange) < 0 ? `-$${Math.abs(parseFloat(priceChange))}` : `+$${priceChange}`} ({changePercent}%)</span>
+      <span>{parseFloat(priceChange) < 0 ? `-$${Math.abs(parseFloat(priceChange)).toFixed(2)}` : `+$${priceChange}`} ({changePercent}%)</span>
     )
   }
   const companyOverview = () => {
