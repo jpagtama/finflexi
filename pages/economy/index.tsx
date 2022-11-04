@@ -240,7 +240,7 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>The Economy</h1>
+            <h1 className={styles.title}>Economic Indicators</h1>
             <Divider />
             {renderGDP()}
             {renderInterestRates()}
