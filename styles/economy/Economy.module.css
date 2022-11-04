@@ -4,15 +4,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 10em;
 }
+
 .title {
     font-weight: 200;
     margin-bottom: 0.3em;
 }
+
 .sectionTitle {
     font-weight: 200;
     margin-bottom: 0.5em;
 }
+
 .sectionContainer {
     margin-top: 5em;
     width: 100%;
@@ -23,6 +27,7 @@
         width: 60vw;
     }
 }
+
 @media (min-width: 820px) {
     .container {
         width: 50vw;

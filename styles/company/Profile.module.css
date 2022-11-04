@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 90vw;
+    padding-top: 10em;
 }
 
 .priceChangeSection {
