@@ -3,9 +3,10 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    padding-top: 5em;
 }
+
 .menuList {
     list-style-type: none;
     margin: 0;
@@ -15,6 +16,7 @@
     gap: 2em;
     color: var(--neon-green);
 }
+
 .menuList li {
     text-align: center;
     padding: 0.25em 1.0em;
