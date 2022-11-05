@@ -7,13 +7,21 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: black;
+    z-index: 100;
 }
 
 .menuIsOpen {
-    height: 100vh;
-    /* background-color: var(--dark-gray); */
-    background-color: rgba(0, 0, 0, 0.93);
+    max-height: 100vh;
+    background-color: black;
+    overflow: hidden;
+    transition: max-height 300ms ease-out;
+}
+
+.menuIsClosed {
+    max-height: 5em;
+    overflow: hidden;
+    transition: max-height 300ms ease-out;
 }
 
 .headerSection {
