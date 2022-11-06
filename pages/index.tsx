@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import Router from 'next/router'
 import Head from 'next/head'
 import AppIntro from '@components/landing/AppIntro'
 import SearchBar from '@components/UI/SearchBar'
+import Image from 'next/image'
+import focusImage from '../public/FinFlexiFocus.svg'
+import mountainsImage from '../public/FinFlexiMountains.svg'
+import { FaApple, FaAmazon, FaGoogle, FaFacebook } from 'react-icons/fa'
+import { SiNetflix } from 'react-icons/si'
+import { IconContext } from 'react-icons/lib'
 import styles from '@styles/landing/Index.module.css'
-import Link from 'next/link'
 
 interface CompanyList {
   symbol: string
@@ -20,9 +26,9 @@ const Home = () => {
   const [companyResults, setCompanyResults] = useState(initialCompanies)
 
   useEffect(() => {
-    if (sessionStatus === 'unauthenticated' && !window.sessionStorage.getItem("visted")) {
+    if (sessionStatus === 'unauthenticated' && !window.sessionStorage.getItem("visited")) {
       // Do if user is not signed in and its their first time getting to the page
-      window.sessionStorage.setItem('visted', '1')
+      window.sessionStorage.setItem("visited", "1")
       setAnimateIntro(true)
     }
   }, [])
@@ -46,10 +52,6 @@ const Home = () => {
     setCompanyResults(companies)
   }
 
-  const signUpHandler = () => {
-
-  }
-
   return (
     <>
       <Head>
@@ -66,22 +68,45 @@ const Home = () => {
       </section>
       <section className={styles.sectionContainer}>
         <div className={styles.sectionDetails}>
-          <h1>Laser focused.</h1>
+          <h1 className={styles.sectionTitle}>Laser focused.</h1>
           <p>Get access to stock market data, company statistics, and more.</p>
         </div>
-        <div className={styles.sectionImage}>
-
-        </div>
+        {/* <div className={styles.sectionImage1}> */}
+        <Image src={focusImage} alt="laser focused icon" />
+        {/* </div> */}
       </section>
-      <section className={styles.sectionContainer}>
+      <section className={`${styles.sectionContainer} ${styles.sectionReverse}`}>
         <div className={styles.sectionDetails}>
-          <h1>Straight to the point.</h1>
-          <p>Key economic indicators helps understand where your investments are going.</p>
+          <h1 className={styles.sectionTitle}>Straight to the point.</h1>
+          <p>Key economic indicators help you understand where your investments are going.</p>
         </div>
-        <div className={styles.sectionImage}>
-
-        </div>
+        {/* <div className={styles.sectionImage2}> */}
+        <Image src={mountainsImage} alt="mountains icon" />
+        {/* </div> */}
       </section>
+      <section className={styles.companiesSection} >
+        <div className={styles.companiesSectionDetails}>
+          <h1 className={styles.sectionTitle}>Stay Up to Date.</h1>
+          <p>Our platform makes it easy to follow the companies you love.</p>
+        </div>
+        <span className={styles.companyIcons}>
+          <IconContext.Provider value={{ size: "2em" }}>
+            <FaFacebook />
+            <FaAmazon />
+            <FaApple />
+            <SiNetflix />
+            <FaGoogle />
+          </IconContext.Provider >
+        </span>
+      </section>
+      <section className={styles.sectionContainer} style={{ height: '20em' }}>
+        <div className={styles.sectionDetails}>
+          <h1 className={styles.sectionTitle}>Sign Up for Free!</h1>
+          <p>All you need is an email.</p>
+        </div>
+        <Link href='/signin'><button className={styles.signUpButton}>Sign Up!</button></Link>
+      </section>
+
     </>
   )
 }

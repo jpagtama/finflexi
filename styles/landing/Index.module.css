@@ -2,7 +2,6 @@
     background-image: url("../../assets/FinflexiBanner.svg");
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: #00FFAB;
     background-position: left bottom;
     display: flex;
     justify-content: flex-end;
@@ -39,19 +38,68 @@
 .sectionContainer {
     display: flex;
     align-items: center;
-    height: 40vh;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2em;
+    background-color: black;
     width: 100%;
     padding: 1em;
+    margin-top: 5em;
 }
 
-.sectionContainer h1 {
+.companiesSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+    margin-top: 5em;
+}
+
+.sectionTitle {
     font-weight: 300;
-    font-size: 4em;
+    font-size: 2em;
+}
+
+.sectionDetails {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.companiesSectionDetails {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.companyIcons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    width: 100%;
+    height: 5em;
+    margin-top: 2em;
+}
+
+.sectionImage1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+    width: 50vw;
 }
 
 @media(min-width: 768px) {
-
     .searchBarContainer {
         width: 60vw;
+    }
+
+    .sectionReverse {
+        flex-flow: row-reverse;
     }
 }
