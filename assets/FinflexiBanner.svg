@@ -42,14 +42,14 @@
             <path d="M442.889,363.757L668.107,527.388L582.082,792.148L303.696,792.148L217.67,527.388L442.889,363.757Z" style="fill:url(#_Linear11);"/>
         </g>
     </g>
-    <g id="arrow-front" transform="matrix(0.89646,0,0,0.749427,-878.974,483.874)">
+    <g id="arrow-front" transform="matrix(1.11325,0,0,0.749427,-1047.6,483.874)">
         <path d="M1354.62,204.497L777.796,204.497L777.796,421.823L1354.62,421.823L1416.11,319.618L1354.62,204.497Z"/>
     </g>
-    <g transform="matrix(0.536052,0,0,0.536052,-14.4978,425.16)">
-        <text x="82.644px" y="577.571px" style="font-family:'Impact', sans-serif;font-stretch:condensed;font-size:144px;fill:url(#_Linear12);">Finﬂexi</text>
+    <g transform="matrix(0.536052,0,0,0.536052,31.7729,408.432)">
+        <text x="82.644px" y="577.571px" style="font-family:'Zapfino', cursive;font-style:italic;font-size:119.391px;fill:url(#_Linear12);">ﬁnﬂexi</text>
     </g>
-    <g transform="matrix(0.680799,0,0,0.536052,-76.7308,414.599)">
-        <text x="160.367px" y="647.622px" style="font-family:'Avenir-Book', 'Avenir';font-size:50.368px;fill:white;">Invest in knowledge</text>
+    <g transform="matrix(0.680799,0,0,0.536052,-27.7308,400.599)">
+        <text x="160.367px" y="647.622px" style="font-family:'Avenir-Book', 'Avenir';font-size:67.158px;fill:white;">Invest in knowledge</text>
     </g>
     <defs>
         <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(450.437,0,0,450.437,217.67,533.134)"><stop offset="0" style="stop-color:rgb(0,153,103);stop-opacity:0.1"/><stop offset="0.22" style="stop-color:rgb(0,194,130);stop-opacity:0.82"/><stop offset="0.5" style="stop-color:rgb(0,204,137);stop-opacity:1"/><stop offset="0.76" style="stop-color:rgb(0,216,145);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(0,255,171);stop-opacity:1"/></linearGradient>
