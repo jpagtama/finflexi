@@ -12,16 +12,18 @@ const Header = () => {
 
   return (
     <>
-      <header className={`${styles.header} ${isMenuOpen && styles.menuIsOpen}`}>
+      <div className={styles.searchBarSection}>
+        <span className={styles.searchBarContainer}>
+          {(router.asPath !== '/' && !isMenuOpen) && <SearchBar />}
+        </span>
+      </div>
+      <header className={`${styles.header} ${isMenuOpen ? styles.menuIsOpen : styles.menuIsClosed}`}>
         <div className={styles.headerSection} >
-          <span className={styles.searchBarContainer}>
-            {(router.asPath !== '/' && !isMenuOpen) && <SearchBar />}
-          </span>
           <span className={styles.menuIcon}>
             <Menu />
           </span>
         </div>
-        {isMenuOpen && <MenuList />}
+        <MenuList />
       </header>
     </>
   )

@@ -26,11 +26,28 @@
 
 .headerSection {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     width: 100%;
+}
+
+.searchBarSection {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-start;
+    width: 75vw;
+    margin-left: 1em;
+    margin-top: 1em;
+    z-index: 200;
 }
 
 .searchBarContainer {
     width: 100%;
-    padding-right: 1em;
+}
+
+@media (min-width: 900px) {
+    .searchBarSection {
+        width: 90vw;
+    }
 }
