@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Head from 'next/head'
+import { useInView } from 'react-intersection-observer';
 import AppIntro from '@components/landing/AppIntro'
 import SearchBar from '@components/UI/SearchBar'
 import Image from 'next/image'
@@ -19,6 +20,9 @@ interface CompanyList {
 }
 
 const Home = () => {
+  const { ref: focusRef, inView: focusInView } = useInView({ threshold: .7, triggerOnce: true })
+  const { ref: pointRef, inView: pointInView } = useInView({ threshold: .7, triggerOnce: true })
+  const { ref: signUpRef, inView: signUpInView } = useInView({ threshold: 1, triggerOnce: true })
   const initialCompanies: Array<CompanyList> = []
   const { status: sessionStatus } = useSession()
 
@@ -71,18 +75,22 @@ const Home = () => {
           <h1 className={styles.sectionTitle}>Laser focused.</h1>
           <p>Get access to stock market data, company statistics, and more.</p>
         </div>
-        {/* <div className={styles.sectionImage1}> */}
-        <Image src={focusImage} alt="laser focused icon" height="195px" width="195px" />
-        {/* </div> */}
+        <div >
+          <div ref={focusRef} className={`${focusInView ? styles.slideToLeft : ''} ${styles.image}`}>
+            <Image src={focusImage} alt="laser focused icon" height="195px" width="195px" />
+          </div>
+        </div>
       </section>
       <section className={`${styles.sectionContainer} ${styles.sectionReverse}`}>
         <div className={styles.sectionDetails}>
           <h1 className={styles.sectionTitle}>Straight to the point.</h1>
           <p>Key economic indicators help you understand where your investments are going.</p>
         </div>
-        {/* <div className={styles.sectionImage2}> */}
-        <Image src={mountainsImage} alt="mountains icon" height="195px" width="195px" />
-        {/* </div> */}
+        <div >
+          <div ref={pointRef} className={`${pointInView ? styles.slideToRight : ''} ${styles.image}`}>
+            <Image src={mountainsImage} alt="mountains icon" height="195px" width="195px" />
+          </div>
+        </div>
       </section>
       <section className={styles.companiesSection} >
         <div className={styles.companiesSectionDetails}>
@@ -104,7 +112,7 @@ const Home = () => {
           <h1 className={styles.sectionTitle}>Sign Up for Free!</h1>
           <p>All you need is an email.</p>
         </div>
-        <Link href='/signin'><button className={styles.signUpButton}>Sign Up!</button></Link>
+        <Link href='/signin'><button ref={signUpRef} className={`${styles.signUpButton} ${signUpInView ? styles.shake : ''}`}>Sign Up!</button></Link>
       </section>
 
     </>

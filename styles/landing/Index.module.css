@@ -94,6 +94,22 @@
     width: 50vw;
 }
 
+.image {
+    opacity: 0;
+}
+
+.slideToLeft {
+    animation: slideToLeft 600ms ease-out both;
+}
+
+.slideToRight {
+    animation: slideToRight 600ms ease-out both;
+}
+
+.shake {
+    animation: shake 1200ms ease-out both;
+}
+
 @media(min-width: 768px) {
     .searchBarContainer {
         width: 60vw;
@@ -102,4 +118,51 @@
     .sectionReverse {
         flex-flow: row-reverse;
     }
+}
+
+@keyframes slideToLeft {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideToRight {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-1em);
+    }
+
+    25% {
+        transform: translateX(1em);
+    }
+
+    50% {
+        transform: translateX(-1em);
+    }
+
+    75% {
+        transform: translateX(1em);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
 }
