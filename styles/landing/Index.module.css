@@ -40,10 +40,10 @@
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
-    gap: 2em;
     background-color: black;
     width: 100%;
-    padding: 1em;
+    min-height: 30em;
+    padding: 2em;
     margin-top: 5em;
 }
 
