@@ -67,6 +67,15 @@ const Favorited = () => {
         }
     }
 
+    const renderNone = () => {
+        return (
+            <div className={styles.noFavorites}>
+                <p>Looks like there's nothing here...</p>
+                <p>Start by searching a company and clicking the star icon to add to favorites</p>
+            </div>
+        )
+    }
+
     const renderFavorites = () => {
 
         const companies = favoritedCompanies.map((item: { ticker: string, name: string, favorited: boolean }) => (
@@ -93,6 +102,7 @@ const Favorited = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>My Favorites</h1>
             {favorites?.data?.length > 0 && renderFavorites()}
+            {favorites?.data?.length === 0 && renderNone()}
 
         </div>
     )
