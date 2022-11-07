@@ -72,7 +72,7 @@ const Home = () => {
           <p>Get access to stock market data, company statistics, and more.</p>
         </div>
         {/* <div className={styles.sectionImage1}> */}
-        <Image src={focusImage} alt="laser focused icon" />
+        <Image src={focusImage} alt="laser focused icon" height="195px" width="195px" />
         {/* </div> */}
       </section>
       <section className={`${styles.sectionContainer} ${styles.sectionReverse}`}>
@@ -81,7 +81,7 @@ const Home = () => {
           <p>Key economic indicators help you understand where your investments are going.</p>
         </div>
         {/* <div className={styles.sectionImage2}> */}
-        <Image src={mountainsImage} alt="mountains icon" />
+        <Image src={mountainsImage} alt="mountains icon" height="195px" width="195px" />
         {/* </div> */}
       </section>
       <section className={styles.companiesSection} >
