@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { FaStar, FaRegStar } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
+import Loading from '@components/UI/Loading'
 import styles from '@styles/company/Favorites.module.css'
 
 const Favorited = () => {
@@ -34,7 +35,7 @@ const Favorited = () => {
         }
     }, [favorites?.data])
 
-    if (sessionStatus === 'loading') return <p>loading...</p>
+    if (sessionStatus === 'loading') return <Loading />
 
     const updateFavoritedCompaniesState = (ticker: string, favorited: boolean) => {
 
