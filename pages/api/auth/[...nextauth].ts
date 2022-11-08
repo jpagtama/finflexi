@@ -11,21 +11,21 @@ const html = (params: { url: string; host: string; }) => {
 
     return `
         <body style="background: none;">
-        <table width="100%" border="0" cellspacing="20" cellpadding="0"
-        style="background: black; max-width: 600px; margin: auto; border-radius: 10px;">
-        <tr>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0"
+        style="background: darkgray; background: linear-gradient(45deg, rgba(249,0,191,1) 0%, rgba(0,255,171,1) 100%); max-width: 600px; margin: auto;">
+        <tr style="background: black;" >
             <td align="center"
-            style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: #F900BF;">
-            Sign in to <strong>${escapedHost}</strong>
+            style="padding: 30px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: #F900BF; font-weight: 300;">
+            ${escapedHost}
             </td>
         </tr>
         <tr>
-            <td align="center" style="padding: 20px 0;">
+            <td align="center" style="padding: 60px 0;">
             <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                <td align="center" style="border-radius: 5px;" bgcolor="#293462"><a href="${url}"
+                <td align="center" style="border-radius: 25px;" bgcolor="#293462"><a href="${url}"
                     target="_blank"
-                    style="font-size: 18px; font-weight: 300; font-family: Helvetica, Arial, sans-serif; color: white; text-decoration: none; border-radius: 55px; padding: 10px 20px; border: none; display: inline-block; font-weight: bold;">Sign
+                    style="font-size: 18px; font-weight: 300; font-family: Helvetica, Arial, sans-serif; color: white; text-decoration: none; padding: 10px 20px; border: none; display: inline-block; font-weight: bold;">Sign
                     in</a></td>
                 </tr>
             </table>
@@ -33,7 +33,7 @@ const html = (params: { url: string; host: string; }) => {
         </tr>
         <tr>
             <td align="center"
-            style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: #F900BF;">
+            style="padding: 0px 0px 20px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: black;">
             If you did not request this email you can safely ignore it.
             </td>
         </tr>
