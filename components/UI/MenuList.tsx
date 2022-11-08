@@ -25,7 +25,8 @@ const MenuList = () => {
     return (
       <ul className={styles.menuList}>
         {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/")} >Home</span></li>}
-        <li><span onClick={() => clickHandler("/favorites")} >My Favorites</span></li>
+        {status === 'authenticated' && <li><span onClick={() => clickHandler("/dashboard")} >Dashboard</span></li>}
+        <li><span onClick={() => clickHandler("/dashboard/favorites")} >My Favorites</span></li>
         <li><span onClick={() => clickHandler("/economy")} >Economic Indicators</span></li>
         <li><span onClick={() => clickHandler("/account")} >My Account</span></li>
         {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
