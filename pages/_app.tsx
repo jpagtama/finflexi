@@ -15,25 +15,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
 
-    //   console.log('router.asPath :>> ', router.asPath);
-    //   console.log('is loading? :>> ', loading);
-    // if (router.asPath !== '/') {
     const handleStart = (url: string) => setLoading(true)
     const handleComplete = (url: string) => setLoading(false)
 
     router.events.on('routeChangeStart', handleStart)
-    // console.log('route is changing')
     router.events.on('routeChangeComplete', handleComplete)
     router.events.on('routeChangeError', handleComplete)
-    // console.log('route is complete')
 
     return () => {
       router.events.off('routeChangeStart', handleStart)
       router.events.off('routeChangeComplete', handleComplete)
       router.events.off('routeChangeError', handleComplete)
     }
-    // }
-    // console.log('loading? :>>', loading)
   }, [router])
 
   return (
