@@ -1,13 +1,12 @@
-import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { menuActions } from '@store/index'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import styles from '@styles/UI/MenuList.module.css'
 import SignOut from './SignOut'
 
 const MenuList = () => {
-  const [displaySignOut, setDisplaySignOut] = useState(false)
+  const isSignOutOpen = useSelector((state: { "menu": { "signOutOpen": boolean } }) => state.menu.signOutOpen)
   const dispatch = useDispatch()
   const router = useRouter()
   const { data, status } = useSession()
@@ -17,10 +16,10 @@ const MenuList = () => {
     router.push(path)
   }
   const displaySignOutAlert = () => {
-    setDisplaySignOut(true)
+    dispatch(menuActions.openSignOut())
   }
   const closeSignOutAlert = () => {
-    setDisplaySignOut(false)
+    dispatch(menuActions.closeSignOut())
   }
   const renderMenuItems = () => {
     return (
@@ -37,8 +36,8 @@ const MenuList = () => {
 
   return (
     <div className={styles.container}>
-      {displaySignOut && <SignOut closeSignOutAlert={closeSignOutAlert} />}
-      {!displaySignOut && renderMenuItems()}
+      {isSignOutOpen && <SignOut closeSignOutAlert={closeSignOutAlert} />}
+      {!isSignOutOpen && renderMenuItems()}
     </div>
   )
 }
