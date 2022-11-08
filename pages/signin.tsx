@@ -5,6 +5,8 @@ import Input from '@components/UI/Input'
 import Button from '@components/UI/Button'
 import Loading from '@components/UI/Loading'
 import * as EmailValidator from 'email-validator'
+import { FaExclamationCircle, FaKey } from 'react-icons/fa'
+import { IconContext } from 'react-icons'
 import styles from '@styles/Signin.module.css'
 
 const SignIn = () => {
@@ -49,19 +51,39 @@ const SignIn = () => {
     const renderSignInForm = () => {
         return (
             <form className={styles.form} onSubmit={submitHandler}>
-                <label htmlFor='email'>Email:</label>
+                <div className={styles.labelSection}>
+                    <label htmlFor='email'>Email:</label>
+                    {error && <span className={styles.error}>{errorMessage}</span>}
+                </div>
                 <Input ref={emailRef} id='email' value={email} type='email' changeHandler={emailChangeHandler} placeholder='your_email@example.com' />
-                {error && <span style={{ color: 'var(--error)' }}>{errorMessage}</span>}
-                <Button onClick={buttonClickHandler} label='Sign-in with email' />
+                <button onClick={buttonClickHandler} >Sign In</button>
             </form>
+        )
+    }
+    const renderSignInMessage = () => {
+        return (
+            <div className={styles.signInMsgContainer}>
+                <IconContext.Provider value={{ size: '2em' }}>
+                    <FaExclamationCircle />
+                </IconContext.Provider>
+                <p className={styles.signInMsg}>Please sign in to continue</p>
+            </div>
         )
     }
 
     return (
         <div className={styles.signupContainer}>
-            <h1>{status === 'authenticated' ? 'You are signed in' : 'Sign In'}</h1>
-            {(router.query?.error && status === 'unauthenticated') && <p>Please sign in to continue</p>}
-            {status !== 'authenticated' ? renderSignInForm() : <Loading />}
+            <div className={styles.signupContent}>
+                <div className={styles.keyIcon}>
+                    <IconContext.Provider value={{ size: '3em' }}>
+                        <FaKey />
+                    </IconContext.Provider>
+                </div>
+                <h1 className={styles.title} >{status === 'authenticated' ? 'You are signed in' : 'Sign In'}</h1>
+                {/* {renderSignInMessage()} */}
+                {(router.query?.error && status === 'unauthenticated') && renderSignInMessage()}
+                {status !== 'authenticated' ? renderSignInForm() : <Loading />}
+            </div>
         </div>
     )
 }

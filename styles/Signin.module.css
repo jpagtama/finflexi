@@ -3,30 +3,100 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    padding-top: 10em;
+    min-height: 90vh;
+    padding-top: 7em;
+    background: rgba(120, 133, 181, 1);
+    background: linear-gradient(45deg, rgba(249, 0, 191, 1) 0%, rgba(0, 255, 171, 1) 100%);
 }
 
-.signupContainer h1 {
+.signupContent {
+    display: flex;
+    width: 90vw;
+    flex-direction: column;
+    align-items: center;
+}
+
+.keyIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 55px;
+    background-color: var(--dark-gray);
+    height: 7em;
+    width: 7em;
+}
+
+.title {
+    color: black;
     font-weight: 200;
-    margin-bottom: 1em;
+    margin: 0.5em 0 0.5em 0;
+}
+
+.signInMsgContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    padding: 2em;
+    background-color: var(--dark-gray);
+    border-radius: 12px;
+    margin-bottom: 2em;
+    display: flex;
+    justify-content: center;
+}
+
+.signInMsg {
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
 }
 
 .form {
-    width: 90vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10;
+}
+
+.labelSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.labelSection>label {
+    color: black;
+    margin-bottom: 0.5em;
+    font-weight: 300;
 }
 
 .form>input {
     margin-bottom: 2em;
 }
 
-.form>label {
-    margin-bottom: 0.5em;
+.error {
+    color: darkred;
 }
 
 .form>button {
-    align-self: center;
-    width: 25vw;
+    align-self: flex-end;
+    width: auto;
+    color: white;
+    background-color: var(--purple-blue);
+    padding: 1em 2em;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .signupContent {
+        width: 40vw;
+    }
+}
+
+@media(min-width: 1200px) {
+    .signupContent {
+        width: 35vw;
+    }
 }
