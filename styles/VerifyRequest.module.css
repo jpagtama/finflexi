@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 90vh;
+    width: 100%;
+}
+
+.header {
+    height: 12em;
+    width: 100%;
+    margin-bottom: 2em;
+    background-image: url('../assets/FinflexiBanner.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left bottom;
+}
+
+.mailIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 55px;
+    background-color: black;
+    border-color: var(--neon-pink);
+    margin-top: 5em;
+    height: 7em;
+    width: 7em;
+}
+
+.container h2,
+.title {
+    font-weight: 200;
+}
+
+.container p {
+    margin-top: 5em;
+    max-width: 90vw;
+    text-align: center;
+
+}
