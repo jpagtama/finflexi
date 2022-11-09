@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Input from '@components/UI/Input'
-import Button from '@components/UI/Button'
 import Loading from '@components/UI/Loading'
 import * as EmailValidator from 'email-validator'
 import { FaExclamationCircle, FaKey } from 'react-icons/fa'
@@ -16,16 +15,15 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [emailSent, setEmailSent] = useState(true)
     const emailRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => { emailRef.current?.focus() }, [])
     useEffect(() => {
         if (status === 'authenticated') {
-            const redirectTo = router.query?.callbackUrl ? router.query.callbackUrl as string : '/'
+            const redirectTo = router.query?.callbackUrl ? router.query.callbackUrl as string : '/dashboard'
             setTimeout(() => {
                 router.push(redirectTo)
-            }, 1500)
+            }, 1000)
         }
     }, [status])
 
@@ -55,7 +53,7 @@ const SignIn = () => {
                     <label htmlFor='email'>Email:</label>
                     {error && <span className={styles.error}>{errorMessage}</span>}
                 </div>
-                <Input ref={emailRef} id='email' value={email} type='email' changeHandler={emailChangeHandler} placeholder='your_email@example.com' />
+                <Input ref={emailRef} id='email' value={email} type='email' changeHandler={emailChangeHandler} placeholder='youremail@example.com' />
                 <button onClick={buttonClickHandler} >Sign In</button>
             </form>
         )
@@ -82,7 +80,9 @@ const SignIn = () => {
                 <h1 className={styles.title} >{status === 'authenticated' ? 'You are signed in' : 'Sign In'}</h1>
                 {/* {renderSignInMessage()} */}
                 {(router.query?.error && status === 'unauthenticated') && renderSignInMessage()}
+                {/* {renderSignInForm()} */}
                 {status !== 'authenticated' ? renderSignInForm() : <Loading />}
+                {/* <Loading /> */}
             </div>
         </div>
     )
