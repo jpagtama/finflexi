@@ -19,6 +19,8 @@ const Favorited = () => {
         }
     })
 
+    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
+
     const getFavorites = async (url: string) => {
         const res = await fetch(url)
         const data = await res.json()
@@ -34,8 +36,6 @@ const Favorited = () => {
             ))
         }
     }, [favorites?.data])
-
-    if (sessionStatus === 'loading') return <Loading />
 
     const updateFavoritedCompaniesState = (ticker: string, favorited: boolean) => {
 
