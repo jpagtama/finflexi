@@ -26,9 +26,7 @@ interface Props {
 }
 
 const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props) => {
-  // console.log('props :>> ', [details, daily, earnings, earnings_calendar]);
   const { data: sessionData, status: sessionStatus } = useSession()
-  // console.log('sessionData :>> ', sessionData);
 
   const [graphMode, setGraphMode] = useState(30)
   const [favorited, setFavorited] = useState(false)
