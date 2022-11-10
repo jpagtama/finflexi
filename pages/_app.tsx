@@ -12,7 +12,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
-
   useEffect(() => {
 
     const handleStart = (url: string) => setLoading(true)
@@ -32,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store} >
-        {loading && <Loading />}
+        {loading && <div className='loadingContainer' ><Loading /></div>}
         <Main >
           <Component {...pageProps} />
         </Main>
