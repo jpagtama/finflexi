@@ -4,15 +4,18 @@ import { GetServerSidePropsContext } from 'next'
 import { signIn, useSession } from 'next-auth/react'
 import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import Divider from '@components/UI/Divider'
+import { Line } from 'react-chartjs-2'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
+import Loading from '@components/UI/Loading'
 import { dbDatetoString } from '../../utils/utils'
 import styles from '@styles/Dashboard.module.css'
-import Loading from '@components/UI/Loading'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface Props {
-    favorites: string
+    favorites: { order: number | null, company: { ticker: string, name: string } }[]
     upcoming_earnings: string
-    stock_prices: string
+    stock_prices: { [key: string]: { price: string, date: string }[] }
 }
 
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
@@ -33,11 +36,75 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
 
     if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
+    const goToCompany = (ticker: string) => {
+        router.push(`/company/${ticker}`)
+    }
+
+    const renderStockCharts = () => {
+        // Renders the top 5 favorited stocks
+        const optionsLine = {
+            responsive: true,
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+
+        let charts = []
+
+        for (const i of favorites.slice(0, 5)) {
+            const labels = stock_prices[i.company.ticker].map((item) => item.date).reverse().slice(-30)
+            const prices = stock_prices[i.company.ticker].map((item) => item.price).reverse().slice(-30)
+
+            const priceChange = parseFloat(prices[prices.length - 1]) - parseFloat(prices[0])
+
+            const dataStock = {
+                chartData: {
+                    labels: labels,
+                    datasets: [{
+                        label: i.company.ticker,
+                        data: prices,
+                        borderColor: '#f900bf',
+                        backgroundColor: '#f900bf',
+                    }]
+                },
+                stockDetails: {
+                    ticker: i.company.ticker,
+                    name: i.company.name,
+                    price_change: priceChange
+                }
+
+            }
+            charts.push(dataStock)
+        }
+
+        return (
+            charts.map((i, idx) => (
+                <div key={idx} className={styles.chartContainer} onClick={() => goToCompany(i.stockDetails.ticker)}>
+                    <div className={styles.stockDetailsContainerTop}>
+                        <span>{i.stockDetails.price_change > 0 ? `+$${i.stockDetails.price_change.toFixed(2)}` : `-$${Math.abs(i.stockDetails.price_change).toFixed(2)}`}</span>
+                        <span></span>
+                    </div>
+                    <Line options={optionsLine} data={i.chartData} />
+                    <div className={styles.stockDetailsContainerBottom}>
+                        <span>{i.stockDetails.name}</span>
+                        <span>{i.stockDetails.ticker}</span>
+                    </div>
+                </div>
+            ))
+        )
+    }
+
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>My Dashboard</h1>
-            <Divider />
-
+            <div className={styles.chartSection}>
+                {Object.keys(stock_prices).length && renderStockCharts()}
+            </div>
         </div>
     )
 }
@@ -48,7 +115,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let favorites: { order: number | null; company: { ticker: string; name: string | null; }; }[] = []
     let upcoming_earnings: { ticker: string; name: string, date: string; }[] = []
     let calendar = []
-    let stock_prices: { ticker: string, date: string, close: string }[] = []
+    let stock_prices: { [key: string]: { price: string, date: string }[] } = {}
     try {
         const userId = session?.userId
 
@@ -79,8 +146,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 companyticker: true,
                 date: true,
                 close: true
-            }
+            },
         })
+
+        const daily_prices_formatted: { [key: string]: { price: string, date: string }[] } = {}
+        for (const i of daily_prices) {
+            if (i.companyticker in daily_prices_formatted) {
+                daily_prices_formatted[i.companyticker].push({ price: i.close ? i.close.toString() : '', date: i.date ? dbDatetoString(i.date) : '' })
+            } else {
+                daily_prices_formatted[`${i.companyticker}`] = []
+                daily_prices_formatted[`${i.companyticker}`].push({ price: i.close ? i.close.toString() : '', date: i.date ? dbDatetoString(i.date) : '' })
+            }
+        }
 
         const earnings = await prisma.earnings_calendar.findMany({
             where: {
@@ -107,9 +184,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
         favorites = companies
         upcoming_earnings = calendar
-        stock_prices = daily_prices.map((i) => {
-            return { ticker: i.companyticker, close: i.close ? i.close.toFixed(2) : '', date: i.date ? dbDatetoString(i.date) : '' }
-        })
+        stock_prices = daily_prices_formatted
 
     } catch (e) {
         if (e instanceof Error) console.log('error occurred: ', e.message)

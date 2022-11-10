@@ -16,7 +16,40 @@
     padding-top: 7em;
 }
 
-.title {
-    font-weight: 200;
-    padding-bottom: 0.5em;
+.chartSection {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 1em;
+    padding: 2em 0;
+    width: 90vw;
+}
+
+.chartContainer {
+    background-color: black;
+    border-radius: 12px;
+    min-width: 360px;
+    height: auto;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.stockDetailsContainerTop {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 2em 0;
+    width: 100%;
+}
+
+.stockDetailsContainerBottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 2em 0 0 0;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .chartSection {
+        justify-content: flex-start;
+    }
 }
