@@ -61,7 +61,9 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             const labels = stock_prices[i.company.ticker].map((item) => item.date).reverse().slice(-30)
             const prices = stock_prices[i.company.ticker].map((item) => item.price).reverse().slice(-30)
 
-            const priceChange = parseFloat(prices[prices.length - 1]) - parseFloat(prices[0])
+            const price_change = parseFloat(prices[prices.length - 1]) - parseFloat(prices[0])
+            const percent_change = Math.abs(price_change) / parseFloat(prices[0]) * 100
+            const date_range = `${labels[0]}-${labels[labels.length - 1]}`
 
             const dataStock = {
                 chartData: {
@@ -76,7 +78,9 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
                 stockDetails: {
                     ticker: i.company.ticker,
                     name: i.company.name,
-                    price_change: priceChange
+                    price_change,
+                    percent_change,
+                    date_range
                 }
 
             }
@@ -87,8 +91,10 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             charts.map((i, idx) => (
                 <div key={idx} className={styles.chartContainer} onClick={() => goToCompany(i.stockDetails.ticker)}>
                     <div className={styles.stockDetailsContainerTop}>
-                        <span>{i.stockDetails.price_change > 0 ? `+$${i.stockDetails.price_change.toFixed(2)}` : `-$${Math.abs(i.stockDetails.price_change).toFixed(2)}`}</span>
-                        <span></span>
+                        <span>
+                            {i.stockDetails.price_change > 0 ? `+$${i.stockDetails.price_change.toFixed(2)}` : `-$${Math.abs(i.stockDetails.price_change).toFixed(2)}`} ({i.stockDetails.percent_change.toFixed(2)}%)
+                        </span>
+                        <span style={{ fontWeight: '300' }}>{i.stockDetails.date_range}</span>
                     </div>
                     <Line options={optionsLine} data={i.chartData} />
                     <div className={styles.stockDetailsContainerBottom}>
