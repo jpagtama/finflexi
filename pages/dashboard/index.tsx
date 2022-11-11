@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Loading from '@components/UI/Loading'
 import { prisma } from '@db/index'
 import { GetServerSidePropsContext } from 'next'
 import { signIn, useSession } from 'next-auth/react'
@@ -6,7 +7,7 @@ import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
-import Loading from '@components/UI/Loading'
+import Calendar from '@components/UI/Calendar'
 import { dbDatetoString } from '../../utils/utils'
 import styles from '@styles/Dashboard.module.css'
 
@@ -111,6 +112,7 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             <div className={styles.chartSection}>
                 {Object.keys(stock_prices).length && renderStockCharts()}
             </div>
+            {upcoming_earnings.length > 0 && <Calendar />}
         </div>
     )
 }
