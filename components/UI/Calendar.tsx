@@ -52,7 +52,7 @@ const Calendar = ({ month, year, events }: Props) => {
         if (i < weekDayStart) { days.push({ number: prevMonthDayStart++, currentMonth: false, isToday: false, events: [] }) }
         else if (i >= weekDayStart && d <= lastDay) {
             days.push({
-                isToday: today.getDate() !== d ? false : true,
+                isToday: (today.getMonth() + 1 === month) && (today.getDate() === d) ? true : false,
                 currentMonth: true,
                 events: !currentEvents[d]?.length ? [] : currentEvents[d],
                 number: d++,
