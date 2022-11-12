@@ -49,10 +49,16 @@
     overflow: hidden;
 }
 
+.isToday {
+    background-color: darkgray;
+    border-radius: 24px;
+}
+
 .dayNumber {
-    padding: 5px;
+    padding: 5px 6px;
     align-self: flex-end;
     color: black;
+    margin: 0.5em 0.5em 0 0;
 }
 
 .row {
@@ -64,3 +70,14 @@
     border-bottom: 1px solid black;
     width: 100%;
 }
+
+.eventListContainer {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color: black;
+}
+
+@media (min-width: 768px) {}
+
+@media (prefers-color-scheme: light) {}
