@@ -26,13 +26,18 @@ const Calendar = ({ month, year, events }: Props) => {
     const thisMonth = new Date(`${year}/${month}/01`)
     const weekDayStart = thisMonth.getDay() // returns some int where 0 (Sun), 1 (Mon), etc.
     const lastDay = new Date(year, month, 0).getDate() // returns some int from 1-31
+    const prevMonth = new Date(`${month - 1 > 0 ? year : year - 1}/${month - 1 > 0 ? month - 1 : 12}/01`) // returns the date of previous month
+    const prevMonthLastDay = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).getDate() // returns some int from 1-31
+
+    console.log('prevMonthLastDay :>> ', prevMonthLastDay);
 
     // Set up the array of days with all events and numbering
     let days: DayProps[] = []
     let nextMonthDay = 1
+    let prevMonthDayStart = prevMonthLastDay - weekDayStart + 1
     let d = 1 // calendar day counter
     for (let i = 0; i < 35; i++) {
-        if (i < weekDayStart) { days.push({ number: i + 1 }) }
+        if (i < weekDayStart) { days.push({ number: prevMonthDayStart++ }) }
         else if (i === weekDayStart) { days.push({ number: d++ }) }
         else if (i > weekDayStart && d <= lastDay) {
             days.push({ number: d++ })
@@ -84,11 +89,11 @@ const Calendar = ({ month, year, events }: Props) => {
         let result = []
         let week = []
         for (let i = 0; i < days.length; i++) {
-            if ((i + 1) % 7 !== 0) week.push(<Day number={days[i].number} events={days[i].events} />)
+            if ((i + 1) % 7 !== 0) week.push(<Day key={`${i}_day`} number={days[i].number} events={days[i].events} />)
             else {
-                week.push(<Day number={days[i].number} events={days[i].events} />)
+                week.push(<Day key={`${i}_day`} number={days[i].number} events={days[i].events} />)
                 result.push(
-                    <div style={{
+                    <div key={`${i}_week`} style={{
                         display: 'flex',
                         flexDirection: 'row',
                         flexWrap: 'nowrap',
@@ -119,6 +124,7 @@ const Calendar = ({ month, year, events }: Props) => {
                 overflow: 'hidden'
             }}>
                 <span style={{
+                    padding: '5px',
                     alignSelf: 'flex-end',
                     color: 'black'
                 }}>
@@ -134,8 +140,8 @@ const Calendar = ({ month, year, events }: Props) => {
             justifyContent: 'center',
             flexDirection: 'column',
             paddingTop: '1em',
-            width: '960px',
-            height: '540px',
+            minWidth: '960px',
+            minHeight: '540px',
             backgroundColor: 'brown',
             borderRadius: '10px',
             border: '1px solid black',
