@@ -6,6 +6,8 @@ interface DayProps {
     currentMonth: boolean
     isToday: boolean
     events: string[]
+    rightBorder?: boolean
+    bottomBorder?: boolean
 }
 
 interface Props {
@@ -14,10 +16,16 @@ interface Props {
     events?: {
         date: Date,
         event: string[]
-    }[]
+    }[],
+    styles?: {
+        calendar?: { border?: boolean, borderColor?: string }
+        header?: { background?: string, fontColor?: string },
+        dates?: { background?: string, border?: boolean, borderColor?: string, numberColor?: string, todayBadgeColor?: string, todayFontColor?: string, outsideMonth?: { background?: string, fontColor?: string } },
+        events?: { background?: string, fontColor?: string },
+    }
 }
 
-const Calendar = ({ month, year, events }: Props) => {
+const Calendar = ({ month, year, events, styles: propStyles }: Props) => {
     if (month !== undefined && (month < 1 || month > 12)) throw new Error('Invalid month: enter a number within 1 and 12.')
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -32,7 +40,6 @@ const Calendar = ({ month, year, events }: Props) => {
     const prevMonth = new Date(`${month - 1 > 0 ? year : year - 1}/${month - 1 > 0 ? month - 1 : 12}/01`) // returns the date of previous month
     const prevMonthLastDay = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).getDate() // returns some int from 1-31
 
-    // console.log('today.getDate()', today.getDate())
     // Get only events within the current month
     let currentEvents: { [key: string]: string[] } = {} // store the events with day number as key and events [] as the value
     if (events) {
@@ -91,29 +98,41 @@ const Calendar = ({ month, year, events }: Props) => {
         let week = []
         for (let i = 0; i < days.length; i++) {
             if ((i + 1) % 7 !== 0) week.push(
-                <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} />
+                <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={true} bottomBorder={true} />
             )
             else {
                 week.push(
-                    <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} />
+                    <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={false} bottomBorder={true} />
                 )
                 result.push(
-                    <div key={`${i}_week`} className={styles.row}>
+                    <div key={`${i}_week`} className={styles.weekRow}>
                         {week}
                     </div>
                 )
                 week = []
             }
         }
-        return result
+        return <div className={styles.dayTilesContainer}>{result}</div>
     }
 
-    const Day = ({ number, currentMonth, isToday, events }: DayProps) => {
-        const eventItems = events?.map((i, idx) => <li key={idx}>{i}</li>)
+    const Day = ({ number, currentMonth, isToday, events, rightBorder, bottomBorder }: DayProps) => {
+        const eventItems = events?.map((i, idx) => <li key={idx} className={styles.eventItem} style={{
+            backgroundColor: propStyles?.events?.background || 'seagreen',
+            color: propStyles?.events?.fontColor || 'black'
+        }}>
+            {i}
+        </li>)
 
         return (
-            <div className={styles.dayContainer}>
-                <span className={`${styles.dayNumber} ${!isToday ? '' : styles.isToday}`}>
+            <div className={`${currentMonth ? styles.dayContainer : styles.mobileViewDay}`} style={{
+                background: currentMonth ? propStyles?.dates?.background || 'lightgray' : propStyles?.dates?.outsideMonth?.background || 'darkgray',
+                borderRight: propStyles?.dates?.border === false || !rightBorder ? 'none' : `1px solid ${propStyles?.dates?.borderColor || 'black'}`,
+                borderBottom: propStyles?.dates?.border === false || !bottomBorder ? 'none' : `1px solid ${propStyles?.dates?.borderColor || 'black'}`
+            }}>
+                <span className={`${styles.dayNumber} ${!isToday ? '' : styles.isToday}`} style={{
+                    color: !isToday ? (currentMonth ? (propStyles?.dates?.numberColor || 'black') : propStyles?.dates?.outsideMonth?.fontColor || 'gray') : (propStyles?.dates?.todayFontColor || 'black'),
+                    backgroundColor: !isToday ? 'none' : (propStyles?.dates?.todayBadgeColor || '#428bca'),
+                }}>
                     {number}
                 </span>
                 {eventItems.length ? <ul className={styles.eventListContainer}>{eventItems}</ul> : ''}
@@ -122,9 +141,16 @@ const Calendar = ({ month, year, events }: Props) => {
     }
 
     return (
-        <div className={styles.container} >
-            {renderMonthTitle(monthName, year.toString())}
-            {renderWeekHeader()}
+        <div className={styles.container} style={{
+            border: propStyles?.calendar?.border === false ? 'none' : `1px solid ${propStyles?.calendar?.borderColor || 'black'}`,
+        }}>
+            <div className={styles.calendarHeader} style={{
+                backgroundColor: propStyles?.header?.background,
+                color: propStyles?.header?.fontColor || 'black'
+            }}>
+                {renderMonthTitle(monthName, year.toString())}
+                {renderWeekHeader()}
+            </div>
             {renderTiles()}
         </div>
     )
