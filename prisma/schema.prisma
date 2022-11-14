@@ -137,7 +137,7 @@ model earnings {
 model earnings_calendar {
   id            String    @id @default(uuid())
   companyticker String    @db.VarChar(20)
-  reportDate    DateTime? @db.Date
+  reportDate    DateTime  @db.Date
   estimate      Decimal?  @db.Decimal(7, 2)
   companies     companies @relation(fields: [companyticker], references: [ticker], onDelete: NoAction, onUpdate: NoAction, map: "earningscalendar_fk")
 }
