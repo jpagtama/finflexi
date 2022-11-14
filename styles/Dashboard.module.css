@@ -7,11 +7,18 @@
     padding-top: 7em;
 }
 
+.calendarSection {
+    display: flex;
+    justify-content: center;
+    width: 90vw;
+}
+
 .calendarContainer {
     display: flex;
     justify-content: center;
     min-width: 360px;
     width: 90vw;
+    max-width: 768px;
 }
 
 .loadingContainer {
@@ -58,8 +65,12 @@
 @media (min-width: 768px) {
 
     .chartSection,
-    .calendarContainer {
+    .calendarSection {
         justify-content: flex-start;
     }
+
+    /* .calendarSection {
+        justify-content: flext-start;
+    } */
 
 }
