@@ -20,7 +20,7 @@ interface Props {
     styles?: {
         calendar?: { border?: boolean, borderColor?: string }
         header?: { background?: string, fontColor?: string },
-        dates?: { background?: string, border?: boolean, borderColor?: string, numberColor?: string, todayBadgeColor?: string, todayFontColor?: string, outsideMonth?: { background?: string, fontColor?: string } },
+        dates?: { background?: string, border?: boolean, borderColor?: string, numberColor?: string, todayBadgeColor?: string, todayNumberColor?: string, outsideMonth?: { background?: string, fontColor?: string } },
         events?: { background?: string, fontColor?: string },
     }
 }
@@ -130,7 +130,7 @@ const Calendar = ({ month, year, events, styles: propStyles }: Props) => {
                 borderBottom: propStyles?.dates?.border === false || !bottomBorder ? 'none' : `1px solid ${propStyles?.dates?.borderColor || 'black'}`
             }}>
                 <span className={`${styles.dayNumber} ${!isToday ? '' : styles.isToday}`} style={{
-                    color: !isToday ? (currentMonth ? (propStyles?.dates?.numberColor || 'black') : propStyles?.dates?.outsideMonth?.fontColor || 'gray') : (propStyles?.dates?.todayFontColor || 'black'),
+                    color: !isToday ? (currentMonth ? (propStyles?.dates?.numberColor || 'black') : propStyles?.dates?.outsideMonth?.fontColor || 'gray') : (propStyles?.dates?.todayNumberColor || 'black'),
                     backgroundColor: !isToday ? 'none' : (propStyles?.dates?.todayBadgeColor || '#428bca'),
                 }}>
                     {number}
