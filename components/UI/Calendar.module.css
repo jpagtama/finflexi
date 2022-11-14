@@ -68,9 +68,9 @@
     width: 100%;
 }
 
-.weekRow div {
-    border-right: none;
-}
+/* .weekRow div {
+    border-right: none !important;
+} */
 
 .eventListContainer {
     list-style-type: none;
@@ -90,6 +90,12 @@
 
 .mobileViewDay {
     display: none;
+}
+
+@media (max-width: 390px) {
+    .weekRow div {
+        border-right: none !important;
+    }
 }
 
 @media (min-width: 391px) {
