@@ -9,16 +9,43 @@
 
 .calendarSection {
     display: flex;
+    flex-flow: column wrap;
     justify-content: center;
+    /* flex-wrap: wrap; */
+    gap: 1em;
     width: 90vw;
 }
 
 .calendarContainer {
     display: flex;
     justify-content: center;
-    min-width: 360px;
+    min-width: 340px;
     width: 90vw;
     max-width: 768px;
+}
+
+.eventListContainer {
+    /* width: 100%; */
+    flex: 1;
+    max-width: 720px;
+    min-width: 340px;
+}
+
+.eventListContainer>ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.eventListContainer>ul li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+    padding: 0 1em 0.8em 0;
+    border-bottom: 1px solid darkgray;
+}
+
+.listDateitem {
+    color: gray;
 }
 
 .loadingContainer {
@@ -62,6 +89,26 @@
     width: 100%;
 }
 
+.earningsHeader,
+.companiesHeader {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: gray;
+    padding: 1em;
+    background-color: var(--gray);
+}
+
+.earningsHeader {
+    margin-bottom: 2em;
+}
+
+.earningsHeader>h1,
+.companiesHeader>h1 {
+    font-weight: 300;
+    text-align: center;
+}
+
 @media (min-width: 768px) {
 
     .chartSection,
@@ -69,8 +116,18 @@
         justify-content: flex-start;
     }
 
-    /* .calendarSection {
-        justify-content: flext-start;
-    } */
+    .calendarSection {
+        flex-direction: row;
 
+    }
+
+    .calendarContainer {
+        order: 1
+    }
+
+    .eventListContainer {
+        /* width: 25vw; */
+        max-height: 30em;
+        overflow-x: scroll;
+    }
 }
