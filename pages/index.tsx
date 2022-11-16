@@ -63,7 +63,7 @@ const Home = () => {
         <meta name="description" content="Access to stock market data and technical analysis" />
       </Head>
       {animateIntro && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />}
-      <section className={styles.bannerSection}>
+      <section className={styles.bannerSection} >
         <Link href='/signin'><button className={styles.signUpButton}>Sign Up!</button></Link>
       </section>
       <section className={styles.searchBarContainer}>
