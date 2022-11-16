@@ -32,8 +32,8 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const today = new Date()
-    month = month === undefined ? today.getMonth() + 1 : month
-    year = year === undefined ? (events && events?.length > 0 ? events[0].date.getFullYear() : today.getFullYear()) : year
+    month = month === undefined ? (events !== undefined && events?.length > 0 ? events[0].date.getMonth() + 1 : today.getMonth() + 1) : month
+    year = year === undefined ? (events !== undefined && events?.length > 0 ? events[0].date.getFullYear() : today.getFullYear()) : year
     const monthName = monthNames[month - 1]
 
     const thisMonth = new Date(`${year}/${month}/01`)
@@ -44,7 +44,7 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
 
     // Get only events within the current month and year
     let currentEvents: { [key: string]: string[] } = {} // store the events with day number as key and events [] as the value
-    if (events) {
+    if (events !== undefined && events?.length > 0) {
         for (const i of events) {
             if (i.date.getMonth() + 1 === month && i.date.getFullYear() === year) {
                 currentEvents[`${i.date.getDate()}`] = i.event
