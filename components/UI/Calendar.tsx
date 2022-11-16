@@ -33,7 +33,7 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const today = new Date()
     month = month === undefined ? today.getMonth() + 1 : month
-    year = year === undefined ? today.getFullYear() : year
+    year = year === undefined ? (events && events?.length > 0 ? events[0].date.getFullYear() : today.getFullYear()) : year
     const monthName = monthNames[month - 1]
 
     const thisMonth = new Date(`${year}/${month}/01`)
