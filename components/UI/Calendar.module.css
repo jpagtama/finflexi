@@ -55,7 +55,7 @@
 
 .dayNumber {
     padding: 5px 6px;
-    margin-bottom: 0.5em;
+    /* margin-bottom: 0.5em; */
 }
 
 .weekRow {
@@ -177,6 +177,12 @@
         white-space: nowrap;
         padding: 0.25em;
         overflow-x: hidden;
+    }
+}
+
+@media (min-width: 480px) {
+    .dayNumber {
+        margin-bottom: 0.5em;
     }
 }
 
