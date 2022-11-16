@@ -30,10 +30,51 @@ interface Props {
 const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Props) => {
     if (month !== undefined && (month < 1 || month > 12)) throw new Error('Invalid month: enter a number within 1 and 12.')
 
+    events = events === undefined || events?.length === 0 ? undefined : events
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const today = new Date()
-    month = month === undefined ? (events !== undefined && events?.length > 0 ? events[0].date.getMonth() + 1 : today.getMonth() + 1) : month
-    year = year === undefined ? (events !== undefined && events?.length > 0 ? events[0].date.getFullYear() : today.getFullYear()) : year
+
+    // set month and year based on conditions
+    if (!year && !month && !events) {
+        // set the month and year to today's month and year
+        month = today.getMonth() + 1
+        year = today.getFullYear()
+
+    } else if (!month && !year && events) {
+        // set the month and year to the first provided event
+        month = events[0].date.getMonth() + 1
+        year = events[0].date.getFullYear()
+
+    } else if (!month && year && !events) {
+        // set the month to today's month
+        month = 1
+
+    } else if (!month && year && events) {
+        // set the month to the first event that is in the provided year
+        for (const i of events) {
+            if (year === i.date.getFullYear()) {
+                month = i.date.getMonth() + 1
+                break
+            }
+        }
+
+    } else if (month && !year && !events) {
+        // set the year to today's year
+        year = today.getFullYear()
+
+    } else if (month && !year && events) {
+        // set the year to the first event that's in the provided month
+        for (const i of events) {
+            if (month === i.date.getMonth() + 1) {
+                year = i.date.getFullYear()
+                break
+            }
+        }
+    }
+
+    month = !month ? today.getMonth() + 1 : month
+    year = !year ? today.getFullYear() : year
+
     const monthName = monthNames[month - 1]
 
     const thisMonth = new Date(`${year}/${month}/01`)
@@ -57,11 +98,12 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
     let nextMonthDay = 1
     let prevMonthDayStart = prevMonthLastDay - weekDayStart + 1
     let d = 1 // calendar day counter
-    for (let i = 0; i < 35; i++) {
+    let maxTiles = weekDayStart < 6 ? 35 : 42
+    for (let i = 0; i < maxTiles; i++) {
         if (i < weekDayStart) { days.push({ number: prevMonthDayStart++, currentMonth: false, isToday: false, events: [], clickHandler: clickHandler !== undefined ? clickHandler : undefined }) }
         else if (i >= weekDayStart && d <= lastDay) {
             days.push({
-                isToday: (today.getMonth() + 1 === month) && (today.getDate() === d) ? true : false,
+                isToday: (today.getMonth() + 1 === month) && (today.getDate() === d) && (today.getFullYear() === year) ? true : false,
                 currentMonth: true,
                 events: !currentEvents[d]?.length ? [] : currentEvents[d],
                 number: d++,
