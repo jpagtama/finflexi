@@ -8,7 +8,8 @@ interface DayProps {
     events: string[]
     rightBorder?: boolean
     bottomBorder?: boolean
-    clickHandler?: (events?: string[]) => void
+    clickHandler?: (events?: string[], date?: string) => void
+    date?: string
 }
 
 interface Props {
@@ -98,7 +99,8 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
     let nextMonthDay = 1
     let prevMonthDayStart = prevMonthLastDay - weekDayStart + 1
     let d = 1 // calendar day counter
-    let maxTiles = weekDayStart < 6 ? 35 : 42
+    let maxTiles = weekDayStart === 6 && lastDay > 29 ? 42 : 35
+
     for (let i = 0; i < maxTiles; i++) {
         if (i < weekDayStart) { days.push({ number: prevMonthDayStart++, currentMonth: false, isToday: false, events: [], clickHandler: clickHandler !== undefined ? clickHandler : undefined }) }
         else if (i >= weekDayStart && d <= lastDay) {
@@ -107,7 +109,8 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
                 currentMonth: true,
                 events: !currentEvents[d]?.length ? [] : currentEvents[d],
                 number: d++,
-                clickHandler: clickHandler !== undefined ? clickHandler : undefined
+                clickHandler: clickHandler !== undefined ? clickHandler : undefined,
+                date: `${year}/${month}/${d - 1}`
             })
         } else { // for days i after lastDay
             days.push({ number: nextMonthDay++, currentMonth: false, isToday: false, events: [], clickHandler: clickHandler !== undefined ? clickHandler : undefined })
@@ -143,11 +146,11 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
         let week = []
         for (let i = 0; i < days.length; i++) {
             if ((i + 1) % 7 !== 0) week.push(
-                <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={true} bottomBorder={true} clickHandler={days[i].clickHandler} />
+                <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={true} bottomBorder={true} clickHandler={days[i].clickHandler} date={days[i].date} />
             )
             else {
                 week.push(
-                    <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={false} bottomBorder={true} clickHandler={days[i].clickHandler} />
+                    <Day key={`${i}_day`} number={days[i].number} currentMonth={days[i].currentMonth} isToday={days[i].isToday} events={days[i].events} rightBorder={false} bottomBorder={true} clickHandler={days[i].clickHandler} date={days[i].date} />
                 )
                 result.push(
                     <div key={`${i}_week`} className={styles.weekRow}>
@@ -160,7 +163,7 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
         return <div className={styles.dayTilesContainer}>{result}</div>
     }
 
-    const Day = ({ number, currentMonth, isToday, events, rightBorder, bottomBorder, clickHandler }: DayProps) => {
+    const Day = ({ number, currentMonth, isToday, events, rightBorder, bottomBorder, clickHandler, date }: DayProps) => {
         const eventItems = events?.map((i, idx) => <li key={idx} className={styles.eventItem} style={{
             backgroundColor: propStyles?.events?.background || 'seagreen',
             color: propStyles?.events?.fontColor || 'black'
@@ -170,7 +173,7 @@ const Calendar = ({ month, year, events, styles: propStyles, clickHandler }: Pro
 
         return (
             <div className={`${currentMonth ? styles.dayContainer : styles.mobileViewDay} ${!eventItems.length && styles.hideOnMobile}`}
-                onClick={clickHandler && currentMonth ? () => clickHandler(events) : undefined}
+                onClick={clickHandler && currentMonth ? () => clickHandler(events, date) : undefined}
                 style={{
                     background: currentMonth ? propStyles?.dates?.background || 'lightgray' : propStyles?.dates?.outsideMonth?.background || 'darkgray',
                     borderRight: propStyles?.dates?.border === false || !rightBorder ? 'none' : `1px solid ${propStyles?.dates?.borderColor || 'black'}`,
