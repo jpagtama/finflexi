@@ -7,7 +7,7 @@ import { getSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
-import Calendar from '@components/UI/Calendar'
+import Calendar from 'react-event-viewer-calendar'
 import { dbDatetoString } from '../../utils/utils'
 import styles from '@styles/Dashboard.module.css'
 
@@ -15,16 +15,17 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineEleme
 
 interface Props {
     favorites: { order: number | null, company: { ticker: string, name: string } }[]
-    upcoming_earnings: string
+    // upcoming_earnings: string
+    upcoming_earnings: { ticker: string, name: string, date: string }[]
     stock_prices: { [key: string]: { price: string, date: string }[] }
 }
 
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
-    useEffect(() => {
-        console.log('upcoming_earnings :>> ', upcoming_earnings);
-        console.log('favorites :>> ', favorites);
-        console.log('stock_prices :>> ', stock_prices);
-    }, [])
+    // useEffect(() => {
+    //     // console.log('upcoming_earnings :>> ', upcoming_earnings);
+    //     // console.log('favorites :>> ', favorites);
+    //     // console.log('stock_prices :>> ', stock_prices);
+    // }, [])
 
     const router = useRouter()
 
@@ -107,12 +108,62 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
         )
     }
 
+    let events: { date: Date, event: string[] }[] = []
+
+    for (const i of upcoming_earnings) {
+        const date = new Date(i.date)
+        const idx = events.findIndex(item => `${item.date.getMonth() + 1}/${item.date.getDate()}/${item.date.getFullYear()}` === `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`)
+        // console.log('date of upcoming_eranings', date)
+        // console.log('index of evetns array', idx)
+        if (idx < 0) events.push({ date, event: [`${i.name}`] })
+        else events[idx].event.push(i.name)
+    }
+
+    // let events = upcoming_earnings.map((i: { ticker: string; name: string, date: string }) => {
+    //     return { date: new Date(i.date), event: [`${i.name}`] }
+    // })
+
+    // test events
+    // events = [
+    //     { date: new Date(), event: ['hello world', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
+    //     { date: new Date('11/20/2022'), event: ['hello world', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
+    //     { date: new Date('11/20/2023'), event: ['you should\'nt see this', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
+    //     { date: new Date('11/30/2022'), event: ['stfu motha fucka'] },
+    // ]
+
+    // const dayClickHandler = (events?: string[], date?: string) => {
+    //     console.log('events :>> ', events)
+    //     console.log('date :>> ', date)
+    // }
+
+    const calStyles = {
+        calendar: { border: true, borderColor: '#293462' },
+        header: { background: '#293462', fontColor: 'lightgray' },
+        dates: { background: 'black', border: true, borderColor: '#293462', numberColor: '#F900BF', todayBadgeColor: '#F900BF', todayNumberColor: 'black', outsideMonth: { background: '#121212', fontColor: 'gray' } },
+        events: { background: '#293462', fontColor: 'lightgray' }
+    }
+    //month={events[0].date.getMonth() + 1} 
     return (
         <div className={styles.container}>
-            <div className={styles.chartSection}>
-                {Object.keys(stock_prices).length && renderStockCharts()}
-            </div>
-            {upcoming_earnings.length > 0 && <Calendar />}
+            {Object.keys(stock_prices).length && <>
+                <div className={styles.companiesHeader} ><h1>Top 5 Companies</h1></div>
+                <div className={styles.chartSection}>
+                    {Object.keys(stock_prices).length && renderStockCharts()}
+                </div>
+            </>}
+            {upcoming_earnings.length > 0 && <>
+                <div className={styles.earningsHeader} ><h1>Upcoming Earnings</h1></div>
+                <div className={styles.calendarSection}>
+                    <div className={styles.calendarContainer}>
+                        {<Calendar styles={calStyles} events={events} />}
+                    </div>
+                    <div className={styles.eventListContainer}>
+                        <ul>
+                            {upcoming_earnings.map((i, idx) => <li key={idx}><span>{i.name}</span><span className={styles.listDateitem}>{i.date}</span></li>)}
+                        </ul>
+                    </div>
+                </div>
+            </>}
         </div>
     )
 }
@@ -183,6 +234,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 }
             }
         })
+
+        // sort by date
+        let formattedEarnings: { companyticker: string, companies: { name: string | null }, reportDate: Date }[] = []
+        if (earnings.length) formattedEarnings = earnings.sort((a, b) => a.reportDate.valueOf() - b.reportDate.valueOf())
 
         for (const i of earnings) {
             if (i.reportDate && i.reportDate >= today) {
