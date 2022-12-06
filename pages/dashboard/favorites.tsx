@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import update from 'immutability-helper'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import Link from 'next/link'
-import { FaStar, FaRegStar } from 'react-icons/fa'
-import { IconContext } from 'react-icons'
+import FavoritedItem from '@components/dashboard/FavoritedItem'
 import Loading from '@components/UI/Loading'
 import styles from '@styles/company/Favorites.module.css'
 
@@ -18,8 +17,6 @@ const Favorited = () => {
             signIn('email', { callbackUrl: router.asPath })
         }
     })
-
-    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
     const getFavorites = async (url: string) => {
         const res = await fetch(url)
@@ -78,33 +75,42 @@ const Favorited = () => {
     }
 
     const renderFavorites = () => {
-
-        const companies = favoritedCompanies.map((item: { ticker: string, name: string, favorited: boolean }) => (
-            <div key={item.ticker} className={styles.listItemContainer}>
-                <Link href={`/company/${item.ticker}`} >
-                    <a className={styles.linkContainer} >
-                        <li className={`${styles.listItemDetails}`}>
-                            <span className={styles.ticker}>{item.ticker}</span>
-                            <span className={styles.companyName}>{item.name}</span>
-                        </li>
-                    </a>
-                </Link>
-                <span className={styles.starContainer}>
-                    <IconContext.Provider value={{ size: '1.5em', color: 'var(--dark-pink)' }}>
-                        <div className={styles.starIcon} onClick={() => addToWatchList(item.ticker, !item.favorited)}>{item.favorited ? <FaStar /> : <FaRegStar />}</div>
-                    </IconContext.Provider>
-                </span>
-            </div>
-        ))
+        const companies = favoritedCompanies.map((item: { ticker: string, name: string, favorited: boolean }, idx) => renderItem(item, idx))
         return <ul className={styles.listContainer}>{companies}</ul>
     }
+
+    const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
+        setFavoritedCompanies((prevItems) =>
+            update(prevItems, {
+                $splice: [
+                    [dragIndex, 1],
+                    [hoverIndex, 0, prevItems[dragIndex]],
+                ],
+            }),
+        )
+    }, [])
+
+    const renderItem = useCallback((item: { ticker: string, name: string, favorited: boolean }, index: number) => {
+        return (
+            <FavoritedItem
+                key={item.ticker}
+                idx={index}
+                ticker={item.ticker}
+                name={item.name}
+                favorited={item.favorited}
+                addToWatchList={addToWatchList}
+                moveItem={moveItem}
+            />
+        )
+    }, [])
+
+    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>My Favorites</h1>
             {favorites?.data?.length > 0 && renderFavorites()}
             {favorites?.data?.length === 0 && renderNone()}
-
         </div>
     )
 }
