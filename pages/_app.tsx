@@ -7,6 +7,8 @@ import { useRouter } from 'next/router'
 import Main from '@components/layouts/Main'
 import Loading from '@components/UI/Loading'
 import '@styles/globals.css'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -32,9 +34,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <Provider store={store} >
         {loading && <div className='loadingContainer' ><Loading /></div>}
-        <Main >
-          <Component {...pageProps} />
-        </Main>
+        <DndProvider backend={HTML5Backend}>
+          <Main >
+            <Component {...pageProps} />
+          </Main>
+        </DndProvider>
       </Provider>
     </SessionProvider>
   )
