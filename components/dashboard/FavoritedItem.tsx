@@ -1,5 +1,4 @@
-import React, { useRef } from 'react'
-import { useDrag, useDrop } from 'react-dnd'
+import React from 'react'
 import Link from 'next/link'
 import { IconContext } from 'react-icons'
 import { FaStar, FaRegStar } from 'react-icons/fa'
@@ -12,7 +11,10 @@ interface Props {
     name: string,
     favorited: boolean,
     addToWatchList: (ticker: string, favorited: boolean) => void
-    moveItem: (dragIndex: number, hoverIndex: number) => void
+    onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+    onDragEnter: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+    onDragEnd: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+    onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
 }
 
 interface ItemType {
@@ -20,70 +22,18 @@ interface ItemType {
     index: number
 }
 
-const FavoritedItem = ({ idx, ticker, name, favorited, addToWatchList, moveItem }: Props) => {
-    const ref = useRef<HTMLDivElement>(null)
-
-    const [{ handlerId }, drop] = useDrop({
-        accept: 'listItem',
-        collect(monitor) {
-            return {
-                handlerId: monitor.getHandlerId(),
-            }
-        },
-        hover(item, monitor) {
-            if (!ref.current) {
-                return
-            }
-            const dragIndex = (item as ItemType).index
-            const hoverIndex = idx
-            // Don't replace items with themselves
-            if (dragIndex === hoverIndex) {
-                return
-            }
-            // Determine rectangle on screen
-            const hoverBoundingRect = ref.current?.getBoundingClientRect()
-            // Get vertical middle
-            const hoverMiddleY =
-                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-            // Determine mouse position
-            const clientOffset = monitor.getClientOffset()
-            // Get pixels to the top
-            const hoverClientY = clientOffset ? clientOffset.y - hoverBoundingRect.top : undefined
-            // Only perform the move when the mouse has crossed half of the items height
-            // When dragging downwards, only move when the cursor is below 50%
-            // When dragging upwards, only move when the cursor is above 50%
-            // Dragging downwards
-            if (hoverClientY) {
-                if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-                    return
-                }
-                // Dragging upwards
-                if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-                    return
-                }
-            }
-            // Time to actually perform the action
-            moveItem(dragIndex, hoverIndex);
-            // Note: we're mutating the monitor item here!
-            // Generally it's better to avoid mutations,
-            // but it's good here for the sake of performance
-            // to avoid expensive index searches.
-            (item as ItemType).index = hoverIndex
-        },
-    })
-
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: 'listItem',
-        item: () => ({ id: ticker, index: idx }),
-        collect: monitor => ({
-            isDragging: monitor.isDragging(),
-        })
-    }))
-
-    drag(drop(ref))
+const FavoritedItem = ({ idx, ticker, name, favorited, addToWatchList, onDragStart, onDragEnter, onDragEnd, onDragOver }: Props) => {
 
     return (
-        <div key={ticker} ref={ref} className={`${styles.listItemContainer} ${isDragging ? styles.isDragging : ''}`} data-handler-id={handlerId}>
+        <div
+            key={ticker}
+            className={`${styles.listItemContainer}`}
+            onDragStart={(e) => onDragStart(e, idx)}
+            onDragEnter={(e) => onDragEnter(e, idx)}
+            onDragEnd={(e) => onDragEnd(e, idx)}
+            onDragOver={(e) => onDragOver(e)}
+            draggable
+        >
             <div className={styles.grabIconContainer}>
                 <IconContext.Provider value={{ size: '2em', color: 'var(--dark-pink)' }}>
                     <CgMenuGridO />

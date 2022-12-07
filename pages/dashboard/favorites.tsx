@@ -1,15 +1,43 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import update from 'immutability-helper'
+import React, { useState, useRef, useEffect } from 'react'
+import { prisma } from '@db/index'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import FavoritedItem from '@components/dashboard/FavoritedItem'
 import Loading from '@components/UI/Loading'
+import { GetServerSidePropsContext } from 'next'
+import { getSession } from 'next-auth/react'
 import styles from '@styles/company/Favorites.module.css'
 
-const Favorited = () => {
-    const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean }[]>([])
+interface Props {
+    favoritedCompanies: [{
+        company: {
+            name: string,
+            ticker: string
+        },
+        order: number | null
+    }],
+    status: {
+        message: string,
+        success: boolean
+    }
+}
+
+const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     const router = useRouter()
+    let draggedItem = useRef<number | null>(null)
+    let draggedItemDroppedOn = useRef<number | null>(null)
+
+    const formatReqCompanies = (companies: { company: { name: string, ticker: string }, order: number | null }[]) => {
+        // Formats the companies we retrieved from the server
+        return companies.map((item, i) => ({
+            ticker: item.company.ticker, name: item.company.name, favorited: true, order: item.order
+        }))
+    }
+
+    const req_companies = status ? formatReqCompanies(companies) : []
+
+    const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean, order: number | null }[]>(req_companies)
 
     const { data: sessionData, status: sessionStatus } = useSession({
         required: true,
@@ -17,22 +45,6 @@ const Favorited = () => {
             signIn('email', { callbackUrl: router.asPath })
         }
     })
-
-    const getFavorites = async (url: string) => {
-        const res = await fetch(url)
-        const data = await res.json()
-        return data
-    }
-
-    const { data: favorites, error } = useSWR(`/api/get-favorites?id=${sessionData?.userId}`, getFavorites)
-
-    useEffect(() => {
-        if (favorites?.data.length) {
-            setFavoritedCompanies(favorites.data.map((item: { [company: string]: { name: string, ticker: string } }) => (
-                { ticker: item.company.ticker, name: item.company.name, favorited: true })
-            ))
-        }
-    }, [favorites?.data])
 
     const updateFavoritedCompaniesState = (ticker: string, favorited: boolean) => {
 
@@ -58,7 +70,6 @@ const Favorited = () => {
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'application/json' }
             })
-            const data = await res.json()
             updateFavoritedCompaniesState(ticker, payload.favorited)
         } catch (e) {
             if (e instanceof Error) console.log(e.message)
@@ -74,23 +85,55 @@ const Favorited = () => {
         )
     }
 
-    const renderFavorites = () => {
-        const companies = favoritedCompanies.map((item: { ticker: string, name: string, favorited: boolean }, idx) => renderItem(item, idx))
-        return <ul className={styles.listContainer}>{companies}</ul>
+
+
+    // handle drag start. Tells us which index is currently grabbed
+    const onDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+        draggedItem.current = index
+    }
+    // handle drag enter. Tells us the index over which item the dragged element is hovered over
+    const onDragEnter = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+        draggedItemDroppedOn.current = index
+    }
+    // handle drag end
+    const onDragEnd = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+        handleSort()
     }
 
-    const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
-        setFavoritedCompanies((prevItems) =>
-            update(prevItems, {
-                $splice: [
-                    [dragIndex, 1],
-                    [hoverIndex, 0, prevItems[dragIndex]],
-                ],
-            }),
-        )
-    }, [])
+    // prevent the dragged item from 'ghosting' back to its original position
+    const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+    }
 
-    const renderItem = useCallback((item: { ticker: string, name: string, favorited: boolean }, index: number) => {
+    // handle drag sorting
+    const handleSort = () => {
+        if (draggedItem?.current !== null && draggedItemDroppedOn.current !== null) {
+            // Return if the dragged item is dropped in the same position in the list
+            if (draggedItem.current === draggedItemDroppedOn.current) return
+
+            let _favoritedCompanies = [...favoritedCompanies]
+
+            // Copy and remove the contents of the currently dragged item from the list. Splice returns an array
+            const draggedItemContent = _favoritedCompanies.splice(draggedItem.current, 1)[0]
+
+            // Add the copy to list in its final index destination
+            _favoritedCompanies.splice(draggedItemDroppedOn.current, 0, draggedItemContent)
+
+            // Set the state of the original array to the newly sorted one
+            setFavoritedCompanies(_favoritedCompanies)
+
+            // Reset the refs for draggedItem and draggedItemDroppedOn
+            draggedItem.current = null
+            draggedItemDroppedOn.current = null
+        }
+    }
+
+    const renderFavorites = () => {
+        const companies = favoritedCompanies.map((item: { ticker: string, name: string, favorited: boolean }, idx) => renderItem(item, idx))
+        return <div className={styles.listContainer}>{companies}</div>
+    }
+
+    const renderItem = (item: { ticker: string, name: string, favorited: boolean }, index: number) => {
         return (
             <FavoritedItem
                 key={item.ticker}
@@ -99,20 +142,75 @@ const Favorited = () => {
                 name={item.name}
                 favorited={item.favorited}
                 addToWatchList={addToWatchList}
-                moveItem={moveItem}
+                onDragStart={onDragStart}
+                onDragEnter={onDragEnter}
+                onDragEnd={onDragEnd}
+                onDragOver={onDragOver}
             />
         )
-    }, [])
+    }
 
     if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>My Favorites</h1>
-            {favorites?.data?.length > 0 && renderFavorites()}
-            {favorites?.data?.length === 0 && renderNone()}
+            {favoritedCompanies.length > 0 && renderFavorites()}
+            {favoritedCompanies.length === 0 && renderNone()}
         </div>
     )
+}
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+    const session = await getSession(context)
+    const userId = session?.userId
+
+    let status = 200
+    let message = 'ok'
+    let success = true
+    let data = {}
+
+    try {
+        data = await prisma.watchlist.findMany({
+            where: { userId: userId },
+            select: {
+                order: true,
+                company: {
+                    select: {
+                        ticker: true,
+                        name: true
+                    }
+                }
+            }
+        })
+
+        return {
+            props: {
+                favoritedCompanies: data,
+                status: {
+                    success,
+                    message
+                }
+            }
+        }
+
+    } catch (e) {
+        status = 500
+        success = false
+        message = e instanceof Error ? e.message : 'unable to retrieve companies'
+
+        return {
+            props: {
+                favoritedCompanies: [],
+                status: {
+                    success,
+                    message
+                }
+            }
+        }
+    }
+
+
 }
 
 
