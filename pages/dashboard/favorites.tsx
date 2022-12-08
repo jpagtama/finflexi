@@ -15,7 +15,8 @@ interface Props {
             name: string,
             ticker: string
         },
-        order: number | null
+        order: number | null,
+        id: string
     }],
     status: {
         message: string,
@@ -28,16 +29,16 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     let draggedItem = useRef<number | null>(null)
     let draggedItemDroppedOn = useRef<number | null>(null)
 
-    const formatReqCompanies = (companies: { company: { name: string, ticker: string }, order: number | null }[]) => {
+    const formatReqCompanies = (companies: { company: { name: string, ticker: string }, order: number | null, id: string }[]) => {
         // Formats the companies we retrieved from the server
         return companies.map((item, i) => ({
-            ticker: item.company.ticker, name: item.company.name, favorited: true, order: item.order
+            id: item.id, ticker: item.company.ticker, name: item.company.name, favorited: true, order: item.order
         }))
     }
 
     const req_companies = status ? formatReqCompanies(companies) : []
 
-    const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean, order: number | null }[]>(req_companies)
+    const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean, order: number | null, id: string }[]>(req_companies)
 
     const { data: sessionData, status: sessionStatus } = useSession({
         required: true,
@@ -45,6 +46,17 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
             signIn('email', { callbackUrl: router.asPath })
         }
     })
+
+    useEffect(() => {
+        // Save the order of the list
+        const payload = { companies: favoritedCompanies }
+        const res = fetch('/api/save-favorites', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+    }, [favoritedCompanies])
 
     const updateFavoritedCompaniesState = (ticker: string, favorited: boolean) => {
 
@@ -106,7 +118,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     }
 
     // handle drag sorting
-    const handleSort = () => {
+    const handleSort = async () => {
         if (draggedItem?.current !== null && draggedItemDroppedOn.current !== null) {
             // Return if the dragged item is dropped in the same position in the list
             if (draggedItem.current === draggedItemDroppedOn.current) return
@@ -119,12 +131,12 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
             // Add the copy to list in its final index destination
             _favoritedCompanies.splice(draggedItemDroppedOn.current, 0, draggedItemContent)
 
-            // Set the state of the original array to the newly sorted one
-            setFavoritedCompanies(_favoritedCompanies)
-
             // Reset the refs for draggedItem and draggedItemDroppedOn
             draggedItem.current = null
             draggedItemDroppedOn.current = null
+
+            // Set the state of the original array to the newly sorted one
+            setFavoritedCompanies(_favoritedCompanies)
         }
     }
 
@@ -173,8 +185,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     try {
         data = await prisma.watchlist.findMany({
             where: { userId: userId },
+            orderBy: {
+                order: 'asc'
+            },
             select: {
                 order: true,
+                id: true,
                 company: {
                     select: {
                         ticker: true,
