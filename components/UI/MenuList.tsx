@@ -2,8 +2,8 @@ import { useSession } from 'next-auth/react'
 import { menuActions } from '@store/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
-import styles from '@styles/UI/MenuList.module.css'
 import SignOut from './SignOut'
+import styles from '@styles/UI/MenuList.module.css'
 
 const MenuList = () => {
   const isSignOutOpen = useSelector((state: { "menu": { "signOutOpen": boolean } }) => state.menu.signOutOpen)
