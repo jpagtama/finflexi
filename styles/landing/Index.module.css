@@ -30,6 +30,7 @@
 
 .searchBarContainer {
     width: 90vw;
+    max-width: 768px;
     height: 30vh;
     margin-top: 5em;
     margin-bottom: 1em;
