@@ -49,12 +49,21 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
 
     useEffect(() => {
         // Save the order of the list
-        const payload = { companies: favoritedCompanies }
-        const res = fetch('/api/save-favorites', {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            headers: { 'Content-Type': 'application/json' }
-        })
+        const saveFaves = async () => {
+            const payload = { companies: favoritedCompanies }
+            const res = await fetch('/api/save-favorites', {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            return res.json()
+        }
+
+        try {
+            saveFaves()
+        } catch (e) {
+            // handle error
+        }
 
     }, [favoritedCompanies])
 
