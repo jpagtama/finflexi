@@ -1,9 +1,5 @@
 import { prisma } from '@db/index'
-import NextAuth from 'pages/api/auth/[...nextauth]'
-import { useSession } from 'next-auth/react'
 import { NextApiRequest, NextApiResponse } from "next"
-import { unstable_getServerSession } from 'next-auth'
-import { request } from 'http'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -11,9 +7,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let success = true
     let message = 'ok'
     let data = {}
-
-    console.log('is favoriting? :>>', req.body.favorited);
-    console.log('for what ticker? :>>', req.body.ticker);
 
     if (req.method === 'POST') {
         try {
