@@ -20,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'POST') {
         const companies: Companies[] = req.body.companies
-        console.log('companies from payload', companies)
 
         try {
             // loop through list of companies in a prisma.$transaction
