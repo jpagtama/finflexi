@@ -21,12 +21,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const companies: Companies[] = req.body.companies
 
-        try {
-            // loop through list of companies in a prisma.$transaction
-            // update each record's order field with the value of the current index in the loop
-            for (let [index, item] of companies.entries()) {
-                prisma.$transaction([
-                    prisma.watchlist.update({
+        const saveCompanies = async (companies: Companies[]) => {
+            return await prisma.$transaction(async (tx) => {
+                for (let [index, item] of companies.entries()) {
+                    await tx.watchlist.updateMany({
                         where: {
                             id: item.id
                         },
@@ -34,8 +32,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                             order: index
                         }
                     })
-                ])
-            }
+                }
+            })
+        }
+
+        try {
+            saveCompanies(companies)
 
         } catch (e) {
             status = 500
