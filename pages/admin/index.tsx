@@ -1,4 +1,6 @@
 import { prisma } from '@db/index'
+import { GetServerSidePropsContext } from 'next'
+import { getSession } from 'next-auth/react'
 
 // TO ADD: 
 const companies = ['AAL', 'AAPL', 'ABNB', 'ADBE', 'ADDYY', 'AMC', 'AMD', 'AMT', 'AMTD', 'AMZN', 'ATVI', 'AXP', 'BA', 'BABA', 'BAC', 'BB', 'BBBY', 'BBY', 'BLK', 'BMWYY', 'BRK.A', 'BRK.B', 'BYD', 'BYDDF', 'BYDDY', 'BYND', 'C', 'CAT', 'CCL', 'COF', 'COKE', 'COST', 'CRM', 'CRSP', 'CS', 'CSCO', 'CMCSA', 'CVS', 'CVX', 'DAL', 'DIS', 'DKNG', 'DVA', 'DWAC', 'EBAY', 'EFX', 'EIX', 'F', 'FDX', 'FIS', 'FSR', 'FUBO', 'GE', 'GME', 'GOOG', 'GOOGL', 'GS', 'HAS', 'HCP', 'HD', 'HI', 'HOOD', 'HSBC', 'HUBS', 'IBM', 'INFY', 'INTC', 'INTU', 'IVC', 'JD', 'JNJ', 'JPM', 'KBH', 'KHC', 'KLAC', 'KO', 'KOSS', 'KR', 'LCID', 'LMND', 'LOW', 'LUV', 'MA', 'MATW', 'MCD', 'MDB', 'META', 'MGM', 'MMM', 'MRNA', 'MS', 'MSFT', 'NFLX', 'NIO', 'NKE', 'NOC', 'NTDOY', 'NVDA', 'O', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PHM', 'PLTR', 'PPG', 'PYPL', 'QCOM', 'QSR', 'RCL', 'RIVN', 'RTX', 'SBUX', 'SCI', 'SCHW', 'SHEL', 'SHOP', 'SNOW', 'SONY', 'SNAP', 'SPCE', 'SPY', 'T', 'TGT', 'TM', 'TMUS', 'TSLA', 'TSM', 'TWTR', 'TXN', 'U', 'UAL', 'UBER', 'UNH', 'UPS', 'UPWK', 'USB', 'V', 'VAC', 'VMW', 'VWAGY', 'VTI', 'VZ', 'WFC', 'WING', 'WIX', 'WMT', 'WYNN', 'XOM', 'XPEV', 'ZM', 'ZOM']
@@ -7,7 +9,15 @@ const popularCompanies = ['AAPL', 'AMC', 'AMZN', 'BABA', 'BB', 'BBBY', 'GOOG', '
 
 const ignore = ['BYDDF', 'BYDDY', 'NTDOY', 'SPY']
 
-const AdminHome = () => {
+const AdminHome = (props: { isAuthorized: boolean }) => {
+    if (!props.isAuthorized) {
+        return (
+            <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <h1 style={{ marginTop: '5em' }}>You shall not pass</h1>
+            </div>
+        )
+    }
+
     const economyHandler = async () => {
         const response = await fetch(`/api/admin/economy`)
         const data = await response.json()
@@ -69,6 +79,21 @@ const AdminHome = () => {
             </div>
         </div>
     )
+}
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+    const session = await getSession(context)
+
+    console.log('session :>> ', session);
+
+    const isAuthorized = session?.user?.email === 'jpagtama.dev@gmail.comm'
+
+    return {
+        props: {
+            isAuthorized
+        }
+    }
+
 }
 
 export default AdminHome
