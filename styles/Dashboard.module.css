@@ -109,6 +109,16 @@
     text-align: center;
 }
 
+.emptyDashContainer {
+    margin-top: 5em;
+    width: 100%;
+    max-width: 768px;
+}
+
+.emptyDashContainer h1 {
+    font-weight: 300;
+}
+
 @media (min-width: 768px) {
 
     .chartSection,
