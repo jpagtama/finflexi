@@ -8,6 +8,7 @@ import Loading from '@components/UI/Loading'
 import { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 import styles from '@styles/company/Favorites.module.css'
+import { Session } from 'next-auth'
 
 interface Props {
     favoritedCompanies: [{
@@ -22,6 +23,10 @@ interface Props {
         message: string,
         success: boolean
     }
+}
+
+interface ExtraSessionData extends Session {
+    userId: string
 }
 
 const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
@@ -83,7 +88,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     }
 
     const addToWatchList = async (ticker: string, favorited: boolean) => {
-        const payload = { ticker, favorited, userId: sessionData?.userId }
+        const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData).userId }
 
         try {
             const res = await fetch('/api/add-to-favorites', {
