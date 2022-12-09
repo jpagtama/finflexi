@@ -13,6 +13,7 @@ import { dbDatetoString, isJSONEmpty } from '../../utils/utils'
 import { Decimal } from '@prisma/client/runtime'
 import Loading from '@components/UI/Loading'
 import styles from '@styles/company/Profile.module.css'
+import { Session } from 'next-auth'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -25,6 +26,10 @@ interface Props {
   status: Status
 }
 
+interface ExtraSessionData extends Session {
+  userId: string
+}
+
 const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props) => {
   const { data: sessionData, status: sessionStatus } = useSession()
 
@@ -34,7 +39,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
   const router = useRouter()
   useEffect(() => {
     console.log('sessionData', sessionData)
-    if (sessionStatus === 'authenticated' && ticker && sessionData?.userId) checkIsFavorited()
+    if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData).userId) checkIsFavorited()
   }, [sessionStatus, ticker, sessionData?.userId])
 
   const checkIsFavorited = async () => {
