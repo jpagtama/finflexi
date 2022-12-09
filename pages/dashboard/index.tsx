@@ -21,11 +21,17 @@ interface Props {
 }
 
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
-    // useEffect(() => {
-    //     // console.log('upcoming_earnings :>> ', upcoming_earnings);
-    //     // console.log('favorites :>> ', favorites);
-    //     // console.log('stock_prices :>> ', stock_prices);
-    // }, [])
+
+    if (favorites.length === 0) return (
+        <div className={styles.container}>
+            <div className={styles.emptyDashContainer}>
+                <h1>Welcome to your Dashboard!</h1>
+                <p>This is your dashboard where you can track all the details for the companies you follow.</p>
+                <p>Getting started is easy! Simply search a company and click the star icon to favorite it.</p>
+                <p>Our dashboard makes it easy to view stock-prices and upcoming earnings all in one place.</p>
+            </div>
+        </div>
+    )
 
     const router = useRouter()
 
@@ -44,6 +50,7 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
 
     const renderStockCharts = () => {
         // Renders the top 5 favorited stocks
+
         const optionsLine = {
             responsive: true,
             scales: {
@@ -113,28 +120,9 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
     for (const i of upcoming_earnings) {
         const date = new Date(i.date)
         const idx = events.findIndex(item => `${item.date.getMonth() + 1}/${item.date.getDate()}/${item.date.getFullYear()}` === `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`)
-        // console.log('date of upcoming_eranings', date)
-        // console.log('index of evetns array', idx)
         if (idx < 0) events.push({ date, event: [`${i.name}`] })
         else events[idx].event.push(i.name)
     }
-
-    // let events = upcoming_earnings.map((i: { ticker: string; name: string, date: string }) => {
-    //     return { date: new Date(i.date), event: [`${i.name}`] }
-    // })
-
-    // test events
-    // events = [
-    //     { date: new Date(), event: ['hello world', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
-    //     { date: new Date('11/20/2022'), event: ['hello world', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
-    //     { date: new Date('11/20/2023'), event: ['you should\'nt see this', 'somebody stop me!', 'I\'m batman', 'stfu motha fucka'] },
-    //     { date: new Date('11/30/2022'), event: ['stfu motha fucka'] },
-    // ]
-
-    // const dayClickHandler = (events?: string[], date?: string) => {
-    //     console.log('events :>> ', events)
-    //     console.log('date :>> ', date)
-    // }
 
     const calStyles = {
         calendar: { border: true, borderColor: '#293462' },
@@ -142,7 +130,7 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
         dates: { background: 'black', border: true, borderColor: '#293462', numberColor: '#F900BF', todayBadgeColor: '#F900BF', todayNumberColor: 'black', outsideMonth: { background: '#121212', fontColor: 'gray' } },
         events: { background: '#293462', fontColor: 'lightgray' }
     }
-    //month={events[0].date.getMonth() + 1} 
+
     return (
         <div className={styles.container}>
             {Object.keys(stock_prices).length && <>
