@@ -23,4 +23,7 @@ const Input = forwardRef(({ value, id, changeHandler, type = 'text', placeholder
     )
 })
 
+// set display name
+Input.displayName = 'InputComponent';
+
 export default Input

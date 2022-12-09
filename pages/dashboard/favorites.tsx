@@ -100,7 +100,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     const renderNone = () => {
         return (
             <div className={styles.noFavorites}>
-                <p>Looks like there's nothing here...</p>
+                <p>Looks like there&apos;s nothing here...</p>
                 <p>Start by searching a company and clicking the star icon to add to favorites</p>
             </div>
         )

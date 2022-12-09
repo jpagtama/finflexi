@@ -21,6 +21,13 @@ interface Props {
 }
 
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
+    const router = useRouter()
+    const { status: sessionStatus } = useSession({
+        required: true,
+        onUnauthenticated() {
+            signIn('email', { callbackUrl: router.asPath })
+        }
+    })
 
     if (favorites.length === 0) return (
         <div className={styles.container}>
@@ -32,15 +39,6 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             </div>
         </div>
     )
-
-    const router = useRouter()
-
-    const { status: sessionStatus } = useSession({
-        required: true,
-        onUnauthenticated() {
-            signIn('email', { callbackUrl: router.asPath })
-        }
-    })
 
     if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
