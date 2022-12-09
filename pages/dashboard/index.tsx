@@ -10,6 +10,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement,
 import Calendar from 'react-event-viewer-calendar'
 import { dbDatetoString } from '../../utils/utils'
 import styles from '@styles/Dashboard.module.css'
+import { Session } from 'next-auth'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -18,6 +19,10 @@ interface Props {
     // upcoming_earnings: string
     upcoming_earnings: { ticker: string, name: string, date: string }[]
     stock_prices: { [key: string]: { price: string, date: string }[] }
+}
+
+interface ExtraSessionData extends Session {
+    userId: string
 }
 
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
@@ -162,7 +167,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let calendar = []
     let stock_prices: { [key: string]: { price: string, date: string }[] } = {}
     try {
-        const userId = session?.userId
+        const userId = (session as ExtraSessionData).userId
 
         // Get the users favorite companies with details
         const companies = await prisma.watchlist.findMany({

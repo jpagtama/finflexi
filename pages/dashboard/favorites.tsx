@@ -189,7 +189,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const session = await getSession(context)
-    const userId = session?.userId
+    const userId = (session as ExtraSessionData).userId
 
     let status = 200
     let message = 'ok'
