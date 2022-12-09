@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+// import { useState } from 'react';
+// import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import Router from 'next/router'
 import Head from 'next/head'
 import { useInView } from 'react-intersection-observer';
 import AppIntro from '@components/landing/AppIntro'
@@ -23,38 +22,27 @@ const Home = () => {
   const { ref: focusRef, inView: focusInView } = useInView({ threshold: .7, triggerOnce: true })
   const { ref: pointRef, inView: pointInView } = useInView({ threshold: .7, triggerOnce: true })
   const { ref: signUpRef, inView: signUpInView } = useInView({ threshold: 1, triggerOnce: true })
-  const initialCompanies: Array<CompanyList> = []
-  const { status: sessionStatus } = useSession()
+  // const { status: sessionStatus } = useSession()
 
-  const [animateIntro, setAnimateIntro] = useState(false)
-  const [companyResults, setCompanyResults] = useState(initialCompanies)
+  // const [animateIntro, setAnimateIntro] = useState(true)
 
-  useEffect(() => {
-    if (sessionStatus === 'unauthenticated' && !window.sessionStorage.getItem("visited")) {
-      // Do if user is not signed in and its their first time getting to the page
-      window.sessionStorage.setItem("visited", "1")
-      setAnimateIntro(true)
-    }
-  }, [])
+  // useEffect(() => {
+  //   // console.log('sessionStatus', sessionStatus)
+  //   // console.log('window.sessionStorage.getItem("visited")', window.sessionStorage.getItem("visited"))
+  //   if (sessionStatus !== 'authenticated' && !window.sessionStorage.getItem("visited")) {
+  //     // Do if user is not signed in and its their first time getting to the page
+  //     window.sessionStorage.setItem("visited", "1")
+  //     setAnimateIntro(true)
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    if (companyResults.length > 0) {
-      Router.push({
-        pathname: '/company/search',
-        query: { details: JSON.stringify(companyResults) }
-      }, '/company/search')
-    }
-  }, [companyResults])
-
-  const introDoneHandler = () => {
-    setTimeout(() => endIntroHandler(), 2400)
-  }
-  const endIntroHandler = () => {
-    setAnimateIntro(false)
-  }
-  const searchCompaniesHandler = (companies: CompanyList[]) => {
-    setCompanyResults(companies)
-  }
+  // const introDoneHandler = () => {
+  //   setTimeout(() => endIntroHandler(), 2400)
+  // }
+  // const endIntroHandler = () => {
+  //   setAnimateIntro(false)
+  // }
+  // if (animateIntro) return <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />
 
   return (
     <>
@@ -62,13 +50,13 @@ const Home = () => {
         <title>Finflexi</title>
         <meta name="description" content="Access to stock market data and technical analysis" />
       </Head>
-      {animateIntro && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />}
+      {/* {animateIntro === true && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />} */}
       <section className={styles.bannerSection} >
         <Link href='/signin'><button className={styles.signUpButton}>Sign Up!</button></Link>
       </section>
       <section className={styles.searchBarContainer}>
         <p className={styles.searchDesc}>Get started right away:</p>
-        <SearchBar searchCompaniesHandler={searchCompaniesHandler} />
+        <SearchBar />
       </section>
       <section className={styles.sectionContainer}>
         <div className={styles.sectionDetails}>
@@ -118,5 +106,6 @@ const Home = () => {
     </>
   )
 }
+
 
 export default Home
