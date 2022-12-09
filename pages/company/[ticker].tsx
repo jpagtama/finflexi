@@ -43,7 +43,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
   }, [sessionStatus, ticker, (sessionData as ExtraSessionData).userId])
 
   const checkIsFavorited = async () => {
-    const response = await fetch(`/api/is-favorite-company?id=${sessionData?.userId}&ticker=${ticker}`)
+    const response = await fetch(`/api/is-favorite-company?id=${(sessionData as ExtraSessionData).userId}&ticker=${ticker}`)
     const data = await response.json()
     setFavorited(data.data.isFavorited)
   }
@@ -199,7 +199,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     )
   }
   const addToWatchList = async () => {
-    const payload = { ticker, favorited: !favorited, userId: sessionData?.userId }
+    const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData).userId }
 
     if (sessionStatus === 'unauthenticated') {
       signIn('email', { callbackUrl: router.asPath })
