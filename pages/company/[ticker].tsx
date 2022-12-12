@@ -39,7 +39,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
   const router = useRouter()
   useEffect(() => {
     console.log('sessionData', sessionData)
-    if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData).userId) checkIsFavorited()
+    if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData)?.userId) checkIsFavorited()
   }, [sessionStatus, ticker, (sessionData as ExtraSessionData).userId])
 
   const checkIsFavorited = async () => {

@@ -88,7 +88,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
     }
 
     const addToWatchList = async (ticker: string, favorited: boolean) => {
-        const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData).userId }
+        const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData)?.userId }
 
         try {
             const res = await fetch('/api/add-to-favorites', {
