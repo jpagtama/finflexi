@@ -84,9 +84,7 @@ const AdminHome = (props: { isAuthorized: boolean }) => {
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const session = await getSession(context)
 
-    console.log('session :>> ', session);
-
-    const isAuthorized = session?.user?.email === 'jpagtama.dev@gmail.comm'
+    const isAuthorized = session?.user?.email === 'jpagtama.dev@gmail.com'
 
     return {
         props: {
