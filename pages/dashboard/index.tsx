@@ -10,6 +10,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement,
 import Calendar from 'react-event-viewer-calendar'
 import { dbDatetoString } from '../../utils/utils'
 import styles from '@styles/Dashboard.module.css'
+import { Session } from 'next-auth'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -20,7 +21,18 @@ interface Props {
     stock_prices: { [key: string]: { price: string, date: string }[] }
 }
 
+interface ExtraSessionData extends Session {
+    userId: string
+}
+
 const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
+    const router = useRouter()
+    const { status: sessionStatus } = useSession({
+        required: true,
+        onUnauthenticated() {
+            signIn('email', { callbackUrl: router.asPath })
+        }
+    })
 
     if (favorites.length === 0) return (
         <div className={styles.container}>
@@ -32,15 +44,6 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             </div>
         </div>
     )
-
-    const router = useRouter()
-
-    const { status: sessionStatus } = useSession({
-        required: true,
-        onUnauthenticated() {
-            signIn('email', { callbackUrl: router.asPath })
-        }
-    })
 
     if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
@@ -164,7 +167,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let calendar = []
     let stock_prices: { [key: string]: { price: string, date: string }[] } = {}
     try {
-        const userId = session?.userId
+        const userId = (session as ExtraSessionData).userId
 
         // Get the users favorite companies with details
         const companies = await prisma.watchlist.findMany({

@@ -8,13 +8,13 @@ const VerifyRequest = () => {
         <div className={styles.container}>
             <div className={styles.header}></div>
             <h1 className={styles.title}>Check your Email</h1>
-            <h2>You're almost there!</h2>
+            <h2>You&apos;re almost there!</h2>
             <div className={styles.mailIcon}>
                 <IconContext.Provider value={{ size: '3em' }}>
                     <MdOutlineMarkEmailUnread />
                 </IconContext.Provider>
             </div>
-            <p>Click the sign-in link we sent you and you're ready to go</p>
+            <p>Click the sign-in link we sent you and you&apos;re ready to go</p>
         </div>
     )
 }
