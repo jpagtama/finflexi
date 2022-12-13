@@ -40,7 +40,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
   useEffect(() => {
     console.log('sessionData', sessionData)
     if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData)?.userId) checkIsFavorited()
-  }, [sessionStatus, ticker, (sessionData as ExtraSessionData).userId])
+  }, [sessionStatus, ticker, (sessionData as ExtraSessionData)?.userId])
 
   const checkIsFavorited = async () => {
     const response = await fetch(`/api/is-favorite-company?id=${(sessionData as ExtraSessionData).userId}&ticker=${ticker}`)
