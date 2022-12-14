@@ -29,7 +29,7 @@ interface ExtraSessionData extends Session {
     userId: string
 }
 
-const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
+const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
     const router = useRouter()
     let draggedItem = useRef<number | null>(null)
     let draggedItemDroppedOn = useRef<number | null>(null)
@@ -189,7 +189,7 @@ const Favorited = ({ favoritedCompanies: companies, status }: Props) => {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const session = await getSession(context)
-    const userId = (session as ExtraSessionData).userId
+    const userId = (session as ExtraSessionData)?.userId
 
     let status = 200
     let message = 'ok'
@@ -245,4 +245,4 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
 
 
-export default Favorited
+export default Favorites
