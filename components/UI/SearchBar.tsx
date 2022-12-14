@@ -53,10 +53,11 @@ const SearchBar = (props: Props) => {
 
     const submitHandler = async (e: React.FormEvent) => {
         e.preventDefault()
+        const ticker = searchResults[highlightedResult].ticker
+        setSearchResults([])
+        searchBarRef.current?.blur()
         if (highlightedResult > -1) {
-            router.push(`/company/${searchResults[highlightedResult].ticker}`)
-            setSearchResults([])
-            searchBarRef.current?.blur()
+            router.push(`/company/${ticker}`)
         }
     }
 
