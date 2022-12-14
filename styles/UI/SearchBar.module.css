@@ -13,6 +13,7 @@
     border: none;
     color: ivory;
     background-color: var(--gray);
+    font-size: 16px;
 }
 
 .searchBar:focus {
