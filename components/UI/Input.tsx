@@ -19,7 +19,7 @@ const Input = forwardRef(({ value, id, changeHandler, type = 'text', placeholder
 
     return (
         <input ref={inputRef} id={id} type={type} value={value} onChange={changeHandler} placeholder={placeholder}
-            style={{ width: "100%", padding: "1em", border: "none", borderRadius: "5px", color: "ivory", backgroundColor: "var(--gray)" }} />
+            style={{ width: "100%", padding: "1em", border: "none", borderRadius: "5px", color: "ivory", backgroundColor: "var(--gray)", fontSize: "16px" }} />
     )
 })
 
