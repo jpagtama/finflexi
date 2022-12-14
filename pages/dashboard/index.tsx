@@ -34,7 +34,9 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
         }
     })
 
-    if (favorites.length === 0) return (
+    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
+
+    const renderWelcome = () => (
         <div className={styles.container}>
             <div className={styles.emptyDashContainer}>
                 <h1>Welcome to your Dashboard!</h1>
@@ -44,8 +46,6 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
             </div>
         </div>
     )
-
-    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
     const goToCompany = (ticker: string) => {
         router.push(`/company/${ticker}`)
@@ -136,7 +136,8 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
 
     return (
         <div className={styles.container}>
-            {Object.keys(stock_prices).length && <>
+            {favorites.length === 0 && renderWelcome()}
+            {Object.keys(stock_prices).length > 0 && <>
                 <div className={styles.companiesHeader} ><h1>Top 5 Companies</h1></div>
                 <div className={styles.chartSection}>
                     {Object.keys(stock_prices).length && renderStockCharts()}
