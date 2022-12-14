@@ -1,9 +1,9 @@
-import { prisma } from '@db/index'
 import { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
 
-// TO ADD: 
-const companies = ['AAL', 'AAPL', 'ABNB', 'ADBE', 'ADDYY', 'AMC', 'AMD', 'AMT', 'AMTD', 'AMZN', 'ATVI', 'AXP', 'BA', 'BABA', 'BAC', 'BB', 'BBBY', 'BBY', 'BLK', 'BMWYY', 'BRK.A', 'BRK.B', 'BYD', 'BYDDF', 'BYDDY', 'BYND', 'C', 'CAT', 'CCL', 'COF', 'COKE', 'COST', 'CRM', 'CRSP', 'CS', 'CSCO', 'CMCSA', 'CVS', 'CVX', 'DAL', 'DIS', 'DKNG', 'DVA', 'DWAC', 'EBAY', 'EFX', 'EIX', 'F', 'FDX', 'FIS', 'FSR', 'FUBO', 'GE', 'GME', 'GOOG', 'GOOGL', 'GS', 'HAS', 'HCP', 'HD', 'HI', 'HOOD', 'HSBC', 'HUBS', 'IBM', 'INFY', 'INTC', 'INTU', 'IVC', 'JD', 'JNJ', 'JPM', 'KBH', 'KHC', 'KLAC', 'KO', 'KOSS', 'KR', 'LCID', 'LMND', 'LOW', 'LUV', 'MA', 'MATW', 'MCD', 'MDB', 'META', 'MGM', 'MMM', 'MRNA', 'MS', 'MSFT', 'NFLX', 'NIO', 'NKE', 'NOC', 'NTDOY', 'NVDA', 'O', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PHM', 'PINS', 'PLTR', 'PPG', 'PYPL', 'QCOM', 'QSR', 'RCL', 'RIVN', 'RTX', 'SBUX', 'SCI', 'SCHW', 'SHEL', 'SHOP', 'SNOW', 'SONY', 'SNAP', 'SPCE', 'SPY', 'T', 'TGT', 'TM', 'TMUS', 'TSLA', 'TSM', 'TWTR', 'TXN', 'U', 'UAL', 'UBER', 'UNH', 'UPS', 'UPWK', 'USB', 'V', 'VAC', 'VMW', 'VWAGY', 'VTI', 'VZ', 'WFC', 'WING', 'WIX', 'WMT', 'WYNN', 'XOM', 'XPEV', 'ZM', 'ZOM']
+// Update manually (after retrieving data from request): ADDYY, 
+
+const companies = ['AAL', 'AAPL', 'ABNB', 'ADBE', 'ADDYY', 'AMC', 'AMD', 'AMT', 'AMTD', 'AMZN', 'ATVI', 'AXP', 'BA', 'BABA', 'BAC', 'BB', 'BBBY', 'BBY', 'BLK', 'BMWYY', 'BRK.A', 'BRK.B', 'BYD', 'BYND', 'C', 'CAT', 'CCL', 'COF', 'COKE', 'COST', 'CRM', 'CRSP', 'CS', 'CSCO', 'CMCSA', 'CVS', 'CVX', 'DAL', 'DIS', 'DKNG', 'DVA', 'DWAC', 'EBAY', 'EFX', 'EIX', 'F', 'FDX', 'FIS', 'FSR', 'FUBO', 'GE', 'GME', 'GOOG', 'GOOGL', 'GS', 'HAS', 'HCP', 'HD', 'HI', 'HOOD', 'HSBC', 'HUBS', 'IBM', 'INFY', 'INTC', 'INTU', 'IVC', 'JD', 'JNJ', 'JPM', 'KBH', 'KHC', 'KLAC', 'KO', 'KOSS', 'KR', 'LCID', 'LMND', 'LOW', 'LUV', 'MA', 'MATW', 'MCD', 'MDB', 'META', 'MGM', 'MMM', 'MRNA', 'MS', 'MSFT', 'NFLX', 'NIO', 'NKE', 'NOC', 'NTDOY', 'NVDA', 'O', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PHM', 'PINS', 'PLTR', 'PPG', 'PYPL', 'QCOM', 'QSR', 'RCL', 'RIVN', 'RTX', 'SBUX', 'SCI', 'SCHW', 'SHEL', 'SHOP', 'SNOW', 'SONY', 'SNAP', 'SPCE', 'SPY', 'T', 'TGT', 'TM', 'TMUS', 'TSLA', 'TSM', 'TWTR', 'TXN', 'U', 'UAL', 'UBER', 'UNH', 'UPS', 'UPWK', 'USB', 'V', 'VAC', 'VMW', 'VWAGY', 'VTI', 'VZ', 'WFC', 'WING', 'WIX', 'WMT', 'WYNN', 'XOM', 'XPEV', 'ZM', 'ZOM']
 
 const popularCompanies = ['AAPL', 'AMC', 'AMZN', 'BABA', 'BB', 'BBBY', 'GOOG', 'GOOGL', 'GME', 'META', 'NFLX', 'NIO', 'TGT', 'TSLA', 'TWTR', 'WMT', 'UBER']
 
@@ -64,7 +64,7 @@ const AdminHome = (props: { isAuthorized: boolean }) => {
             </div>
             <div>
                 <h2>General Overview x1</h2>
-                <span>Notes: update manually SPY, BYDDF, BYDDY, NTDOY, VWAGY, VTI, HOOD, LCID, ADDYY </span><br />
+                <span>Notes: update manually ADDYY, BMWYY, HOOD, LCID, NTDOY, RIVN, SPY, TWTR, VWAGY, VTI </span><br />
                 {companies.map(i => <button key={i} onClick={() => companyHandler(i)} >{i}</button>)}
             </div>
             <div>
