@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
         const data = await response.json()
 
-        await prisma.companies.create({
+        const res = await prisma.companies.create({
             data: {
                 ticker: ticker,
                 name: data['Name'],
@@ -27,6 +27,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 fiscalyearend: data['FiscalYearEnd'],
             }
         })
+
+        return res
 
         // await prisma.companies.upsert({
         //     where: {
@@ -61,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-        updateCompanyOverview(ticker)
+        const message = updateCompanyOverview(ticker)
         return res.status(200).json({ status: { success: success, message: message } })
     } catch (error) {
         success = false
