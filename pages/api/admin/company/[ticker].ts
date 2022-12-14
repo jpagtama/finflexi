@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const response = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
         const data = await response.json()
 
-        const res = await prisma.companies.create({
+        await prisma.companies.create({
             data: {
                 ticker: ticker,
                 name: data['Name'],
@@ -28,7 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
         })
 
-        return res
+        return data
 
         // await prisma.companies.upsert({
         //     where: {
