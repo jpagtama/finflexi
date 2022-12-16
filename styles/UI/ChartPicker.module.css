@@ -4,13 +4,16 @@
     gap: 2em;
     margin-top: 2em;
 }
+
 .container button {
     background-color: var(--dark-pink);
+    color: black;
     border: none;
     border-radius: 5px;
     padding: 0.5em 1em;
     cursor: pointer;
 }
+
 .container button.isActive {
     background-color: var(--neon-pink);
     box-shadow: 0 0 10px 3px var(--dark-pink);

@@ -7,7 +7,7 @@ interface Props {
 
 const Button = ({ onClick, label }: Props) => {
     return (
-        <button onClick={onClick} style={{ padding: '1em', border: 'none', borderRadius: '5px', cursor: 'pointer', backgroundColor: 'var(--neon-green)' }} >
+        <button onClick={onClick} style={{ padding: '1em', border: 'none', borderRadius: '5px', cursor: 'pointer', backgroundColor: 'var(--neon-green)', color: 'black' }} >
             {label}
         </button>
     )
