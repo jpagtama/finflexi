@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Session } from 'next-auth'
 import Loading from '@components/UI/Loading'
 import { prisma } from '@db/index'
 import { GetServerSidePropsContext } from 'next'
@@ -9,14 +10,17 @@ import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
 import Calendar from 'react-event-viewer-calendar'
 import { dbDatetoString } from '../../utils/utils'
+import Image from 'next/image'
+import FaveIcon from '../../public/FaveIcon.svg'
+import GlobeIcon from '../../public/GlobeIcon.svg'
+import ShopIcon from '../../public/ShopIcon.svg'
 import styles from '@styles/Dashboard.module.css'
-import { Session } from 'next-auth'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface Props {
+    isAuthorized: boolean
     favorites: { order: number | null, company: { ticker: string, name: string } }[]
-    // upcoming_earnings: string
     upcoming_earnings: { ticker: string, name: string, date: string }[]
     stock_prices: { [key: string]: { price: string, date: string }[] }
 }
@@ -25,7 +29,7 @@ interface ExtraSessionData extends Session {
     userId: string
 }
 
-const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
+const Dashboard = ({ isAuthorized, favorites, upcoming_earnings, stock_prices }: Props) => {
     const router = useRouter()
     const { status: sessionStatus } = useSession({
         required: true,
@@ -39,10 +43,20 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
     const renderWelcome = () => (
         <div className={styles.container}>
             <div className={styles.emptyDashContainer}>
-                <h1>Welcome to your Dashboard!</h1>
-                <p>This is your dashboard where you can track all the details for the companies you follow.</p>
-                <p>Getting started is easy! Simply search a company and click the star icon to favorite it.</p>
-                <p>Our dashboard makes it easy to view stock-prices and upcoming earnings all in one place.</p>
+                <h1 className={styles.welcomeHeader} >Welcome to your Dashboard!</h1>
+                <div className={styles.welcomeSection}>
+                    <Image src={ShopIcon} alt="company icon" height="200px" width="200px" />
+                    <p>Track all the details for the companies you follow.</p>
+                </div>
+                <div className={styles.welcomeSection}>
+                    <Image src={FaveIcon} alt="star icon" height="200px" width="200px" />
+                    <p>Simply search a company and click the star icon to favorite it.</p>
+
+                </div>
+                <div className={styles.welcomeSection}>
+                    <Image src={GlobeIcon} alt="globe icon" height="200px" width="200px" />
+                    <p>Our dashboard makes it easy to view stock-prices and upcoming earnings all in one place.</p>
+                </div>
             </div>
         </div>
     )
@@ -136,32 +150,50 @@ const Dashboard = ({ favorites, upcoming_earnings, stock_prices }: Props) => {
 
     return (
         <div className={styles.container}>
-            {favorites.length === 0 && renderWelcome()}
-            {Object.keys(stock_prices).length > 0 && <>
-                <div className={styles.companiesHeader} ><h1>Top 5 Companies</h1></div>
-                <div className={styles.chartSection}>
-                    {Object.keys(stock_prices).length && renderStockCharts()}
-                </div>
-            </>}
-            {upcoming_earnings.length > 0 && <>
-                <div className={styles.earningsHeader} ><h1>Upcoming Earnings</h1></div>
-                <div className={styles.calendarSection}>
-                    <div className={styles.calendarContainer}>
-                        {<Calendar styles={calStyles} events={events} />}
+            {isAuthorized ? <>
+                {favorites.length === 0 && renderWelcome()}
+                {Object.keys(stock_prices).length > 0 && <>
+                    <div className={styles.companiesHeader} ><h1>Price Action Overview</h1></div>
+                    <div className={styles.chartSection}>
+                        {Object.keys(stock_prices).length && renderStockCharts()}
                     </div>
-                    <div className={styles.eventListContainer}>
-                        <ul>
-                            {upcoming_earnings.map((i, idx) => <li key={idx}><span>{i.name}</span><span className={styles.listDateitem}>{i.date}</span></li>)}
-                        </ul>
+                </>}
+                {upcoming_earnings.length > 0 && <>
+                    <div className={styles.earningsHeader} ><h1>Upcoming Earnings</h1></div>
+                    <div className={styles.calendarSection}>
+                        <div className={styles.calendarContainer}>
+                            {<Calendar styles={calStyles} events={events} />}
+                        </div>
+                        <div className={styles.eventListContainer}>
+                            <ul>
+                                {upcoming_earnings.map((i, idx) => <li key={idx}><span>{i.name}</span><span className={styles.listDateitem}>{i.date}</span></li>)}
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </>}
+                </>}
+            </>
+                :
+                <h1>Please sign in before continuing...</h1>
+            }
         </div>
     )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getSession(context)
+
+    const isAuthorized = session !== null
+    if (!isAuthorized) {
+        return {
+            props: {
+                isAuthorized: false,
+                favorites: [],
+                upcoming_earnings: [],
+                stock_prices: []
+            }
+        }
+    }
+
     const today = new Date()
     let favorites: { order: number | null; company: { ticker: string; name: string | null; }; }[] = []
     let upcoming_earnings: { ticker: string; name: string, date: string; }[] = []
@@ -247,6 +279,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
         props: {
+            isAuthorized,
             favorites,
             upcoming_earnings,
             stock_prices
