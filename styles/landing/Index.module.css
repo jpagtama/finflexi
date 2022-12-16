@@ -3,6 +3,9 @@
     height: 100%;
     /* Need overflow-x: hidden to prevent sliding animation from skewing layout when in view */
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .bannerSection {
