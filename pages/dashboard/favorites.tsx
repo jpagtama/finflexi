@@ -31,16 +31,16 @@ interface ExtraSessionData extends Session {
 }
 
 const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Props) => {
-    const router = useRouter()
-    let draggedItem = useRef<number | null>(null)
-    let draggedItemDroppedOn = useRef<number | null>(null)
-
     const { data: sessionData, status: sessionStatus } = useSession({
         required: true,
         onUnauthenticated() {
             signIn('email', { callbackUrl: router.asPath })
         }
     })
+
+    const router = useRouter()
+    let draggedItem = useRef<number | null>(null)
+    let draggedItemDroppedOn = useRef<number | null>(null)
 
     const formatReqCompanies = (companies: { company: { name: string, ticker: string }, order: number | null, id: string }[]) => {
         // Formats the companies we retrieved from the server
@@ -92,12 +92,12 @@ const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Prop
         const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData)?.userId }
 
         try {
+            updateFavoritedCompaniesState(ticker, payload.favorited)
             const res = await fetch('/api/add-to-favorites', {
                 method: 'POST',
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'application/json' }
             })
-            updateFavoritedCompaniesState(ticker, payload.favorited)
         } catch (e) {
             if (e instanceof Error) console.log(e.message)
         }

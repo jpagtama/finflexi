@@ -38,7 +38,6 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
 
   const router = useRouter()
   useEffect(() => {
-    console.log('sessionData', sessionData)
     if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData)?.userId) checkIsFavorited()
   }, [sessionStatus, ticker, (sessionData as ExtraSessionData)?.userId])
 
@@ -199,19 +198,20 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     )
   }
   const addToWatchList = async () => {
-    const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData).userId }
+    const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData)?.userId }
 
     if (sessionStatus === 'unauthenticated') {
       signIn('email', { callbackUrl: router.asPath })
     } else {
       try {
+        setFavorited(!favorited)
+
         const res = await fetch('/api/add-to-favorites', {
           method: 'POST',
           body: JSON.stringify(payload),
           headers: { 'Content-Type': 'application/json' }
         })
         const data = await res.json()
-        setFavorited(!favorited)
       } catch (e) {
         if (e instanceof Error) console.log(e.message)
       }
