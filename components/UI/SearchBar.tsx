@@ -61,6 +61,12 @@ const SearchBar = (props: Props) => {
         }
     }
 
+    const clickResultHandler = (ticker: string) => {
+        setSearchResults([])
+        searchBarRef.current?.blur()
+        router.push(`/company/${ticker}`)
+    }
+
     const renderSearchResults = () => {
         if (searchResults.length === 0 || searchText.length === 0) return
         return (
@@ -68,14 +74,10 @@ const SearchBar = (props: Props) => {
                 <ul className={styles.searchResultsList} >
                     {searchResults.map((i, index) => {
                         return (
-                            <Link key={i.ticker} href={`/company/${i.ticker}`} >
-                                <a>
-                                    <li className={`${styles.searchItem} ${highlightedResult === index && styles.highlight}`} key={i.ticker} >
-                                        <span className={styles.ticker} >{i.ticker}</span>
-                                        <span className={styles.companyName} >{i.name}</span>
-                                    </li>
-                                </a>
-                            </Link>
+                            <li className={`${styles.searchItem} ${highlightedResult === index && styles.highlight}`} key={i.ticker} onClick={() => clickResultHandler(i.ticker)} >
+                                <span className={styles.ticker} >{i.ticker}</span>
+                                <span className={styles.companyName} >{i.name}</span>
+                            </li>
                         )
                     })}
                 </ul>
