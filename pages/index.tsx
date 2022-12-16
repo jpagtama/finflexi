@@ -45,7 +45,7 @@ const Home = () => {
   // if (animateIntro) return <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />
 
   return (
-    <>
+    <div className={styles.container}>
       <Head>
         <title>Finflexi</title>
         <meta name="description" content="Access to stock market data and technical analysis" />
@@ -103,7 +103,7 @@ const Home = () => {
         <Link href='/signin'><button ref={signUpRef} className={`${styles.signUpButton} ${signUpInView ? styles.shake : ''}`}>Sign Up!</button></Link>
       </section>
 
-    </>
+    </div>
   )
 }
 
