@@ -3,6 +3,7 @@ import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Input from '@components/UI/Input'
 import Loading from '@components/UI/Loading'
+import LoadingCircle from '@components/UI/LoadingCircle'
 import * as EmailValidator from 'email-validator'
 import { FaExclamationCircle, FaKey } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
@@ -15,6 +16,7 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [signInClicked, setSignInClicked] = useState(false)
     const emailRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => { emailRef.current?.focus() }, [])
@@ -36,14 +38,17 @@ const SignIn = () => {
             if (res?.error) {
                 setError(true)
                 setErrorMessage('Please use a valid email')
+                setSignInClicked(false)
             }
         } else {
             setError(true)
             setErrorMessage('Please use a valid email')
+            setSignInClicked(false)
         }
     }
     const buttonClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        setSignInClicked(true)
         submitHandler(e)
     }
     const renderSignInForm = () => {
@@ -54,7 +59,8 @@ const SignIn = () => {
                     {error && <span className={styles.error}>{errorMessage}</span>}
                 </div>
                 <Input ref={emailRef} id='email' value={email} type='email' changeHandler={emailChangeHandler} placeholder='youremail@example.com' />
-                <button onClick={buttonClickHandler} >Sign In</button>
+                {signInClicked && <div className={styles.signInLoaderContainer}><LoadingCircle /></div>}
+                {!signInClicked && <button onClick={buttonClickHandler} >Sign In</button>}
             </form>
         )
     }
