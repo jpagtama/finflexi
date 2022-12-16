@@ -5,6 +5,7 @@
     width: 100%;
     min-height: 90vh;
     padding-top: 7em;
+    padding-bottom: 2em;
     background: rgba(120, 133, 181, 1);
     background: linear-gradient(45deg, rgba(249, 0, 191, 1) 0%, rgba(0, 255, 171, 1) 100%);
 }
