@@ -11,6 +11,7 @@ import styles from '@styles/company/Favorites.module.css'
 import { Session } from 'next-auth'
 
 interface Props {
+    isAuthorized: boolean,
     favoritedCompanies: [{
         company: {
             name: string,
@@ -29,10 +30,17 @@ interface ExtraSessionData extends Session {
     userId: string
 }
 
-const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
+const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Props) => {
     const router = useRouter()
     let draggedItem = useRef<number | null>(null)
     let draggedItemDroppedOn = useRef<number | null>(null)
+
+    const { data: sessionData, status: sessionStatus } = useSession({
+        required: true,
+        onUnauthenticated() {
+            signIn('email', { callbackUrl: router.asPath })
+        }
+    })
 
     const formatReqCompanies = (companies: { company: { name: string, ticker: string }, order: number | null, id: string }[]) => {
         // Formats the companies we retrieved from the server
@@ -44,13 +52,6 @@ const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
     const req_companies = status ? formatReqCompanies(companies) : []
 
     const [favoritedCompanies, setFavoritedCompanies] = useState<{ ticker: string, name: string, favorited: boolean, order: number | null, id: string }[]>(req_companies)
-
-    const { data: sessionData, status: sessionStatus } = useSession({
-        required: true,
-        onUnauthenticated() {
-            signIn('email', { callbackUrl: router.asPath })
-        }
-    })
 
     useEffect(() => {
         // Save the order of the list
@@ -65,7 +66,7 @@ const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
         }
 
         try {
-            saveFaves()
+            if (favoritedCompanies.length > 0) saveFaves()
         } catch (e) {
             // handle error
         }
@@ -181,6 +182,7 @@ const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>My Favorites</h1>
+            {!isAuthorized && <h1>Please sign in to continue</h1>}
             {favoritedCompanies.length > 0 && renderFavorites()}
             {favoritedCompanies.length === 0 && renderNone()}
         </div>
@@ -190,6 +192,20 @@ const Favorites = ({ favoritedCompanies: companies, status }: Props) => {
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const session = await getSession(context)
     const userId = (session as ExtraSessionData)?.userId
+
+    const isAuthorized = session !== null
+    if (!isAuthorized) {
+        return {
+            props: {
+                isAuthorized: false,
+                favoritedCompanies: [],
+                status: {
+                    success: false,
+                    message: 'user is not authorized'
+                }
+            }
+        }
+    }
 
     let status = 200
     let message = 'ok'
@@ -216,6 +232,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
         return {
             props: {
+                isAuthorized,
                 favoritedCompanies: data,
                 status: {
                     success,
@@ -231,6 +248,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
         return {
             props: {
+                isAuthorized: isAuthorized,
                 favoritedCompanies: [],
                 status: {
                     success,
