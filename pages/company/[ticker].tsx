@@ -315,6 +315,8 @@ export const getStaticPaths = async () => {
       { params: { ticker: 'AAPL' } },
       { params: { ticker: 'TSLA' } },
       { params: { ticker: 'AMZN' } },
+      { params: { ticker: 'META' } },
+      { params: { ticker: 'NFLX' } },
       { params: { ticker: 'MSFT' } },
       { params: { ticker: 'GOOG' } },
       { params: { ticker: 'GOOGL' } },
