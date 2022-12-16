@@ -66,12 +66,12 @@ const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Prop
         }
 
         try {
-            if (favoritedCompanies.length > 0) saveFaves()
+            if (isAuthorized && favoritedCompanies.length > 0) saveFaves()
         } catch (e) {
             // handle error
         }
 
-    }, [favoritedCompanies])
+    }, [isAuthorized, favoritedCompanies])
 
     const updateFavoritedCompaniesState = (ticker: string, favorited: boolean) => {
 
