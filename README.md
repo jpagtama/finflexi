@@ -8,7 +8,7 @@ Finflexi is a fintech app that allows you to view market and company data. By si
 
 
 
-## Demo at 
+## Demo
 You can find the demo at https://finflexi.vercel.app
 ![gif](https://www.julianpagtama.com/assets/finflexi.641b571a.gif)
 
