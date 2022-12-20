@@ -34,7 +34,7 @@ const about = () => {
             <div className={`${styles.section}`}>
                 <div className={`${styles.secPt1}`}>
                     <h2>Everything in One Place</h2>
-                    <p>Use the dashboard to track your favorite companies. The dashboard allows you to view price action at a glance and get the dates on upcoming earnings so you don't miss a beat. Tap the star icon to add a company to your favorites list so you can start tracking their data.</p>
+                    <p>Use the dashboard to track your favorite companies. The dashboard allows you to view price action at a glance and get the dates on upcoming earnings so you don&apos;t miss a beat. Tap the star icon to add a company to your favorites list so you can start tracking their data.</p>
                 </div>
                 <div className={`${styles.secPt2}`}>
                     <Image src={cellPhoneIcon} alt="cellphone icon" height="195px" width="195px" />
