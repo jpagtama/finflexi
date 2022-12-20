@@ -28,7 +28,8 @@ const MenuList = () => {
         {status === 'authenticated' && <li><span onClick={() => clickHandler("/dashboard")} >Dashboard</span></li>}
         <li><span onClick={() => clickHandler("/dashboard/favorites")} >My Favorites</span></li>
         <li><span onClick={() => clickHandler("/economy")} >Economic Indicators</span></li>
-        <li><span onClick={() => clickHandler("/account")} >My Account</span></li>
+        {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/about")} >About Us</span></li>}
+        {status === 'authenticated' && <li><span onClick={() => clickHandler("/account")} >My Account</span></li>}
         {status === 'unauthenticated' && <li><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
         {status === 'authenticated' && <li><span onClick={displaySignOutAlert} >Sign Out</span></li>}
       </ul>
