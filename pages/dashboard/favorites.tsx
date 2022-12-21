@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import { prisma } from '@db/index'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
+import Image from 'next/image'
+import touchIcon from '../../public/touchfave_icon_300x300.svg'
 import FavoritedItem from '@components/dashboard/FavoritedItem'
 import Loading from '@components/UI/Loading'
 import { GetServerSidePropsContext } from 'next'
 import { getSession } from 'next-auth/react'
-import styles from '@styles/company/Favorites.module.css'
 import { Session } from 'next-auth'
+import styles from '@styles/company/Favorites.module.css'
 
 interface Props {
     isAuthorized: boolean,
@@ -107,6 +108,7 @@ const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Prop
         return (
             <div className={styles.noFavorites}>
                 <p>Looks like there&apos;s nothing here...</p>
+                <Image className={styles.touchIcon} src={touchIcon} alt="touch favorite icon" />
                 <p>Start by searching a company and clicking the star icon to add to favorites</p>
             </div>
         )

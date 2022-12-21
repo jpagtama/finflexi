@@ -33,7 +33,17 @@
 .noFavorites {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 90vw;
+}
+
+.noFavorites p {
+    text-align: center;
+}
+
+.touchIcon {
+    height: 200px;
+    width: 200px;
 }
 
 @media (min-width: 768px) {
