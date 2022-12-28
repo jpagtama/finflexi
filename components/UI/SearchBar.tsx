@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import useSWR from 'swr'
+import SearchBarResults from './SearchBarResults'
 import styles from '@styles/UI/SearchBar.module.css'
 
 interface CompanyDetails {
@@ -70,20 +71,7 @@ const SearchBar = (props: Props) => {
     const renderSearchResults = () => {
         // return <ul><li>{searchResults.length} | {searchText.length}</li></ul>
         if (searchResults.length === 0 || searchText.length === 0) return
-        return (
-            <div data-testid="search_results_container" className={styles.searchResultsContainer}>
-                <ul className={styles.searchResultsList} >
-                    {searchResults.map((i, index) => {
-                        return (
-                            <li className={`${styles.searchItem} ${highlightedResult === index && styles.highlight}`} key={i.ticker} onClick={() => clickResultHandler(i.ticker)} >
-                                <span className={styles.ticker} >{i.ticker}</span>
-                                <span className={styles.companyName} >{i.name}</span>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        )
+        return <SearchBarResults searchResults={searchResults} highlightedResult={highlightedResult} clickResultHandler={clickResultHandler} />
     }
 
     const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
