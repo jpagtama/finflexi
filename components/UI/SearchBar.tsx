@@ -68,9 +68,10 @@ const SearchBar = (props: Props) => {
     }
 
     const renderSearchResults = () => {
+        // return <ul><li>{searchResults.length} | {searchText.length}</li></ul>
         if (searchResults.length === 0 || searchText.length === 0) return
         return (
-            <div className={styles.searchResultsContainer}>
+            <div data-testid="search_results_container" className={styles.searchResultsContainer}>
                 <ul className={styles.searchResultsList} >
                     {searchResults.map((i, index) => {
                         return (
@@ -135,7 +136,7 @@ const SearchBar = (props: Props) => {
     return (
         <form className={styles.form} onSubmit={submitHandler} >
             <div className={styles.searchBarContainer}>
-                <input ref={searchBarRef} className={`${styles.searchBar} ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} type="text" placeholder="search companies" value={searchText} disabled={isSearching} />
+                <input role="search_bar" type="text" ref={searchBarRef} className={`${styles.searchBar} ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} placeholder="search companies" value={searchText} disabled={isSearching} />
                 <div onClick={searchBarIconHandler} className={`${styles.searchIcon} ${searchResults.length ? styles.searchIconBorderWithRecords : styles.searchIconBorderWithoutRecords}`}>
                     {searchText.length ? <FaTimes /> : <FaSearch />}
                 </div>
