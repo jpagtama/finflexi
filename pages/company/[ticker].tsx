@@ -10,7 +10,7 @@ import { FaStar, FaRegStar } from 'react-icons/fa'
 import { Line, Bar } from 'react-chartjs-2'
 import ChartPicker from '@components/UI/ChartPicker'
 import { dbDatetoString, isJSONEmpty } from '../../utils/utils'
-import { Decimal } from '@prisma/client/runtime'
+import { Decimal } from '@prisma/client/runtime/library'
 import Loading from '@components/UI/Loading'
 import styles from '@styles/company/Profile.module.css'
 import { Session } from 'next-auth'
@@ -244,7 +244,7 @@ const getCompanyOverview = async (ticker: string) => {
       } else if (value instanceof Date) {
         company[key] = dbDatetoString(value)
       } else if (value instanceof Decimal) {
-        company[key] = value.toString()
+        company[key] = value.toString();
       } else {
         company[key] = value
       }
