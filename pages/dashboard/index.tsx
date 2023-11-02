@@ -45,16 +45,16 @@ const Dashboard = ({ isAuthorized, favorites, upcoming_earnings, stock_prices }:
             <div className={styles.emptyDashContainer}>
                 <h1 className={styles.welcomeHeader} >Welcome to your Dashboard!</h1>
                 <div className={styles.welcomeSection}>
-                    <Image src={ShopIcon} alt="company icon" height="200px" width="200px" />
+                    <Image src={ShopIcon} alt="company icon" height="200" width="200" />
                     <p>Track all the details for the companies you follow.</p>
                 </div>
                 <div className={styles.welcomeSection}>
-                    <Image src={FaveIcon} alt="star icon" height="200px" width="200px" />
+                    <Image src={FaveIcon} alt="star icon" height="200" width="200" />
                     <p>Simply search a company and click the star icon to favorite it.</p>
 
                 </div>
                 <div className={styles.welcomeSection}>
-                    <Image src={GlobeIcon} alt="globe icon" height="200px" width="200px" />
+                    <Image src={GlobeIcon} alt="globe icon" height="200" width="200" />
                     <p>Our dashboard makes it easy to view stock-prices and upcoming earnings all in one place.</p>
                 </div>
             </div>

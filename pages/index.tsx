@@ -69,7 +69,7 @@ const Home = () => {
         </div>
         <div >
           <div ref={focusRef} className={`${focusInView ? styles.slideToLeft : ''} ${styles.image}`}>
-            <Image src={focusImage} alt="laser focused icon" height="195px" width="195px" />
+            <Image src={focusImage} alt="laser focused icon" height="195" width="195" />
           </div>
         </div>
       </section>
@@ -80,7 +80,7 @@ const Home = () => {
         </div>
         <div >
           <div ref={pointRef} className={`${pointInView ? styles.slideToRight : ''} ${styles.image}`}>
-            <Image src={mountainsImage} alt="mountains icon" height="195px" width="195px" />
+            <Image src={mountainsImage} alt="mountains icon" height="195" width="195" />
           </div>
         </div>
       </section>
