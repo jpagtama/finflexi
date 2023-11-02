@@ -37,19 +37,6 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     );
 
     const renderGDP = () => {
-        const options: ChartOptions = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                    position: 'top'
-                },
-                title: {
-                    display: false,
-                    text: 'GDP'
-                }
-            }
-        }
         const data = {
             labels: gdp.labels.slice(0, gdpTimeFrame).reverse(),
             datasets: [{
@@ -72,7 +59,7 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
         return (
             <div className={styles.sectionContainer}>
                 <h2 className={styles.sectionTitle}>Gross Domestic Product</h2>
-                <Bar options={options} data={data} />
+                <Bar data={data} />
                 <ChartPicker buttons={buttons} />
             </div>
         )
