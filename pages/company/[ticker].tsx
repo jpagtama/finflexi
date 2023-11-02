@@ -129,18 +129,6 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     const reportedEps = earnings.reportedEPS.slice(0, 4).reverse()
     const estEps = earnings.estimatedEPS.slice(0, 4).reverse()
 
-    const options: ChartOptions = {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        title: {
-          display: false,
-          text: ''
-        }
-      }
-    }
     const data = {
       labels: labels,
       datasets: [{
@@ -157,10 +145,11 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
       }
       ]
     }
+
     return (
       <>
         <h2 className={styles.descLabel}>Earnings:</h2>
-        <Bar options={options} data={data} />
+        <Bar data={data} />
       </>
     )
   }
