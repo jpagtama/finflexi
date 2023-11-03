@@ -1,10 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: [],
-  purge: ["./pages/**/*.{html,js,ts,tsx}", "./pages/*.{html,js,ts,tsx}"],
+  content: ["./pages/**/*.{html,js,ts,tsx}", "./components/**/*.{html,js,ts,tsx}"],
+  purge: ["./pages/**/*.{html,js,ts,tsx}", "./components/**/*.{html,js,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'dirty-white': '#DFE0E1'
+      }
+    },
   },
   plugins: [],
 }
