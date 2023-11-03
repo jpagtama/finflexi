@@ -1,9 +1,7 @@
-// import { useState } from 'react';
-// import { useSession } from 'next-auth/react'
+
 import Link from 'next/link'
 import Head from 'next/head'
 import { useInView } from 'react-intersection-observer';
-import AppIntro from '@components/landing/AppIntro'
 import SearchBar from '@components/UI/SearchBar'
 import Image from 'next/image'
 import focusImage from '../public/FinFlexiFocus.svg'
@@ -11,7 +9,6 @@ import mountainsImage from '../public/FinFlexiMountains.svg'
 import { FaApple, FaAmazon, FaGoogle, FaFacebook } from 'react-icons/fa'
 import { SiNetflix } from 'react-icons/si'
 import { IconContext } from 'react-icons/lib'
-import styles from '@styles/landing/Index.module.css'
 
 interface CompanyList {
   symbol: string
@@ -45,7 +42,7 @@ const Home = () => {
   // if (animateIntro) return <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />
 
   return (
-    <div className={styles.container}>
+    <div className='flex flex-col w-full min-h-screen'>
       <Head>
         <title>Finflexi</title>
         <meta name="description" content="Access to stock market data and technical analysis" />
@@ -54,43 +51,44 @@ const Home = () => {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest"></link>
       </Head>
-      {/* {animateIntro === true && <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />} */}
-      <section className={styles.bannerSection} >
-        <Link href='/signin'><button className={styles.signUpButton}>Sign Up!</button></Link>
+
+      <section className='flex justify-center items-center w-full min-h-screen'>
+        <Link href='/signin'><button className='bg-black' >Sign Up!</button></Link>
       </section>
-      <section className={styles.searchBarContainer}>
-        <p className={styles.searchDesc}>Get started right away:</p>
+
+      <section className=''>
+        <p className='' >Get started right away:</p>
         <SearchBar />
       </section>
-      <section className={styles.sectionContainer}>
-        <div className={styles.sectionDetails}>
-          <h1 className={styles.sectionTitle}>Laser focused.</h1>
+      <section className='' >
+        <div className='' >
+          <h1 className='' >Laser focused.</h1>
           <p>Get access to stock market data, company statistics, and more.</p>
         </div>
         <div >
-          <div ref={focusRef} className={`${focusInView ? styles.slideToLeft : ''} ${styles.image}`}>
+          <div ref={focusRef} className='' >
             <Image src={focusImage} alt="laser focused icon" height="195" width="195" />
           </div>
         </div>
       </section>
-      <section className={`${styles.sectionContainer} ${styles.sectionReverse}`}>
-        <div className={styles.sectionDetails}>
-          <h1 className={styles.sectionTitle}>Straight to the point.</h1>
+      <section className='' >
+        <div className='' >
+          <h1 className='' >Straight to the point.</h1>
           <p>Key economic indicators help you understand where your investments are going.</p>
         </div>
         <div >
-          <div ref={pointRef} className={`${pointInView ? styles.slideToRight : ''} ${styles.image}`}>
+          <div ref={pointRef} className='' >
             <Image src={mountainsImage} alt="mountains icon" height="195" width="195" />
           </div>
         </div>
       </section>
-      <section className={styles.companiesSection} >
-        <div className={styles.companiesSectionDetails}>
-          <h1 className={styles.sectionTitle}>Stay Up to Date.</h1>
+      <section className=''  >
+        <div className='' >
+          <h1 className='' >Stay Up to Date.</h1>
           <p>Our platform makes it easy to follow the companies you love.</p>
         </div>
-        <span className={styles.companyIcons}>
-          <IconContext.Provider value={{ size: "2em" }}>
+        <span className='' >
+          <IconContext.Provider value={{ size: "1em" }}>
             <FaFacebook />
             <FaAmazon />
             <FaApple />
@@ -99,12 +97,12 @@ const Home = () => {
           </IconContext.Provider >
         </span>
       </section>
-      <section className={styles.sectionContainer} style={{ height: '20em' }}>
-        <div className={styles.sectionDetails}>
-          <h1 className={styles.sectionTitle}>Sign Up for Free!</h1>
+      <section className='' style={{ height: '20em' }}>
+        <div className='' >
+          <h1 className='' >Sign Up for Free!</h1>
           <p>All you need is an email.</p>
         </div>
-        <Link href='/signin'><button ref={signUpRef} className={`${styles.signUpButton} ${signUpInView ? styles.shake : ''}`}>Sign Up!</button></Link>
+        <Link href='/signin'><button ref={signUpRef} className='' >Sign Up!</button></Link>
       </section>
 
     </div>
