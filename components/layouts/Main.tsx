@@ -10,7 +10,7 @@ const Main = (props: Props) => {
   const router = useRouter()
 
   return (
-    <main id="main">
+    <main className="flex flex-col w-full min-h-screen">
       {router.asPath !== '/verify-request' && <Header />}
       {props.children}
       <Footer />
