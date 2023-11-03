@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react"
 import { useRouter } from 'next/router'
 import Main from '@components/layouts/Main'
 import Loading from '@components/UI/Loading'
+import 'tailwindcss/tailwind.css'
 import '@styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
