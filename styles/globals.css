@@ -11,12 +11,14 @@
   --purple-blue: #293462;
   --gray: #343434;
   --error: #D61C4E;
+  --text-black: #212529;
+  --bg-white: #f8f9fa;
 }
 
 html,
 body {
-  color: var(--neon-pink);
-  background: #f8f9fa;
+  color: var(--text-black);
+  background: var(--bg-white);
   display: flex;
   flex-direction: column;
   padding: 0;
