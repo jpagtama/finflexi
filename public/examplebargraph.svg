@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 195 89" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-15.0124,-13.2893)">
+        <g id="bar-graph" serif:id="bar graph" transform="matrix(1,0,0,1,6.12668,0)">
+            <g transform="matrix(1,0,0,0.850639,0,14.9361)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(165,180,252);"/>
+            </g>
+            <g transform="matrix(1,0,0,1.30588,70.0429,-29.1349)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(165,180,252);"/>
+            </g>
+            <g transform="matrix(1,0,0,1.22006,100.009,-20.5536)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(79,70,229);"/>
+            </g>
+            <g transform="matrix(1,0,0,1.92927,140.008,-91.4746)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(165,180,252);"/>
+            </g>
+            <g transform="matrix(1,0,0,1.68292,169.967,-66.8391)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(79,70,229);"/>
+            </g>
+            <g transform="matrix(1,0,0,0.777392,30.0436,22.2608)">
+                <rect x="8.886" y="54.302" width="25.008" height="45.698" style="fill:rgb(79,70,229);"/>
+            </g>
+        </g>
+    </g>
+</svg>
