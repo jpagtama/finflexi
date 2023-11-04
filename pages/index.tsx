@@ -1,23 +1,17 @@
 
-import { useEffect } from 'react';
 import Link from 'next/link'
 import Head from 'next/head'
-import { useInView } from 'react-intersection-observer';
 import SearchBar from '@components/UI/SearchBar'
 import Image from 'next/image'
 import googleIcon from '../public/google.svg'
 import amazonIcon from '../public/amazon.svg'
-import netflixIcon from '../public/netflix.svg'
 import microsoftIcon from '../public/microsoft.svg'
 import appleIcon from '../public/apple.svg'
 import metaIcon from '../public/meta.svg'
 import ExampleDisplays from '@components/landing/ExampleDisplays';
-import mountainsImage from '../public/FinFlexiMountains.svg'
-import { FaApple, FaAmazon, FaGoogle, FaFacebook } from 'react-icons/fa'
 import { GiLaserburn, GiSpeedometer } from 'react-icons/gi';
 import { MdBolt } from 'react-icons/md';
 import { PiPersonSimpleBikeBold } from 'react-icons/pi';
-import { SiNetflix } from 'react-icons/si'
 
 interface CompanyList {
   symbol: string
@@ -25,31 +19,6 @@ interface CompanyList {
 }
 
 const Home = () => {
-  const { ref: focusRef, inView: focusInView } = useInView({ threshold: .7, triggerOnce: true })
-  const { ref: pointRef, inView: pointInView } = useInView({ threshold: .7, triggerOnce: true })
-  const { ref: signUpRef, inView: signUpInView } = useInView({ threshold: 1, triggerOnce: true })
-
-  // const { status: sessionStatus } = useSession()
-
-  // const [animateIntro, setAnimateIntro] = useState(true)
-
-  // useEffect(() => {
-  //   // console.log('sessionStatus', sessionStatus)
-  //   // console.log('window.sessionStorage.getItem("visited")', window.sessionStorage.getItem("visited"))
-  //   if (sessionStatus !== 'authenticated' && !window.sessionStorage.getItem("visited")) {
-  //     // Do if user is not signed in and its their first time getting to the page
-  //     window.sessionStorage.setItem("visited", "1")
-  //     setAnimateIntro(true)
-  //   }
-  // }, [])
-
-  // const introDoneHandler = () => {
-  //   setTimeout(() => endIntroHandler(), 2400)
-  // }
-  // const endIntroHandler = () => {
-  //   setAnimateIntro(false)
-  // }
-  // if (animateIntro) return <AppIntro introDoneHandler={introDoneHandler} endIntroHandler={endIntroHandler} />
 
   return (
     <div className='flex flex-col w-full min-h-screen'>
@@ -100,32 +69,32 @@ const Home = () => {
           <span className='text-center w-9/12 text-md sm:text-2xl'>We use a user-centric approach to strip away the complexities of monetary economics through the use of technology</span>
           <div className='flex justify-center items-center flex-wrap w-full sm:w-9/12' >
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
-              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <GiLaserburn className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Laser focused</span>
               <span className='text-center text-xs sm:text-base' >Get access to stock market data, company statistics, and more.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
-              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <MdBolt className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Straightforward</span>
               <span className='text-center text-xs sm:text-base' >Key economic indicators help you understand where your investments are going.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
-              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <PiPersonSimpleBikeBold className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Simplicity</span>
               <span className='text-center text-xs sm:text-base' >We aim to simplify financial education and make the world a more comfortable place.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
-              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <GiSpeedometer className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Performance</span>
-              <span className='text-center text-xs sm:text-base' >We use cutting edge technology to give you the best experience so you won't miss a beat.</span>
+              <span className='text-center text-xs sm:text-base' >We use cutting edge technology to give you the best experience so you won&apos;t miss a beat.</span>
             </div>
           </div>
         </div>
@@ -133,10 +102,10 @@ const Home = () => {
 
       <section className='flex justify-center items-center min-h-[85vh] w-full bg-red-300' >
         <div >
-          <h1 className='' >Sign Up for Free!</h1>
+          <h1 >Sign Up for Free!</h1>
           <p>All you need is an email.</p>
         </div>
-        <Link href='/signin'><button ref={signUpRef} className='' >Sign Up!</button></Link>
+        <Link href='/signin'><button >Sign Up!</button></Link>
       </section>
 
     </div>
