@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router'
-import Menu from '@components/UI/Menu'
-import MenuList from '@components/UI/MenuList'
+import NavBurgerButton from '@components/UI/NavBurgerButton'
+import MenuListMobile from '@components/UI/MenuListMobile'
 import SearchBar from '@components/UI/SearchBar'
 import { useSelector } from 'react-redux'
 import styles from '@styles/layouts/Header.module.css'
+import MenuListDeskTop from '@components/UI/MenuListDeskTop'
 
 
 const Header = () => {
@@ -17,13 +18,12 @@ const Header = () => {
           {(router.asPath !== '/' && !isMenuOpen) && <SearchBar />}
         </span>
       </div>
-      <header className={`${styles.header} ${isMenuOpen ? styles.menuIsOpen : styles.menuIsClosed}`}>
-        <div className={styles.headerSection} >
-          <span className={styles.menuIcon}>
-            <Menu />
-          </span>
+      <header className={`flex justify-center items-center bg-gray-700 w-full h-20 px-4 fixed z-50`}>
+        <div className='sm:hidden flex justify-end w-full'>
+          <NavBurgerButton />
+          {/* <MenuListMobile /> */}
         </div>
-        <MenuList />
+        <MenuListDeskTop />
       </header>
     </>
   )
