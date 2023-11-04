@@ -1,14 +1,23 @@
 
+import { useEffect } from 'react';
 import Link from 'next/link'
 import Head from 'next/head'
 import { useInView } from 'react-intersection-observer';
 import SearchBar from '@components/UI/SearchBar'
 import Image from 'next/image'
-import focusImage from '../public/FinFlexiFocus.svg'
+import googleIcon from '../public/google.svg'
+import amazonIcon from '../public/amazon.svg'
+import netflixIcon from '../public/netflix.svg'
+import microsoftIcon from '../public/microsoft.svg'
+import appleIcon from '../public/apple.svg'
+import metaIcon from '../public/meta.svg'
+import ExampleDisplays from '@components/landing/ExampleDisplays';
 import mountainsImage from '../public/FinFlexiMountains.svg'
 import { FaApple, FaAmazon, FaGoogle, FaFacebook } from 'react-icons/fa'
+import { GiLaserburn, GiSpeedometer } from 'react-icons/gi';
+import { MdBolt } from 'react-icons/md';
+import { PiPersonSimpleBikeBold } from 'react-icons/pi';
 import { SiNetflix } from 'react-icons/si'
-import { IconContext } from 'react-icons/lib'
 
 interface CompanyList {
   symbol: string
@@ -19,6 +28,7 @@ const Home = () => {
   const { ref: focusRef, inView: focusInView } = useInView({ threshold: .7, triggerOnce: true })
   const { ref: pointRef, inView: pointInView } = useInView({ threshold: .7, triggerOnce: true })
   const { ref: signUpRef, inView: signUpInView } = useInView({ threshold: 1, triggerOnce: true })
+
   // const { status: sessionStatus } = useSession()
 
   // const [animateIntro, setAnimateIntro] = useState(true)
@@ -52,53 +62,77 @@ const Home = () => {
         <link rel="manifest" href="/site.webmanifest"></link>
       </Head>
 
-      <section className='flex justify-center items-center w-full min-h-screen'>
-        <Link href='/signin'><button className='bg-black' >Sign Up!</button></Link>
+      <section className='flex justify-center items-center flex-wrap sm:gap-8 md:gap-20 sm:items-start pt-24 sm:pt-36 w-full min-h-2/3'>
+        <div className='flex justify-end'>
+          <ExampleDisplays />
+        </div>
+        <div className='flex flex-col gap-4 -order-1 lg:order-1 mb-12'>
+          <h1 className='text-8xl text-center sm:text-left'><span className='font-bold'>FIN</span><span className='font-extralight'>flexi</span></h1>
+          <p className='text-xl sm:text-3xl text-center sm:text-left' >Invest in your financial flexibility</p>
+          <div className='w-full flex justify-center sm:justify-start'>
+            <Link href='/signin'><button className='bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150' >Sign Up</button></Link>
+          </div>
+        </div>
       </section>
 
-      <section className=''>
-        <p className='' >Get started right away:</p>
-        <SearchBar />
-      </section>
-      <section className='' >
-        <div className='' >
-          <h1 className='' >Laser focused.</h1>
-          <p>Get access to stock market data, company statistics, and more.</p>
+      <section className='flex flex-col justify-center items-center px-8 py-16 mt-16 bg-dirty-white'>
+        <div className='flex flex-col items-center w-full sm:w-1/2 gap-4'>
+          <span className='text-2xl font-light' >Get started right away:</span>
+          <SearchBar />
         </div>
-        <div >
-          <div ref={focusRef} className='' >
-            <Image src={focusImage} alt="laser focused icon" height="195" width="195" />
+      </section>
+
+      <section className='flex flex-col justify-center items-center gap-12 px-8 pt-16 pb-48 bg-dirty-white'  >
+        <span className='text-4xl text-indigo-600 text-center' >Stay Up to Date</span>
+        <div className='flex justify-between w-full sm:w-4/5' >
+          <Image src={microsoftIcon} alt="Microsoft icon" className='h-5 sm:h-8' />
+          <Image src={appleIcon} alt="Apple icon" className='h-5 sm:h-8' />
+          <Image src={metaIcon} alt="Meta icon" className='h-5 sm:h-8' />
+          <Image src={amazonIcon} alt="Amazon icon" className='h-5 sm:h-8' />
+          <Image src={googleIcon} alt="Google icon" className='h-5 sm:h-8' />
+        </div>
+        <span className='text-center text-md sm:text-2xl text-indigo-500 font-thin' >Our platform makes it easy to follow the companies you love</span >
+      </section>
+
+      <section className={`flex flex-col justify-center items-center w-full relative h-[750px]`} >
+        <div className='flex flex-col justify-center items-center gap-6 w-10/12 bg-white shadow-lg rounded-md absolute -top-20 min-h-screen p-4'>
+          <span className='text-4xl sm:text-7xl text-center font-bold text-indigo-600'>Why Finflexi?</span>
+          <span className='text-center w-9/12 text-md sm:text-2xl'>We use a user-centric approach to strip away the complexities of monetary economics through the use of technology</span>
+          <div className='flex justify-center items-center flex-wrap w-full sm:w-9/12' >
+            <div className='flex flex-col justify-center items-center w-1/2 p-4' >
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+                <GiLaserburn className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
+              </div>
+              <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Laser focused</span>
+              <span className='text-center text-xs sm:text-base' >Get access to stock market data, company statistics, and more.</span>
+            </div>
+            <div className='flex flex-col justify-center items-center w-1/2 p-4' >
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+                <MdBolt className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
+              </div>
+              <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Straightforward</span>
+              <span className='text-center text-xs sm:text-base' >Key economic indicators help you understand where your investments are going.</span>
+            </div>
+            <div className='flex flex-col justify-center items-center w-1/2 p-4' >
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+                <PiPersonSimpleBikeBold className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
+              </div>
+              <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Simplicity</span>
+              <span className='text-center text-xs sm:text-base' >We aim to simplify financial education and make the world a more comfortable place.</span>
+            </div>
+            <div className='flex flex-col justify-center items-center w-1/2 p-4' >
+              <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-sky-500 rounded-full'>
+                <GiSpeedometer className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
+              </div>
+              <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Performance</span>
+              <span className='text-center text-xs sm:text-base' >We use cutting edge technology to give you the best experience so you won't miss a beat.</span>
+            </div>
           </div>
         </div>
       </section>
-      <section className='' >
-        <div className='' >
-          <h1 className='' >Straight to the point.</h1>
-          <p>Key economic indicators help you understand where your investments are going.</p>
-        </div>
+
+      <section className='flex justify-center items-center min-h-[85vh] w-full bg-red-300' >
         <div >
-          <div ref={pointRef} className='' >
-            <Image src={mountainsImage} alt="mountains icon" height="195" width="195" />
-          </div>
-        </div>
-      </section>
-      <section className=''  >
-        <div className='' >
-          <h1 className='' >Stay Up to Date.</h1>
-          <p>Our platform makes it easy to follow the companies you love.</p>
-        </div>
-        <span className='' >
-          <IconContext.Provider value={{ size: "1em" }}>
-            <FaFacebook />
-            <FaAmazon />
-            <FaApple />
-            <SiNetflix />
-            <FaGoogle />
-          </IconContext.Provider >
-        </span>
-      </section>
-      <section className='' style={{ height: '20em' }}>
-        <div className='' >
           <h1 className='' >Sign Up for Free!</h1>
           <p>All you need is an email.</p>
         </div>
