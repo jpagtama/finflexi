@@ -124,8 +124,8 @@ const SearchBar = (props: Props) => {
     return (
         <form className={styles.form} onSubmit={submitHandler} >
             <div className={styles.searchBarContainer}>
-                <input role="search_bar" type="text" ref={searchBarRef} className={`${styles.searchBar} ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} placeholder="search companies" value={searchText} disabled={isSearching} />
-                <div onClick={searchBarIconHandler} className={`${styles.searchIcon} ${searchResults.length ? styles.searchIconBorderWithRecords : styles.searchIconBorderWithoutRecords}`}>
+                <input role="search_bar" type="text" ref={searchBarRef} className={`${styles.searchBar} bg-white ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} placeholder="search companies" value={searchText} disabled={isSearching} />
+                <div onClick={searchBarIconHandler} className={`${styles.searchIcon} bg-white ${searchResults.length ? styles.searchIconBorderWithRecords : styles.searchIconBorderWithoutRecords}`}>
                     {searchText.length ? <FaTimes /> : <FaSearch />}
                 </div>
             </div>
