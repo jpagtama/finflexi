@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import SignOut from './SignOut'
 import styles from '@styles/UI/MenuList.module.css'
 
-const MenuList = () => {
+const MenuListMobile = () => {
   const isSignOutOpen = useSelector((state: { "menu": { "signOutOpen": boolean } }) => state.menu.signOutOpen)
   const dispatch = useDispatch()
   const router = useRouter()
@@ -44,4 +44,4 @@ const MenuList = () => {
   )
 }
 
-export default MenuList
+export default MenuListMobile;
