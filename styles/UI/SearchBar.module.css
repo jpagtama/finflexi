@@ -11,8 +11,6 @@
     width: 100%;
     padding: 1em;
     border: none;
-    color: ivory;
-    background-color: var(--gray);
     font-size: 16px;
 }
 
@@ -41,7 +39,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--gray);
     padding: 1em;
     cursor: pointer;
 }
