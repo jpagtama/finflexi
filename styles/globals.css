@@ -12,15 +12,19 @@
   --gray: #343434;
   --error: #D61C4E;
   --text-black: #212529;
-  --bg-white: #f8f9fa;
+  --text-light-indigo: #A5B4FC;
+  --bg-white: #F8F9FA;
+  --bg-light-indigo: #A5B4FC
 }
 
 html,
 body {
+  overscroll-behavior: none;
   color: var(--text-black);
   background: var(--bg-white);
   display: flex;
   flex-direction: column;
+  min-width: 320px;
   padding: 0;
   margin: 0;
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
