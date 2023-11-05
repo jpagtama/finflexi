@@ -100,15 +100,47 @@ const Home = () => {
         </div>
       </section>
 
-      <section className='flex justify-center items-center min-h-[85vh] w-full bg-red-300' >
-        <div >
-          <h1 >Sign Up for Free!</h1>
-          <p>All you need is an email.</p>
+      <section className={`flex items-center min-h-[1000px] w-full md:bg-[url("/globe-dot-pattern-sm.png")] lg:bg-[url("/globe-dot-pattern-lg.png")] bg-top md:bg-right-top bg-no-repeat p-4`} >
+        <div className='flex flex-col gap-8 w-full lg:w-1/2 px-2 sm:px-8'>
+          <h1 className='text-6xl font-bold' >Make the world yours.</h1>
+          <p className='text-xl sm:text-2xl sm:leading-10 ' >
+            Finflexi was made to help individuals understand what makes the world go round. Get a head-start on the single most important aspect of your life and take control of your future.
+          </p>
+          <div className='flex gap-8'>
+            <div className='flex flex-col w-1/2' >
+              <span className='text-2xl text-indigo-400 font-bold'>1M+</span>
+              <span>Join over 1,000,000 users already using Finflexi</span>
+            </div>
+            <div className='flex flex-col w-1/2' >
+              <span className='text-2xl text-indigo-400 font-bold'>10K+</span>
+              <span>Access to over 10,000 data points</span>
+            </div>
+          </div>
+          <div className='flex gap-8'>
+            <div className='flex flex-col w-1/2' >
+              <span className='text-2xl text-indigo-400 font-bold'>100+</span>
+              <span>Used internationally by over 100 schools and institutions</span>
+            </div>
+            <div className='flex flex-col w-1/2' >
+              <span className='text-2xl text-indigo-400 font-bold'>50+</span>
+              <span>In business for more than 50 years</span>
+            </div>
+          </div>
         </div>
-        <Link href='/signin'><button >Sign Up!</button></Link>
+        {/* <Link href='/signin'><button >Sign Up!</button></Link> */}
       </section>
 
-    </div>
+      <section className='flex flex-col justify-center items-center gap-4 w-full min-h-[600px] bg-dirty-white p-4'>
+        <div className='flex flex-col justify-center items-center gap-2'>
+          <span className='text-5xl text-indigo-700 text-center'>Ready to Sign Up?</span>
+          <span className='text-slate-500 text-center'>All you need is an email</span>
+        </div>
+        <form className='flex flex-col justify-center items-center w-full' action="">
+          <input className='rounded-md p-2 w-2/3 sm:w-1/3' type="text" placeholder='type your email here' />
+        </form>
+      </section>
+
+    </div >
   )
 }
 
