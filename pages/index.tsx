@@ -73,34 +73,34 @@ const Home = () => {
                 <GiLaserburn className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Laser focused</span>
-              <span className='text-center text-xs sm:text-base' >Get access to stock market data, company statistics, and more.</span>
+              <span className='text-center text-xs sm:text-base font-thin' >Get access to stock market data, company statistics, and more.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
               <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <MdBolt className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Straightforward</span>
-              <span className='text-center text-xs sm:text-base' >Key economic indicators help you understand where your investments are going.</span>
+              <span className='text-center text-xs sm:text-base font-thin' >Key economic indicators help you understand where your investments are going.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
               <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <PiPersonSimpleBikeBold className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Simplicity</span>
-              <span className='text-center text-xs sm:text-base' >We aim to simplify financial education and make the world a more comfortable place.</span>
+              <span className='text-center text-xs sm:text-base font-thin' >We aim to simplify financial education and make the world a more comfortable place.</span>
             </div>
             <div className='flex flex-col justify-center items-center w-1/2 p-4' >
               <div className='flex justify-center items-center h-16 sm:h-24 w-16 mb-4 sm:w-24 bg-gradient-to-bl from-indigo-400 to-green-400 rounded-full'>
                 <GiSpeedometer className='h-12 sm:h-16 w-12 sm:w-16 text-white' />
               </div>
               <span className='text-lg sm:text-3xl text-indigo-400 text-center' >Performance</span>
-              <span className='text-center text-xs sm:text-base' >We use cutting edge technology to give you the best experience so you won&apos;t miss a beat.</span>
+              <span className='text-center text-xs sm:text-base font-thin' >We use cutting edge technology to give you the best experience so you won&apos;t miss a beat.</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className={`flex items-center min-h-[1000px] w-full md:bg-[url("/globe-dot-pattern-sm.png")] lg:bg-[url("/globe-dot-pattern-lg.png")] bg-top md:bg-right-top bg-no-repeat p-4`} >
+      <section className={`flex items-center min-h-[1000px] w-full bg-[url("/globe-dot-pattern-sm.png")] lg:bg-[url("/globe-dot-pattern-lg.png")] bg-top lg:bg-right bg-no-repeat p-4`} >
         <div className='flex flex-col gap-8 w-full lg:w-1/2 px-2 sm:px-8'>
           <h1 className='text-6xl font-bold' >Make the world yours.</h1>
           <p className='text-xl sm:text-2xl sm:leading-10 ' >
@@ -132,11 +132,27 @@ const Home = () => {
 
       <section className='flex flex-col justify-center items-center gap-4 w-full min-h-[600px] bg-dirty-white p-4'>
         <div className='flex flex-col justify-center items-center gap-2'>
-          <span className='text-5xl text-indigo-700 text-center'>Ready to Sign Up?</span>
-          <span className='text-slate-500 text-center'>All you need is an email</span>
+          <span className='text-3xl sm:text-5xl text-indigo-700 text-center'>Ready to Sign Up?</span>
+          <span className='text-slate-500 text-center'></span>
         </div>
-        <form className='flex flex-col justify-center items-center w-full' action="">
-          <input className='rounded-md p-2 w-2/3 sm:w-1/3' type="text" placeholder='type your email here' />
+        <form className='flex flex-col justify-center items-center w-2/3 md:w-1/3 gap-4' action="">
+          <div className='flex flex-col w-full'>
+            <label htmlFor='email'>Email</label>
+            <input id="email" className='rounded-md p-2 w-full ' type="text" placeholder='your email here' />
+          </div>
+          <div className='flex flex-col w-full'>
+            <label htmlFor="password">Password</label>
+            <input id="password" type="password" className='rounded-md p-2 w-full ' placeholder='desired password' />
+          </div>
+          <div className='flex flex-col w-full'>
+            <label htmlFor="password-confirm">Confirm Password</label>
+            <input id="password-confirm" type="password" className='rounded-md p-2 w-full ' placeholder='retype password' />
+            <span className='text-slate-500 self-end text-sm mt-2'>already have an account? <Link className='hover:scale-105 duration-150' href='/signin' >sign in instead</Link></span>
+          </div>
+          <div className='flex justify-between flex-col sm:flex-row w-full'>
+            <button className=' bg-green-300 rounded-full order-1 sm:-order-1 px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6'>Sign In as Guest</button>
+            <button className='bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6' >Sign Up</button>
+          </div>
         </form>
       </section>
 
