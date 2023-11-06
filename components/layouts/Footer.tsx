@@ -6,7 +6,7 @@ import Link from 'next/link'
 const Footer = () => {
   const year = new Date().getFullYear()
   return (
-    <footer className={styles.footer}>
+    <footer className='bg-gray-700 text-dirty-white' >
       <div className={styles.footerContent}>
         <Divider />
         <ul>
