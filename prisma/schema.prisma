@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["interactiveTransactions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -44,6 +43,16 @@ model User {
   accounts      Account[]
   sessions      Session[]
   watchlist     watchlist[]
+}
+
+model UserModel {
+  id         String   @id @default(cuid())
+  first_name String
+  last_name  String
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model VerificationToken {
