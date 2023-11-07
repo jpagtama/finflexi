@@ -1,15 +1,44 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import * as yup from 'yup';
 import { Formik, Field, Form, FormikHelpers, ErrorMessage } from 'formik';
+import axios from 'axios';
 
 const signUpSchema = yup.object({
     email: yup.string().trim().required('Email is required').email('Email must be valid'),
     password: yup.string().required('Password is required').matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/, 'Needs at least one uppercase, lowercase, special character, number, and at least 8 characters in length'),
 })
 
-const SignUpForm = () => {
-    const submitHandler = () => {
+interface FormValues {
+    email: string;
+    password: string;
+}
 
+const SignUpForm = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
+        setIsSubmitting(true);
+        try {
+            const response = await axios.post('/api/auth/signup', {
+                email: values.email.trim().toLowerCase(),
+                password: values.password
+            });
+
+            console.log("response.data :>>", response.data);
+            if (response.data.success) {
+                actions.resetForm();
+                // dispatch(authActions.setUserSignedIn(response.data.userInfo));
+            }
+            setIsSubmitting(false);
+        } catch (error: any) {
+            setIsSubmitting(false);
+            if (error.response?.data?.errors?.length > 0) {
+                error.response.data.errors.forEach((e: { name: string, message: string }) => {
+                    actions.setFieldError(e.name, e.message);
+                });
+            }
+        }
     }
 
     return (
@@ -37,7 +66,7 @@ const SignUpForm = () => {
                 </div>
                 <div className='flex justify-between flex-col sm:flex-row w-full'>
                     <button className=' bg-green-300 rounded-full order-1 sm:-order-1 px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6'>Sign In as Guest</button>
-                    <button className='bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6' >Sign Up</button>
+                    <button type='submit' className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 `} disabled={isSubmitting} >{isSubmitting ? '...' : 'Sign Up'}</button>
                 </div>
             </Form>
         </Formik>
