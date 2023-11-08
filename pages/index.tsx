@@ -37,12 +37,10 @@ const Home = () => {
         <div className='flex justify-end'>
           <ExampleDisplays />
         </div>
-        <div className='flex flex-col gap-4 -order-1 lg:order-1 mb-12'>
+        <div className='flex flex-col gap-2 -order-1 lg:order-1 mb-12'>
           <h1 className='text-8xl text-center sm:text-left'><span className='font-bold'>FIN</span><span className='font-extralight'>flexi</span></h1>
           <p className='text-xl sm:text-3xl text-center sm:text-left' >Invest in your financial flexibility</p>
-          <div className='w-full flex justify-center sm:justify-start'>
-            <Link href='/signin'><button className='bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150' >Sign Up</button></Link>
-          </div>
+          <button className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 `} >Sign Up</button>
         </div>
       </section>
 
