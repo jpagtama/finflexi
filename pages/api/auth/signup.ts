@@ -64,7 +64,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET);
         const token = await new jose.SignJWT({ email: newUser.email }).setProtectedHeader({ alg }).setExpirationTime("24h").sign(secret);
 
-        // save the token to the client's cookies
+        // save the token to the client's cookies. maxAge is in seconds.
         setCookie("jwt", token, { req, res, maxAge: 60 * 60 * 24 }); // 60sec * 60min * 24hrs (1 day)
 
         return res.status(200).json({
