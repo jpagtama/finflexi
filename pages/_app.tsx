@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import store from 'store'
-import { SessionProvider } from "next-auth/react"
 import { useRouter } from 'next/router'
 import Main from '@components/layouts/Main'
 import Loading from '@components/UI/Loading'
@@ -10,7 +9,7 @@ import 'tailwindcss/tailwind.css'
 import '@styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter()
+  const router = useRouter();
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -30,14 +29,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router])
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <Provider store={store} >
-        {loading && <div className='loadingContainer' ><Loading /></div>}
-        <Main >
-          <Component {...pageProps} />
-        </Main>
-      </Provider>
-    </SessionProvider>
+    <Provider store={store} >
+      {loading && <div className='loadingContainer' ><Loading /></div>}
+      <Main >
+        <Component {...pageProps} />
+      </Main>
+    </Provider>
   )
 }
 
