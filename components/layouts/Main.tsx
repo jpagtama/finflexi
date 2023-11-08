@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Main = (props: Props) => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <main className="flex flex-col w-full min-h-screen">
