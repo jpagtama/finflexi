@@ -40,7 +40,7 @@ const Home = () => {
         <div className='flex flex-col gap-2 -order-1 lg:order-1 mb-12'>
           <h1 className='text-8xl text-center sm:text-left'><span className='font-bold'>FIN</span><span className='font-extralight'>flexi</span></h1>
           <p className='text-xl sm:text-3xl text-center sm:text-left' >Invest in your financial flexibility</p>
-          <button className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 `} >Sign Up</button>
+          <Link href='#signUpForm' className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 text-center `} scroll={true} >Sign Up</Link>
         </div>
       </section>
 
@@ -130,7 +130,7 @@ const Home = () => {
         {/* <Link href='/signin'><button >Sign Up!</button></Link> */}
       </section>
 
-      <section className='flex flex-col justify-center items-center gap-4 w-full min-h-[600px] bg-dirty-white p-4'>
+      <section id="signUpForm" className='flex flex-col justify-center items-center gap-4 w-full min-h-[600px] bg-dirty-white p-4'>
         <div className='flex flex-col justify-center items-center gap-2'>
           <span className='text-3xl sm:text-5xl text-indigo-700 text-center'>Ready to Sign Up?</span>
           <span className='text-slate-500 text-center'></span>
