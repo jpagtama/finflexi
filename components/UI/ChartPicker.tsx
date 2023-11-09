@@ -15,11 +15,11 @@ interface Props {
 const ChartPicker = (props: Props) => {
 
   const buttons = props.buttons.map(item => {
-    return <button key={`button_${item.duration}`} className={item.active? styles.isActive: ''} onClick={(e: React.MouseEvent) => item.clickHandler(item.duration)} >{item.title}</button>
+    return <button key={`button_${item.duration}`} className={`${item.active ? 'bg-indigo-500 text-white' : ''} bg-indigo-300 rounded-md py-2 px-6`} onClick={(e: React.MouseEvent) => item.clickHandler(item.duration)} >{item.title}</button>
   })
 
   return (
-    <div className={styles.container}>
+    <div className='flex justify-center gap-8 mt-8' >
       {buttons}
     </div>
   )
