@@ -42,7 +42,7 @@ const Header = () => {
           <motion.div className='flex justify-center sm:hidden bg-gray-700 w-full h-screen fixed z-10 pt-36'
             initial={{ y: '-100%' }}
             animate={{ y: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25 }}
             exit={{ y: '-100%' }}
           >
             <MenuListMobile isLoggedIn={isLoggedIn} />
