@@ -39,16 +39,16 @@ const SearchBar = (props: Props) => {
     const [companies, setCompanies] = useState<Company[]>([])
 
     const router = useRouter()
-    // const { data: companiesFromCache, error } = useSWR('/api/companies', getCompanies)
+    const { data: companiesFromCache, error } = useSWR('/api/companies', getCompanies)
     const searchBarRef = useRef<HTMLInputElement>(null)
 
-    // useEffect(() => {
-    //     if (companiesFromCache?.status?.success) {
-    //         setCompanies(companiesFromCache?.data)
-    //     }
-    //     console.log('companiesFromCache :>> ', companiesFromCache);
-    //     console.log('error :>> ', error);
-    // }, [companiesFromCache])
+    useEffect(() => {
+        if (companiesFromCache?.status?.success) {
+            setCompanies(companiesFromCache?.data)
+        }
+        console.log('companiesFromCache :>> ', companiesFromCache);
+        console.log('error :>> ', error);
+    }, [companiesFromCache])
 
     useEffect(() => {
         if (searchResults.length === 0) setHighlightedResult(-1)
