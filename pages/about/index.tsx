@@ -13,7 +13,7 @@ const TitleDivider = () => (
 const About = () => {
     return (
         <div className='min-h-screen'>
-            <div className='flex flex-col justify-center items-center pt-16 px-4 bg-[url("/humanity.webp")] bg-center md:bg-left-bottom bg-no-repeat overflow-none w-full bg-cover h-[50vh] sm:h-[100vh]'>
+            <div className='flex flex-col justify-center items-center pt-16 px-4 bg-[url("/humanity.webp")] bg-center bg-no-repeat overflow-none w-full bg-cover h-[50vh] sm:h-[100vh]'>
                 <div className='w-full sm:w-4/5 p-4 bg-black bg-opacity-60 rounded-lg'>
                     <span className='flex flex-col items-center text-center gap-2'>
                         <h1 className='font-bold text-5xl sm:text-7xl md:text-8xl text-white'>OUR MISSION</h1>
