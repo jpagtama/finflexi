@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticPropsContext } from 'next'
 import { prisma } from '@db/index'
-import { useSession, signIn } from 'next-auth/react'
 import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
 import { IconContext } from 'react-icons'
@@ -31,21 +30,16 @@ interface ExtraSessionData extends Session {
 }
 
 const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props) => {
-  const { data: sessionData, status: sessionStatus } = useSession()
-
   const [graphMode, setGraphMode] = useState(30)
   const [favorited, setFavorited] = useState(false)
 
-  const router = useRouter()
-  useEffect(() => {
-    if (sessionStatus === 'authenticated' && ticker && (sessionData as ExtraSessionData)?.userId) checkIsFavorited()
-  }, [sessionStatus, ticker, (sessionData as ExtraSessionData)?.userId])
+  const router = useRouter();
 
-  const checkIsFavorited = async () => {
-    const response = await fetch(`/api/is-favorite-company?id=${(sessionData as ExtraSessionData).userId}&ticker=${ticker}`)
-    const data = await response.json()
-    setFavorited(data.data.isFavorited)
-  }
+  // const checkIsFavorited = async () => {
+  //   const response = await fetch(`/api/is-favorite-company?id=${(sessionData as ExtraSessionData).userId}&ticker=${ticker}`)
+  //   const data = await response.json()
+  //   setFavorited(data.data.isFavorited)
+  // }
 
   const stockChart = () => {
 
@@ -187,24 +181,24 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     )
   }
   const addToWatchList = async () => {
-    const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData)?.userId }
+    // const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData)?.userId }
 
-    if (sessionStatus === 'unauthenticated') {
-      signIn('email', { callbackUrl: router.asPath })
-    } else {
-      try {
-        setFavorited(!favorited)
+    // if (sessionStatus === 'unauthenticated') {
+    //   signIn('email', { callbackUrl: router.asPath })
+    // } else {
+    //   try {
+    //     setFavorited(!favorited)
 
-        const res = await fetch('/api/add-to-favorites', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        const data = await res.json()
-      } catch (e) {
-        if (e instanceof Error) console.log(e.message)
-      }
-    }
+    //     const res = await fetch('/api/add-to-favorites', {
+    //       method: 'POST',
+    //       body: JSON.stringify(payload),
+    //       headers: { 'Content-Type': 'application/json' }
+    //     })
+    //     const data = await res.json()
+    //   } catch (e) {
+    //     if (e instanceof Error) console.log(e.message)
+    //   }
+    // }
   }
 
   if (router.isFallback) return <Loading />

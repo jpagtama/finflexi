@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { prisma } from '@db/index'
-import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import touchIcon from '../../public/touchfave_icon_300x300.svg'
@@ -32,12 +31,6 @@ interface ExtraSessionData extends Session {
 }
 
 const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Props) => {
-    const { data: sessionData, status: sessionStatus } = useSession({
-        required: true,
-        onUnauthenticated() {
-            signIn('email', { callbackUrl: router.asPath })
-        }
-    })
 
     const router = useRouter()
     let draggedItem = useRef<number | null>(null)
@@ -90,18 +83,18 @@ const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Prop
     }
 
     const addToWatchList = async (ticker: string, favorited: boolean) => {
-        const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData)?.userId }
+        // const payload = { ticker, favorited, userId: (sessionData as ExtraSessionData)?.userId }
 
-        try {
-            updateFavoritedCompaniesState(ticker, payload.favorited)
-            const res = await fetch('/api/add-to-favorites', {
-                method: 'POST',
-                body: JSON.stringify(payload),
-                headers: { 'Content-Type': 'application/json' }
-            })
-        } catch (e) {
-            if (e instanceof Error) console.log(e.message)
-        }
+        // try {
+        //     updateFavoritedCompaniesState(ticker, payload.favorited)
+        //     const res = await fetch('/api/add-to-favorites', {
+        //         method: 'POST',
+        //         body: JSON.stringify(payload),
+        //         headers: { 'Content-Type': 'application/json' }
+        //     })
+        // } catch (e) {
+        //     if (e instanceof Error) console.log(e.message)
+        // }
     }
 
     const renderNone = () => {
@@ -179,7 +172,7 @@ const Favorites = ({ isAuthorized, favoritedCompanies: companies, status }: Prop
         )
     }
 
-    if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
+    // if (sessionStatus === 'loading') return <div className={styles.loadingContainer}><Loading /></div>
 
     return (
         <div className={styles.container}>
