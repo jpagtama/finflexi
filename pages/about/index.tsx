@@ -34,7 +34,7 @@ const About = () => {
             <div className='flex flex-col justify-center items-center w-full h-[300px] sm:h-[400px] relative'>
                 <div className='w-4/5 sm:w-3/4 md:w-1/2 h-full bg-[url("/centralpark.webp")] bg-no-repeat bg-center bg-cover rounded-lg shadow-lg absolute bottom-0 lg:-bottom-1/3 mb-4'>
                     <div className='flex flex-col justify-end h-full w-full bg-gradient-to-b from-transparent to-black rounded-lg text-white px-2 py-8'>
-                        <h2 className='text-xl sm:text-2xl md:text-4xl' >Not just numbers, it's about people too.</h2>
+                        <h2 className='text-xl sm:text-2xl md:text-4xl' >Not just numbers, it&rsquo;s about people too.</h2>
                         <p className='text-sm lg:text-lg font-thin'>We care about the well-being of humanity and aim to solve the biggest burden that affects all of our lives.</p>
                     </div>
                 </div>
@@ -45,7 +45,7 @@ const About = () => {
                         <h2 className='text-xl sm:text-2xl md:text-5xl self-center'>OUR COMMITMENT</h2>
                         <TitleDivider />
                         <p className='text-sm lg:text-xl text-left overflow-y-scroll'>
-                            We work with professionals who come from a variety of backgrounds who has been through or witnessed financial hardships. We know what it's like constantly treading water just to stay afloat. We want to provide the tools that make it easier to notice the red flags that could potentially change your livelihood. By removing all the distractions that typically come with fintech software, Finflexi focuses only on the data that matters.
+                            We work with professionals who come from a variety of backgrounds who has been through or witnessed financial hardships. We know what it&rsquo;s like constantly treading water just to stay afloat. We want to provide the tools that make it easier to notice the red flags that could potentially change your livelihood. By removing all the distractions that typically come with fintech software, Finflexi focuses only on the data that matters.
                         </p>
                     </div>
                 </div>
