@@ -18,7 +18,6 @@ const useSession = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log('running useEffect from useSession');
         const jwt = getCookie('jwt');
         const verifyUser = async (jwt: CookieValueTypes) => {
             try {
@@ -35,8 +34,11 @@ const useSession = () => {
         }
 
         setIsLoadingUserInfo(true);
-        if (jwt) verifyUser(jwt);
-        if (!jwt) dispatch(authActions.logout());
+        if (isLoggedIn === null) {
+            if (jwt) verifyUser(jwt);
+            if (!jwt) dispatch(authActions.logout());
+
+        }
         setIsLoadingUserInfo(false);
     }, []);
 
