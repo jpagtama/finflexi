@@ -10,6 +10,7 @@ import '@styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -31,9 +32,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store} >
       {loading && <div className='loadingContainer' ><Loading /></div>}
-      <Main >
-        <Component {...pageProps} />
-      </Main>
+      {!loading &&
+        <Main >
+          <Component {...pageProps} />
+        </Main>
+      }
     </Provider>
   )
 }
