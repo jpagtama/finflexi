@@ -9,8 +9,8 @@ import microsoftIcon from '../public/microsoft.svg'
 import appleIcon from '../public/apple.svg'
 import metaIcon from '../public/meta.svg'
 import ExampleDisplays from '@components/landing/ExampleDisplays';
-import SignUpForm from '@components/UI/SignUpForm'
-import { GiLaserburn, GiSpeedometer } from 'react-icons/gi';
+import SignUpForm from '@components/UI/SignUpForm';
+import { GiLaserburn } from 'react-icons/gi';
 import { BsSpeedometer2 } from 'react-icons/bs';
 import { MdBolt } from 'react-icons/md';
 import { PiPersonSimpleBikeBold } from 'react-icons/pi';
@@ -63,8 +63,9 @@ const Home = () => {
         <span className='text-center text-md sm:text-2xl text-indigo-500 font-thin' >Our platform makes it easy to follow the companies you love</span >
       </section>
 
-      <section className={`flex flex-col justify-center items-center w-full relative h-[750px]`} >
-        <div className='flex flex-col justify-center items-center gap-6 w-10/12 bg-white shadow-lg rounded-md absolute -top-20 min-h-screen p-4'>
+      {/* This section is causing slowness */}
+      <section className={`flex flex-col justify-center items-center w-full relative h-[500px]`} >
+        <div className='flex flex-col justify-center items-center gap-6 w-10/12 bg-white shadow-lg rounded-md absolute -top-20 px-4 py-8'>
           <span className='text-4xl sm:text-7xl text-center font-bold text-indigo-600'>Why Finflexi?</span>
           <span className='text-center w-9/12 text-md sm:text-2xl'>We use a user-centric approach to strip away the complexities of monetary economics through the use of technology</span>
           <div className='flex justify-center items-center flex-wrap w-full sm:w-9/12' >
@@ -127,7 +128,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {/* <Link href='/signin'><button >Sign Up!</button></Link> */}
       </section>
 
       <section id="signUpForm" className='flex flex-col justify-center items-center gap-4 w-full min-h-[600px] bg-dirty-white p-4'>
