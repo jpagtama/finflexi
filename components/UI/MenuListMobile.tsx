@@ -9,7 +9,7 @@ interface Props {
   isLoggedIn: boolean
 }
 
-const MenuListMobile = ({ isLoggedIn }: Props) => {
+const MenuListMobile = () => {
   const { signOutOpen } = useSelector((state: RootState) => state.menu);
   const dispatch = useDispatch()
   const router = useRouter()
@@ -28,14 +28,14 @@ const MenuListMobile = ({ isLoggedIn }: Props) => {
     return (
       <nav >
         <ul className='flex flex-col gap-12 text-dirty-white'>
-          {<li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/")} >Home</span></li>}
-          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/dashboard")} >Dashboard</span></li>}
-          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/dashboard/favorites")} >My Favorites</span></li>}
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/")} >Home</span></li>
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/dashboard")} >Dashboard</span></li>
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/dashboard/favorites")} >My Favorites</span></li>
           <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/economy")} >Economic Indicators</span></li>
-          {<li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/about")} >About Us</span></li>}
-          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/account")} >My Account</span></li>}
-          {!isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
-          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={displaySignOutAlert} >Sign Out</span></li>}
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/about")} >About Us</span></li>
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/account")} >My Account</span></li>
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/signin")} >Sign In</span></li>
+          <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={displaySignOutAlert} >Sign Out</span></li>
         </ul>
       </nav>
     )
