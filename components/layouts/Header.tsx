@@ -11,11 +11,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, email, firstName, lastName, isLoadingUserInfo } = useSession();
   const router = useRouter();
-  const isMenuOpen = useSelector((state: RootState) => state.menu.open)
-
-  console.log('isLoggedIn? :>> ', isLoggedIn);
+  const isMenuOpen = useSelector((state: RootState) => state.menu.open);
 
   return (
     <>
@@ -33,7 +30,7 @@ const Header = () => {
           </div>
         </div>
         <div className='hidden sm:block'>
-          <MenuListDeskTop isLoggedIn={isLoggedIn} isLoadingUserInfo={isLoadingUserInfo} />
+          <MenuListDeskTop />
         </div>
       </header>
       {/* Mobile menu drawer */}
@@ -45,7 +42,7 @@ const Header = () => {
             transition={{ duration: 0.25 }}
             exit={{ y: '-100%' }}
           >
-            <MenuListMobile isLoggedIn={isLoggedIn} />
+            <MenuListMobile />
           </motion.div>
         }
       </AnimatePresence>
