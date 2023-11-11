@@ -1,14 +1,21 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-import { CookieValueTypes, getCookie } from 'cookies-next';
+import { CookieValueTypes, getCookie, deleteCookie } from 'cookies-next';
 import axios from 'axios';
+
+interface InitialAuth {
+    isLoggedIn: boolean | null;
+    email: string;
+    firstName: string;
+    lastName: string;
+}
 
 const initialState = {
     open: false,
     signOutOpen: false,
 }
 
-const initialAuth = {
-    isLoggedIn: false,
+const initialAuth: InitialAuth = {
+    isLoggedIn: null,
     email: '',
     firstName: '',
     lastName: ''
@@ -54,6 +61,7 @@ const authSlice = createSlice({
             state.lastName = action.payload.lastName ?? '';
         },
         logout(state) {
+            deleteCookie('jwt');
             state.isLoggedIn = false;
             state.email = '';
             state.firstName = '';
