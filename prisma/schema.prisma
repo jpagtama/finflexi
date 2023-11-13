@@ -35,24 +35,24 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  watchlist     watchlist[]
 }
 
 model UserModel {
-  id         String   @id @default(cuid())
+  id         String      @id @default(cuid())
   first_name String?
   last_name  String?
-  email      String   @unique
+  email      String      @unique
   password   String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  watchlist  watchlist[]
 }
 
 model VerificationToken {
@@ -70,7 +70,7 @@ model watchlist {
   order         Int?
   listName      String?
 
-  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    UserModel @relation(fields: [userId], references: [id], onDelete: Cascade)
   company companies @relation(fields: [companyticker], references: [ticker], onDelete: Cascade)
 
   @@unique([userId, listName, companyticker])
