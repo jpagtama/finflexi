@@ -1,7 +1,6 @@
-import React from 'react'
-import Button from './Button'
-import { signOut } from "next-auth/react"
-import styles from '@styles/UI/SignOut.module.css'
+import React from 'react';
+import Button from './Button';
+import styles from '@styles/UI/SignOut.module.css';
 
 interface Props {
     closeSignOutAlert: () => void
