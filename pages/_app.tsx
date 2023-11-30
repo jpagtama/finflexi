@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store} >
-      {loading && <div className='loadingContainer' ><Loading /></div>}
+      {loading && <div className='flex justify-center items-center min-h-screen w-full' ><Loading /></div>}
       {!loading &&
         <Main >
           <Component {...pageProps} />
