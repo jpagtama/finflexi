@@ -24,7 +24,6 @@ const SignInForm = () => {
     const dispatch = useDispatch();
 
     const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-        console.log('Using main submit handler');
         setIsSubmitting(true);
         try {
             const response = await axios.post('/api/auth/signin', {
@@ -34,16 +33,13 @@ const SignInForm = () => {
 
             actions.resetForm();
             if (response.data.success) {
-                console.log('success... response.data.userInfo :>> ', response.data.userInfo);
                 dispatch(authActions.login(response.data.userInfo));
                 router.push('/dashboard');
             } else {
-                console.log('sign in failed:>>', response.data);
                 dispatch(authActions.logout());
             }
             setIsSubmitting(false);
         } catch (error: any) {
-            console.log('error.response :>> ', error.response);
             setIsSubmitting(false);
             if (error.response?.data?.errors?.length > 0) {
                 error.response.data.errors.forEach((e: { name: string, message: string }) => {
@@ -54,7 +50,6 @@ const SignInForm = () => {
     }
 
     const guestSignInHandler = async () => {
-        console.log('Using guest submit handler');
         setIsSubmitting(true);
         try {
             const response = await axios.post('/api/auth/signin', {
@@ -63,11 +58,9 @@ const SignInForm = () => {
             });
 
             if (response.data.success) {
-                console.log('success... response.data.userInfo :>> ', response.data.userInfo);
                 dispatch(authActions.login(response.data.userInfo));
                 router.push('/dashboard');
             } else {
-                console.log('sign in failed:>>', response.data);
                 dispatch(authActions.logout());
             }
             setIsSubmitting(false);
