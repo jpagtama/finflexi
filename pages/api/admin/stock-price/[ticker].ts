@@ -4,10 +4,8 @@ import type { NextApiRequest, NextApiResponse } from "next"
 const updateStockPrices = async (ticker: string) => {
 
   try {
-    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
+    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_APIKEY}`)
     const data = await response.json()
-
-    // console.log(`${ticker} data from stock prices`, data);
 
     const dailyData = { ...data['Time Series (Daily)'] }
     if (dailyData === undefined) throw new Error('data is unavailable')
@@ -27,16 +25,17 @@ const updateStockPrices = async (ticker: string) => {
       })
     }
 
-    prisma.$transaction([
-      prisma.stock_data_daily.deleteMany({ where: { companyticker: ticker } }),
-      prisma.stock_data_daily.createMany({
-        data: prices
-      })
-    ])
+    if (prices.length > 0) {
+      prisma.$transaction([
+        prisma.stock_data_daily.deleteMany({ where: { companyticker: ticker } }),
+        prisma.stock_data_daily.createMany({
+          data: prices
+        })
+      ]);
+    }
 
     return true
   } catch (e) {
-    if (e instanceof Error) console.log(e.message)
     return false
   }
 
