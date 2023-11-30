@@ -3,7 +3,7 @@ import { prisma } from '@db/index';
 import ChartPicker from '../../components/UI/ChartPicker';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
-import { ChartOptions, RadialLinearScale } from 'chart.js';
+import { ChartOptions } from 'chart.js';
 import EconomicIndicatorSectionGray from './EconomicIndicatorSectionGray';
 import EconomicIndicatorSectionNoBg from './EconomicIndicatorSectionNoBg';
 
@@ -27,7 +27,6 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     ChartJS.register(
         CategoryScale,
         LinearScale,
-        RadialLinearScale,
         BarElement,
         PointElement,
         LineElement,
@@ -65,18 +64,18 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     }
 
     const renderInterestRates = () => {
-        const options: ChartOptions = {
+        const options = {
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
-                    position: 'top'
+                    position: 'top' as const
                 },
                 title: {
                     display: false,
                     text: 'Federal Interest Rates'
                 }
-            }
+            },
         }
         const data = {
             labels: interest_rates.labels.slice(0, interestRatesTimeFrame).reverse(),
@@ -104,12 +103,12 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     }
 
     const renderCPI = () => {
-        const options: ChartOptions = {
+        const options = {
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
-                    position: 'top'
+                    position: 'top' as const
                 },
                 title: {
                     display: false,
@@ -143,12 +142,12 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     }
 
     const renderInflation = () => {
-        const options: ChartOptions = {
+        const options = {
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
-                    position: 'top'
+                    position: 'top' as const
                 },
                 title: {
                     display: false,
@@ -182,12 +181,12 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     }
 
     const renderUnemployment = () => {
-        const options: ChartOptions = {
+        const options = {
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
-                    position: 'top'
+                    position: 'top' as const
                 },
                 title: {
                     display: false,
