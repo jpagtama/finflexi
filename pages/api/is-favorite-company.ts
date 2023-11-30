@@ -7,12 +7,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let message = 'ok'
     let data = { isFavorited: false }
 
-    console.log('req object from api', req.query)
-    console.log('req id from api', req.query.id)
-    console.log('req ticker from api', req.query.ticker)
-
-    // return res.json({ 'testing': 'testing' })
-
     if (req.method === 'GET') {
         try {
             const result = await prisma.watchlist.findMany({
