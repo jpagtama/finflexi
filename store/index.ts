@@ -4,6 +4,7 @@ import axios from 'axios';
 
 interface InitialAuth {
     isLoggedIn: boolean | null;
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
@@ -16,6 +17,7 @@ const initialState = {
 
 const initialAuth: InitialAuth = {
     isLoggedIn: null,
+    id: '',
     email: '',
     firstName: '',
     lastName: ''
@@ -54,8 +56,8 @@ const authSlice = createSlice({
     initialState: initialAuth,
     reducers: {
         login(state, action) {
-            console.log('inside redux store...action :>> ', action);
             state.isLoggedIn = true;
+            state.id = action.payload.id;
             state.email = action.payload.email;
             state.firstName = action.payload.firstName ?? '';
             state.lastName = action.payload.lastName ?? '';
@@ -63,6 +65,7 @@ const authSlice = createSlice({
         logout(state) {
             deleteCookie('jwt');
             state.isLoggedIn = false;
+            state.id = '';
             state.email = '';
             state.firstName = '';
             state.lastName = '';
