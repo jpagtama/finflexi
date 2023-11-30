@@ -7,7 +7,7 @@ interface Props {
 }
 
 const signOutHandler = () => {
-    signOut({ callbackUrl: '/' })
+
 }
 
 const SignOut = ({ closeSignOutAlert }: Props) => {
