@@ -21,7 +21,6 @@ You can find the demo at https://finflexi.vercel.app
  - TypeScript 
  - PostgreSQL
  - Prisma ORM
- - Next-Auth
  - Alpha Vantage API
  - Vercel
  - Jest
