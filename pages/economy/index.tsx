@@ -320,9 +320,7 @@ export const getStaticProps = async () => {
         }
         monthlyUnemployment = { labels: unemploymentLabels, values: unemploymentValues }
 
-    } catch (error) {
-        if (error instanceof Error) console.log('error.message', error.message)
-    }
+    } catch (error) { }
 
     return {
         props: {
