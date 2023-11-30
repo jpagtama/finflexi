@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { GetStaticPropsContext } from 'next'
-import { prisma } from '@db/index'
-import { CompanyOverview, StockPrice, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js'
-import { IconContext } from 'react-icons'
-import { FaStar, FaRegStar } from 'react-icons/fa'
-import { Line, Bar } from 'react-chartjs-2'
-import ChartPicker from '@components/UI/ChartPicker'
-import { dbDatetoString, isJSONEmpty } from '../../utils/utils'
-import { Decimal } from '@prisma/client/runtime/library'
-import Loading from '@components/UI/Loading'
-import styles from '@styles/company/Profile.module.css'
-import { Session } from 'next-auth'
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next';
+import { prisma } from '@db/index';
+import { CompanyOverview, StockData, Status, CustomError, EarningsData, EarningsCalendar } from '../../types';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { IconContext } from 'react-icons';
+import { FaStar, FaRegStar } from 'react-icons/fa';
+import { Line, Bar } from 'react-chartjs-2';
+import ChartPicker from '@components/UI/ChartPicker';
+import { dbDatetoString, formatNumberScale, isJSONEmpty } from '../../utils/utils';
+import { Decimal } from '@prisma/client/runtime/library';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import Loading from '@components/UI/Loading';
+import styles from '@styles/company/Profile.module.css';
+import axios from 'axios';
+import { getUserAuthInfo } from 'utils/serverAuthUtils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,23 +26,15 @@ interface Props {
   earnings: EarningsData
   earnings_calendar: EarningsCalendar[]
   status: Status
-}
+  isFavorited: boolean
+};
 
-interface ExtraSessionData extends Session {
-  userId: string
-}
-
-const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props) => {
-  const [graphMode, setGraphMode] = useState(30)
-  const [favorited, setFavorited] = useState(false)
+const Profile = ({ ticker, details, daily, earnings, earnings_calendar, isFavorited }: Props) => {
+  const [graphMode, setGraphMode] = useState(30);
+  const [favorited, setFavorited] = useState(isFavorited);
+  const { isLoggedIn, email, id: userId } = useSelector((state: RootState) => state.auth);
 
   const router = useRouter();
-
-  // const checkIsFavorited = async () => {
-  //   const response = await fetch(`/api/is-favorite-company?id=${(sessionData as ExtraSessionData).userId}&ticker=${ticker}`)
-  //   const data = await response.json()
-  //   setFavorited(data.data.isFavorited)
-  // }
 
   const stockChart = () => {
 
@@ -47,25 +42,22 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
       responsive: true,
       plugins: {
         legend: {
-          reverse: true,
+          // reverse: false,
           display: false
         }
       }
     }
 
-    // let labels: string[] = []
-    // let prices: number[] = []
-
-    const labels = daily.labels.slice(0, graphMode).reverse()
-    const prices = daily.price.slice(0, graphMode).reverse()
+    const labels = [...daily.labels.slice(0, graphMode).reverse()];
+    const prices = [...daily.price.slice(0, graphMode).reverse()];
 
     const dataStock = {
       labels: labels,
       datasets: [{
         label: details.ticker,
         data: prices,
-        borderColor: '#f900bf',
-        backgroundColor: '#f900bf',
+        borderColor: '#6366F1',
+        backgroundColor: '#6366F1',
       }]
     }
 
@@ -77,7 +69,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     ]
 
     return (
-      <div className={styles.chartContainer}>
+      <div className='flex flex-col justify-center items-center w-full' >
         <Line options={optionsLine} data={dataStock} />
         <ChartPicker buttons={buttons} />
       </div>
@@ -93,29 +85,25 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
       <span>{parseFloat(priceChange) < 0 ? `-$${Math.abs(parseFloat(priceChange)).toFixed(2)}` : `+$${priceChange}`} ({changePercent}%)</span>
     )
   }
-  const companyOverview = () => {
-    return (
-      <>
-        <h2 className={styles.descLabel}>Description:</h2>
-        <p className={styles.desc}>{details.description}</p>
+  const companyDesc = () => <p className='text-sm sm:text-base'>{details.description}</p>;
 
-        <h2 className={styles.descLabel}>Stats:</h2>
-        <div className={styles.overviewContainer}>
-          <div className={styles.overviewSection}>
-            <span>Ticker Symbol:</span> <span>{details.ticker}</span>
-          </div>
-          <div className={styles.overviewSection}>
-            <span>Exchange:</span> <span>{details.exchange}</span>
-          </div>
-          {details.marketcap && <div className={styles.overviewSection}><span>Market Cap:</span> <span>${details.marketcap}</span></div>}
-          {details.analysttargetprice && <div className={styles.overviewSection}><span>Analyst Target Price:</span> <span>${details.analysttargetprice}</span></div>}
-          {details.sharesoutstanding && <div className={styles.overviewSection}><span>Shares Outstanding:</span> <span>{details.sharesoutstanding}</span></div>}
-          {details.forwardpe && <div className={styles.overviewSection}><span>Forward PE:</span> <span>{details.forwardpe}</span></div>}
-          {details.movingavg50 && <div className={styles.overviewSection}><span>50 Day Moving Avg:</span> <span>${details.movingavg50}</span></div>}
-          {details.movingavg200 && <div className={styles.overviewSection}><span>200 Day Moving Avg:</span> <span>${details.movingavg200}</span></div>}
-          {details.fiscalyearend && <div className={styles.overviewSection}><span>Fiscal Year End:</span> <span>{details.fiscalyearend}</span></div>}
+  const companyStats = () => {
+    return (
+      <div className='flex flex-col w-full' >
+        <div className={styles.overviewSection}>
+          <span className='text-slate-500'>Ticker Symbol:</span> <span className='font-bold'>{details.ticker}</span>
         </div>
-      </>
+        <div className={styles.overviewSection}>
+          <span className='text-slate-500'>Exchange:</span> <span className='font-bold'>{details.exchange}</span>
+        </div>
+        {details.marketcap && <div className={styles.overviewSection}><span className='text-slate-500'>Market Cap:</span> <span className='font-bold'>${formatNumberScale(parseFloat(details.marketcap))}</span></div>}
+        {details.analysttargetprice && <div className={styles.overviewSection}><span className='text-slate-500'>Analyst Target Price:</span> <span className='font-bold'>${details.analysttargetprice}</span></div>}
+        {details.sharesoutstanding && <div className={styles.overviewSection}><span className='text-slate-500'>Shares Outstanding:</span> <span className='font-bold'>{formatNumberScale(details.sharesoutstanding)}</span></div>}
+        {details.forwardpe && <div className={styles.overviewSection}><span className='text-slate-500'>Forward PE:</span> <span className='font-bold'>{details.forwardpe}</span></div>}
+        {details.movingavg50 && <div className={styles.overviewSection}><span className='text-slate-500'>50 Day Moving Avg:</span> <span className='font-bold'>${details.movingavg50}</span></div>}
+        {details.movingavg200 && <div className={styles.overviewSection}><span className='text-slate-500'>200 Day Moving Avg:</span> <span className='font-bold'>${details.movingavg200}</span></div>}
+        {details.fiscalyearend && <div className={styles.overviewSection}><span className='text-slate-500'>Fiscal Year End:</span> <span className='font-bold'>{details.fiscalyearend}</span></div>}
+      </div>
     )
   }
   const earningsOverview = () => {
@@ -142,13 +130,12 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
 
     return (
       <>
-        <h2 className={styles.descLabel}>Earnings:</h2>
+        <h2 className='text-xl text-slate-500 mb-4 text-center'>Earnings:</h2>
         <Bar data={data} />
       </>
     )
   }
   const earningsCalendar = () => {
-    // console.log('earnings_calendar from PROFILE', earnings_calendar)
     const upcomingEarnings = earnings_calendar.map((i, idx) => {
 
       if (i.reportDate) {
@@ -161,7 +148,7 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
     })
     return (
       <>
-        <h2 className={styles.descLabel}>Upcoming Earnings:</h2>
+        <h2 className='text-xl text-slate-500 text-center'>Upcoming Earnings:</h2>
         <div className={styles.overviewSection}>
           <span>Date</span><span>Estimated</span>
         </div>
@@ -175,44 +162,66 @@ const Profile = ({ ticker, details, daily, earnings, earnings_calendar }: Props)
   const renderFavorited = () => {
 
     return (
-      <IconContext.Provider value={{ size: '1.5em', color: 'var(--dark-pink)' }}>
-        <div className={styles.starIcon} onClick={addToWatchList}>{favorited ? <FaStar /> : <FaRegStar />}</div>
+      <IconContext.Provider value={{ size: '1.5em' }}>
+        <div className='text-indigo-500 cursor-pointer hover:scale-110 duration-150' onClick={addToWatchList}>{favorited ? <FaStar /> : <FaRegStar />}</div>
       </IconContext.Provider>
     )
   }
   const addToWatchList = async () => {
-    // const payload = { ticker, favorited: !favorited, userId: (sessionData as ExtraSessionData)?.userId }
+    const payload = { ticker, favorited: !favorited, userId: userId };
 
-    // if (sessionStatus === 'unauthenticated') {
-    //   signIn('email', { callbackUrl: router.asPath })
-    // } else {
-    //   try {
-    //     setFavorited(!favorited)
+    if (!isLoggedIn) {
+      router.push('/signin');
+      // signIn('email', { callbackUrl: router.asPath })
+    } else {
+      try {
+        setFavorited(!favorited);
+        const res = await axios.post('/api/add-to-favorites', payload, {
+          headers: { 'Content-Type': 'application/json' }
+        });
 
-    //     const res = await fetch('/api/add-to-favorites', {
-    //       method: 'POST',
-    //       body: JSON.stringify(payload),
-    //       headers: { 'Content-Type': 'application/json' }
-    //     })
-    //     const data = await res.json()
-    //   } catch (e) {
-    //     if (e instanceof Error) console.log(e.message)
-    //   }
-    // }
+      } catch (e) { }
+    }
   }
 
-  if (router.isFallback) return <Loading />
+  const TitleDivider = () => (
+    <div className='h-1 sm:h-2 w-24 bg-indigo-400 rounded-full'></div>
+  );
+
+  if (router.isFallback) return <Loading />;
+
   return (
-    <div className={styles.companyProfileContainer}>
-      <h1 className={styles.companyName} >{details.name}</h1>
-      <div className={styles.priceChangeSection}>
-        {daily.price.length && priceChange()}
-        {renderFavorited()}
+    <div className='flex flex-col items-center gap-8 pt-36 mb-24'>
+      <div className='flex flex-col items-center gap-2 mb-8 md:mb-24'>
+        <h1 className='text-2xl sm:text-5xl' >{details.name}</h1>
+        <TitleDivider />
       </div>
-      {(daily.labels.length && daily.price.length) && stockChart()}
-      {companyOverview()}
-      {earnings.labels.length > 0 && earningsOverview()}
-      {earnings_calendar.length > 0 && earningsCalendar()}
+      <div className='flex flex-col md:flex-row justify-center gap-8 w-full md:mb-12'>
+        <div className='flex flex-col items-center w-full md:w-1/2 px-2 py-8 bg-white shadow-lg rounded-lg'>
+          <div className='flex justify-between mb-8 w-full'>
+            <span>{daily.price.length && priceChange()}</span>
+            <span>{renderFavorited()}</span>
+          </div>
+          {(daily.labels.length && daily.price.length) && stockChart()}
+        </div>
+        <div className='w-full md:w-1/3 px-2'>
+          <p className='bg-yellow-200 rounded-md p-2 font-thin mb-8'>
+            All data provided on Finflexi is provided for informational purposes only, and is not intended for trading or investing purposes. Stock prices displayed in the ticker are from a subset of exchanges, this price does not represent the real-time price.
+          </p>
+          {companyDesc()}
+        </div>
+      </div>
+      <div className='flex justify-center flex-col md:flex-row gap-8 w-full md:px-4 '>
+        <div className='flex flex-col md:flex-row w-full md:w-1/3 px-4 py-12 overflow-hidden'>
+          {companyStats()}
+        </div>
+        <div className='w-full md:w-1/2 px-2 py-8 bg-white shadow-lg rounded-lg'>
+          {earnings.labels.length > 0 ? earningsOverview() : <span className='text-indigo-500'>No Earnings Data Available</span>}
+        </div>
+      </div>
+      <div className='flex flex-col items-center w-4/5'>
+        {earnings_calendar.length > 0 && earningsCalendar()}
+      </div>
     </div>
   )
 }
@@ -238,10 +247,15 @@ const getCompanyOverview = async (ticker: string) => {
 const getDailyStockPrices = async (ticker: string) => {
   let labels = []
   let price = []
-  const dataDaily = await prisma.stock_data_daily.findMany({ where: { companyticker: ticker } })
-  // const updatedDaily = JSON.stringify(dataDaily, (_key, value) => {
-  //   return typeof value === 'bigint' ? value = value.toString() : value
-  // })
+  const dataDaily = await prisma.stock_data_daily.findMany({
+    where: {
+      companyticker: ticker
+    },
+    orderBy: {
+      date: 'desc'
+    }
+  });
+
   for (const item of dataDaily) {
     let d = null
     let p = null
@@ -290,68 +304,41 @@ const getEarningsCalendar = async (ticker: string) => {
 
   return calendar
 }
-
-export const getStaticPaths = async () => {
-  return {
-    fallback: true,
-    paths: [
-      { params: { ticker: 'AAPL' } },
-      { params: { ticker: 'TSLA' } },
-      { params: { ticker: 'AMZN' } },
-      { params: { ticker: 'META' } },
-      { params: { ticker: 'NFLX' } },
-      { params: { ticker: 'MSFT' } },
-      { params: { ticker: 'GOOG' } },
-      { params: { ticker: 'GOOGL' } },
-      { params: { ticker: 'JNJ' } },
-      { params: { ticker: 'GME' } },
-      { params: { ticker: 'BBBY' } },
-    ]
-  }
+const checkIsFavorited = async (ticker: string, userId: string) => {
+  const companyFave = await prisma.watchlist.findFirst({ where: { companyticker: ticker, userId: userId } });
+  if (!companyFave) return false;
+  return true;
 }
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const authInfo = await getUserAuthInfo(context);
   const ticker = context.params?.ticker?.toString().trim().toLocaleUpperCase()
   let details: CompanyOverview | CustomError | {} | null = {}
   let daily: StockData | CustomError | {} = {}
   let earnings: EarningsData | CustomError | {} = {}
   let earnings_calendar: EarningsCalendar[] = []
   let status: Status = { status: "ok" }
+  let isFavorited = false;
 
   if (ticker) {
     try {
-      const overview = await getCompanyOverview(ticker)
-      // console.log('overview ->', overview)
+      details = await getCompanyOverview(ticker);
+      if (isJSONEmpty(details)) return { notFound: true };
 
-      const dailyStockPrices = await getDailyStockPrices(ticker)
-      // console.log('dailyStockPrices from fun->', dailyStockPrices)
-
-      const updatedEPS = await getReportedEarnings(ticker)
-      // console.log('updatedEPS from func ->', updatedEPS)
-
-      const earningsCalendar = await getEarningsCalendar(ticker)
-      // console.log('earningsCalendar ->', earningsCalendar)
-
-      details = overview
-      // daily -> { labels, price }
-      daily = dailyStockPrices
-      // earnings -> { labels, reportedEPS, estimatedEPS }
-      earnings = updatedEPS
-      // earnings_calendar -> [{reportDate, estimate}]
-      earnings_calendar = earningsCalendar
-
+      daily = await getDailyStockPrices(ticker);
+      earnings = await getReportedEarnings(ticker);
+      earnings_calendar = await getEarningsCalendar(ticker);
+      isFavorited = authInfo.userId ? await checkIsFavorited(ticker, authInfo.userId) : false;
 
     } catch (err) {
       if (err instanceof Error) {
-        console.log("Reached Error:", err.message)
         status.message = err.message
         status.status = 'error'
       }
     }
   }
 
-  return { props: { ticker, details, daily, earnings, earnings_calendar, status } }
+  return { props: { ticker, details, daily, earnings, earnings_calendar, status, isFavorited } }
 }
 
 export default Profile
