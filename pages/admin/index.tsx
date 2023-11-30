@@ -1,5 +1,5 @@
-import { GetServerSidePropsContext } from 'next'
-import { getSession } from 'next-auth/react'
+import { GetServerSidePropsContext } from 'next';
+import * as jose from 'jose';
 
 // Update manually (after retrieving data from request): ADDYY, 
 
@@ -10,13 +10,7 @@ const popularCompanies = ['AAPL', 'AMC', 'AMZN', 'BABA', 'BB', 'BBBY', 'GOOG', '
 const ignore = ['BYDDF', 'BYDDY', 'NTDOY', 'SPY']
 
 const AdminHome = (props: { isAuthorized: boolean }) => {
-    if (!props.isAuthorized) {
-        return (
-            <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <h1 style={{ marginTop: '5em' }}>You shall not pass</h1>
-            </div>
-        )
-    }
+    if (!props.isAuthorized) return;
 
     const economyHandler = async () => {
         const response = await fetch(`/api/admin/economy`)
@@ -53,38 +47,80 @@ const AdminHome = (props: { isAuthorized: boolean }) => {
         const data = await response.json()
         console.log(`economy update status: successful: ${data.status?.success} message: ${data.status?.message}`)
     }
+    const incomeStatementsHandler = async (company: string) => {
+        company = company.replace(/\./g, '-')
+        const response = await fetch(`/api/admin/income-statements/${company}`)
+        const data = await response.json()
+        console.log(company + ' income statements :>>', JSON.stringify(data.incomeStatements.annualReports[0]));
+    }
+
 
     return (
-        <div style={{ paddingTop: '10em' }}>
-            <h1>Admin - Update Page</h1>
+        <div className='flex flex-col w-full gap-8 pt-36 pb-24'>
+            <h1 className='text-5xl self-center'>Admin - Update Page</h1>
+            <ul className='bg-yellow-200 p-8'>
+                <li>Alphavantage only allowing 25 requests per day now. Before, it was 5 per min.</li>
+                <li>To update stock prices: search the ticker symbol on yahoo finance, download the historical data, change the headers to column names, export as csv, update on supabase.</li>
+            </ul>
 
-            <div>
-                <h2>Economy x5</h2>
-                <button onClick={economyHandler}>Update Economy Page</button>
+            <div className='px-8 py-4'>
+                <h2 className='text-indigo-900 text-2xl'>Economy x5</h2>
+                <button className='py-2 px-4 bg-dirty-white rounded-md' onClick={economyHandler}>Update Economy Page</button>
             </div>
-            <div>
-                <h2>General Overview x1</h2>
-                <span>Notes: update manually ADDYY, BMWYY, HOOD, LCID, NTDOY, RIVN, SPY, TWTR, VWAGY, VTI </span><br />
-                {companies.map(i => <button key={i} onClick={() => companyHandler(i)} >{i}</button>)}
+
+            <div className='bg-white'>
+                <div className='w-full px-8 py-4'>
+                    <h2 className='text-indigo-900 text-2xl'>General Overview x1</h2>
+                    <span className='text-slate-700 text-sm'>Notes: update manually ADDYY, BMWYY, HOOD, LCID, NTDOY, RIVN, SPY, TWTR, VWAGY, VTI </span><br />
+                </div>
+                <div className='flex flex-wrap gap-2 px-8'>
+                    {companies.map(i => <button key={i} className='py-2 px-4 bg-dirty-white rounded-md' onClick={() => companyHandler(i)} >{i}</button>)}
+                </div>
             </div>
-            <div>
-                <h2>Stock Price Popular Companies x1</h2>
-                {popularCompanies.map(i => <button key={i} onClick={() => stockPriceHandler(i)} >{i}</button>)}
-                <h2>Stock Price All Companies x1</h2>
-                {companies.map(i => <button key={i} onClick={() => stockPriceHandler(i)} >{i}</button>)}
+            <div className='flex flex-wrap gap-2 px-8'>
+                <h2 className='text-indigo-900 text-2xl w-full'>Stock Price Popular Companies x1</h2>
+                {popularCompanies.map(i => <button key={i} className='py-2 px-4 bg-dirty-white rounded-md' onClick={() => stockPriceHandler(i)} >{i}</button>)}
+                <h2 className='text-indigo-900 text-2xl w-full'>Stock Price All Companies x1</h2>
+                {companies.map(i => <button key={i} className='py-2 px-4 bg-dirty-white rounded-md' onClick={() => stockPriceHandler(i)} >{i}</button>)}
             </div>
-            <div>
-                <h2>Earnings and Calendar x2</h2>
-                {companies.map(i => <button key={i} onClick={() => earningsHandler(i)} >{i}</button>)}
+            <div className='flex flex-wrap gap-2 px-8 bg-white'>
+                <h2 className='text-indigo-900 text-2xl w-full'>Earnings and Calendar x2</h2>
+                {companies.map(i => <button key={i} className='py-2 px-4 bg-dirty-white rounded-md' onClick={() => earningsHandler(i)} >{i}</button>)}
+            </div>
+            <div className='flex flex-wrap gap-2 px-8'>
+                <h2 className='text-indigo-900 text-2xl w-full'>Income Statements x1</h2>
+                {companies.map(i => <button key={i} className='py-2 px-4 bg-dirty-white rounded-md' onClick={() => incomeStatementsHandler(i)} >{i}</button>)}
             </div>
         </div>
     )
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    const session = await getSession(context)
+    interface UserToken {
+        payload: {
+            email: string;
+            exp: number
+        }
+    }
+    const cookiesStore = context.req.cookies;
+    let isAuthorized = false;
+    let userToken: UserToken | null = null;
+    const jwt = cookiesStore.jwt;
 
-    const isAuthorized = session?.user?.email === 'jpagtama.dev@gmail.com'
+    try {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+        userToken = await jose.jwtVerify(String(jwt), secret);
+        if (userToken.payload.email === 'jpagtama.dev@gmail.com') isAuthorized = true;
+
+    } catch (e) {
+        console.log('e.message :>> ', e instanceof Error ? e.message : e);
+        isAuthorized = false;
+    }
+
+
+    if (!isAuthorized || !userToken) isAuthorized === false;
+
+    if (!isAuthorized) return { notFound: true };
 
     return {
         props: {
