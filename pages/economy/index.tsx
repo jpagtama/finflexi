@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
-import { prisma } from '@db/index'
-import ChartPicker from '../../components/UI/ChartPicker'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
-import { Line, Bar } from 'react-chartjs-2'
-import type { ChartOptions } from 'chart.js'
-import styles from '../../styles/economy/Economy.module.css'
-import moment from 'moment'
-import EconomicIndicatorSectionGray from './EconomicIndicatorSectionGray'
-import EconomicIndicatorSectionNoBg from './EconomicIndicatorSectionNoBg'
+import React, { useState } from 'react';
+import { prisma } from '@db/index';
+import ChartPicker from '../../components/UI/ChartPicker';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line, Bar } from 'react-chartjs-2';
+import type { ChartOptions } from 'chart.js';
+import EconomicIndicatorSectionGray from './EconomicIndicatorSectionGray';
+import EconomicIndicatorSectionNoBg from './EconomicIndicatorSectionNoBg';
 
 
 interface Props {
