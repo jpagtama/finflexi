@@ -21,13 +21,21 @@ const Header = () => {
           {(router.asPath !== '/' && !isMenuOpen) && <SearchBar />}
         </span>
       </div> */}
-      <header className={`flex justify-center items-center bg-gray-700 w-full h-20 sm:px-4 fixed z-50`}>
-        <div className='sm:hidden flex flex-col justify-center w-full'>
-          <div className='flex flex-col items-end w-full relative'>
-            <div className='mx-4'>
-              <NavBurgerButton />
-            </div>
-          </div>
+      <header className={`flex justify-center items-center bg-gray-700 w-full h-20 sm:px-4 fixed z-30`}>
+        <div className='sm:hidden flex justify-end gap-4 w-full px-8'>
+          <AnimatePresence>
+            {!isMenuOpen &&
+              <motion.div className='w-full'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25 }}
+                exit={{ opacity: 0 }}
+              >
+                <SearchBar />
+              </motion.div>
+            }
+          </AnimatePresence>
+          <NavBurgerButton />
         </div>
         <div className='hidden sm:block'>
           <MenuListDeskTop />
