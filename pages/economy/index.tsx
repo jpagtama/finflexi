@@ -3,7 +3,7 @@ import { prisma } from '@db/index';
 import ChartPicker from '../../components/UI/ChartPicker';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
-import type { ChartOptions } from 'chart.js';
+import { ChartOptions, RadialLinearScale } from 'chart.js';
 import EconomicIndicatorSectionGray from './EconomicIndicatorSectionGray';
 import EconomicIndicatorSectionNoBg from './EconomicIndicatorSectionNoBg';
 
@@ -27,6 +27,7 @@ const Economy = ({ gdp, interest_rates, cpi, inflation, unemployment }: Props) =
     ChartJS.register(
         CategoryScale,
         LinearScale,
+        RadialLinearScale,
         BarElement,
         PointElement,
         LineElement,
