@@ -43,24 +43,21 @@ const SearchBar = (props: Props) => {
     const searchBarRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
-        if (companiesFromCache?.status?.success) {
-            setCompanies(companiesFromCache?.data)
-        }
-        console.log('companiesFromCache :>> ', companiesFromCache);
-        console.log('error :>> ', error);
-    }, [companiesFromCache])
+        if (companiesFromCache?.status?.success) setCompanies(companiesFromCache?.data)
+    }, [companiesFromCache]);
 
     useEffect(() => {
         if (searchResults.length === 0) setHighlightedResult(-1)
     }, [searchResults])
 
     const submitHandler = async (e: React.FormEvent) => {
-        e.preventDefault()
-        const ticker = searchResults[highlightedResult].ticker
-        setSearchResults([])
-        searchBarRef.current?.blur()
+        e.preventDefault();
+        const ticker = searchResults[highlightedResult]?.ticker;
+        if (!ticker) return;
+        setSearchResults([]);
+        searchBarRef.current?.blur();
         if (highlightedResult > -1) {
-            router.push(`/company/${ticker}`)
+            router.push(`/company/${ticker}`);
         }
     }
 
@@ -71,7 +68,6 @@ const SearchBar = (props: Props) => {
     }
 
     const renderSearchResults = () => {
-        // return <ul><li>{searchResults.length} | {searchText.length}</li></ul>
         if (searchResults.length === 0 || searchText.length === 0) return
         return <SearchBarResults searchResults={searchResults} highlightedResult={highlightedResult} clickResultHandler={clickResultHandler} />
     }
@@ -124,10 +120,10 @@ const SearchBar = (props: Props) => {
     }
 
     return (
-        <form className={styles.form} onSubmit={submitHandler} >
+        <form className='w-full' onSubmit={submitHandler} >
             <div className={styles.searchBarContainer}>
-                <input role="search_bar" type="text" ref={searchBarRef} className={`${styles.searchBar} bg-white ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} placeholder="search companies" value={searchText} disabled={isSearching} />
-                <div onClick={searchBarIconHandler} className={`${styles.searchIcon} bg-white ${searchResults.length ? styles.searchIconBorderWithRecords : styles.searchIconBorderWithoutRecords}`}>
+                <input role="search_bar" type="text" ref={searchBarRef} className={`h-full w-full p-4 border-none focus:outline-none focus:border-none focus:ring-0 bg-white ${searchResults.length ? styles.resultsBorderWithRecords : styles.resultsBorderWithoutRecords}`} onChange={searchHandler} onKeyDown={keyHandler} placeholder="search companies" value={searchText} disabled={isSearching} />
+                <div onClick={searchBarIconHandler} className={`flex justify-center items-center p-4 cursor-pointer border-none bg-white ${searchResults.length ? styles.searchIconBorderWithRecords : styles.searchIconBorderWithoutRecords}`}>
                     {searchText.length ? <FaTimes /> : <FaSearch />}
                 </div>
             </div>
