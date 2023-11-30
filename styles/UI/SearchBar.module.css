@@ -35,14 +35,6 @@
     border-radius: 5px 0 0 0;
 }
 
-.searchIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1em;
-    cursor: pointer;
-}
-
 .searchIconBorderWithRecords {
     border-radius: 0 5px 0 0;
 }

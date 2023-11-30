@@ -56,15 +56,6 @@
     padding-top: 7em;
 }
 
-.chartSection {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    gap: 1em;
-    padding: 2em 0;
-    width: 90vw;
-}
-
 .chartContainer {
     background-color: black;
     border-radius: 12px;
