@@ -92,7 +92,7 @@ const SignInForm = () => {
                 <div className='flex justify-between flex-col sm:flex-row w-full'>
                     {!isSubmitting && <button type='button' onClick={guestSignInHandler} className=' bg-green-300 rounded-full order-1 sm:-order-1 px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6'>Sign In as Guest</button>}
                     {!isSubmitting && <button type='submit' className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 `} >Sign In</button>}
-                    {isSubmitting && <div className='h-12 w-12 my-6 self-center'><Loading /></div>}
+                    {isSubmitting && <div className='flex justify-center h-12 w-full'><Loading /></div>}
                 </div>
             </Form>
         </Formik>
