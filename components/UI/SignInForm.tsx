@@ -90,9 +90,9 @@ const SignInForm = () => {
                     <span className='text-red-700 h-16 sm:h-7 text-sm'><ErrorMessage name="password" /></span>
                 </div>
                 <div className='flex justify-between flex-col sm:flex-row w-full'>
-                    <button type='button' onClick={guestSignInHandler} className=' bg-green-300 rounded-full order-1 sm:-order-1 px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6'>Sign In as Guest</button>
+                    {!isSubmitting && <button type='button' onClick={guestSignInHandler} className=' bg-green-300 rounded-full order-1 sm:-order-1 px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6'>Sign In as Guest</button>}
                     {!isSubmitting && <button type='submit' className={`bg-indigo-300 rounded-full px-6 py-2 shadow-lg hover:scale-110 duration-150 mt-6 `} >Sign In</button>}
-                    {isSubmitting && <Loading />}
+                    {isSubmitting && <div className='h-12 w-12 my-6 self-center'><Loading /></div>}
                 </div>
             </Form>
         </Formik>
