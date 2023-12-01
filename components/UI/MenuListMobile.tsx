@@ -1,29 +1,21 @@
-import { menuActions } from '@store/index';
+import { authActions, menuActions } from '@store/index';
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import SignOut from './SignOut';
-import styles from '@styles/UI/MenuList.module.css';
-
-interface Props {
-  isLoggedIn: boolean
-}
 
 const MenuListMobile = () => {
-  const { signOutOpen } = useSelector((state: RootState) => state.menu);
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const clickHandler = (path: string) => {
-    dispatch(menuActions.close())
-    router.push(path)
+    dispatch(menuActions.close());
+    router.push(path);
   }
-  const displaySignOutAlert = () => {
-    dispatch(menuActions.openSignOut())
-  }
-  const closeSignOutAlert = () => {
-    dispatch(menuActions.closeSignOut())
+  const signOut = () => {
+    dispatch(menuActions.close());
+    dispatch(authActions.logout());
+    router.push('/');
   }
   const renderMenuItems = () => {
     return (
@@ -35,7 +27,7 @@ const MenuListMobile = () => {
           <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/dashboard")} >Dashboard</span></li>
           {/* <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/account")} >My Account</span></li> */}
           {!isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={() => clickHandler("/signin")} >Sign In</span></li>}
-          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={displaySignOutAlert} >Sign Out</span></li>}
+          {isLoggedIn && <li className='hover:cursor-pointer hover:scale-110 hover:text-white duration-150'><span onClick={signOut} >Sign Out</span></li>}
         </ul>
       </nav>
     )
@@ -43,7 +35,6 @@ const MenuListMobile = () => {
 
   return (
     <div>
-      {/* {isSignOutOpen && <SignOut closeSignOutAlert={closeSignOutAlert} />} */}
       {renderMenuItems()}
     </div>
   )
